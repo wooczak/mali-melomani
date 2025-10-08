@@ -1,0 +1,143 @@
+{
+  "songName": "Neon Groove Variation 9",
+  "tempo": 60,
+  "countdownMs": 4000,
+  "duration": 60,
+  "instruments": [
+    {
+      "name": "triangle",
+      "hits": [
+        {
+          "time": 0.9
+        },
+        {
+          "time": 1.0,
+          "long": true,
+          "duration": 1.9
+        },
+        {
+          "time": 2.2
+        },
+        {
+          "time": 3.5
+        },
+        {
+          "time": 4.0,
+          "long": true,
+          "duration": 0.5
+        },
+        {
+          "time": 4.4,
+          "long": true,
+          "duration": 1.6
+        },
+        {
+          "time": 4.7
+        },
+        {
+          "time": 5.9
+        }
+      ]
+    },
+    {
+      "name": "woodBlocks",
+      "hits": [
+        {
+          "time": 0.9,
+          "long": true,
+          "duration": 1.0
+        },
+        {
+          "time": 1.7
+        },
+        {
+          "time": 2.0
+        },
+        {
+          "time": 2.0,
+          "long": true,
+          "duration": 1.6
+        },
+        {
+          "time": 3.2
+        },
+        {
+          "time": 4.5
+        },
+        {
+          "time": 5.7
+        },
+        {
+          "time": 6.4
+        },
+        {
+          "time": 6.5
+        }
+      ]
+    },
+    {
+      "name": "tambourine",
+      "hits": [
+        {
+          "time": 1.5
+        },
+        {
+          "time": 2.0
+        },
+        {
+          "time": 2.8
+        },
+        {
+          "time": 3.0
+        },
+        {
+          "time": 4.2
+        },
+        {
+          "time": 5.5,
+          "long": true,
+          "duration": 1.2
+        },
+        {
+          "time": 6.2
+        },
+        {
+          "time": 8.0,
+          "long": true,
+          "duration": 1.8
+        }
+      ]
+    },
+    {
+      "name": "drum",
+      "hits": [
+        {
+          "time": 1
+        },
+        {
+          "time": 2
+        },
+        {
+          "time": 3
+        },
+        {
+          "time": 3.8
+        },
+        {
+          "time": 4
+        },
+        {
+          "time": 4.2
+        },
+        {
+          "time": 5,
+          "long": true,
+          "duration": 1.0
+        },
+        {
+          "time": 6.6
+        }
+      ]
+    }
+  ]
+}

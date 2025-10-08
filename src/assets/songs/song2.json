@@ -1,0 +1,154 @@
+{
+  "songName": "Neon Groove Variation 1",
+  "tempo": 60,
+  "countdownMs": 4000,
+  "duration": 60,
+  "instruments": [
+    {
+      "name": "triangle",
+      "hits": [
+        {
+          "time": 0.9
+        },
+        {
+          "time": 2.2
+        },
+        {
+          "time": 2.3
+        },
+        {
+          "time": 2.4
+        },
+        {
+          "time": 3.0
+        },
+        {
+          "time": 3.5
+        },
+        {
+          "time": 4.7
+        },
+        {
+          "time": 5.9
+        },
+        {
+          "time": 6.6
+        },
+        {
+          "time": 7.1
+        },
+        {
+          "time": 7.9
+        }
+      ]
+    },
+    {
+      "name": "rattle",
+      "hits": [
+        {
+          "time": 1.8
+        },
+        {
+          "time": 2.3
+        },
+        {
+          "time": 2.5
+        },
+        {
+          "time": 2.6
+        },
+        {
+          "time": 3.7
+        },
+        {
+          "time": 4.0
+        },
+        {
+          "time": 4.3
+        },
+        {
+          "time": 5.3
+        },
+        {
+          "time": 6.0,
+          "long": true,
+          "duration": 0.8
+        }
+      ]
+    },
+    {
+      "name": "woodBlocks",
+      "hits": [
+        {
+          "time": 0.6
+        },
+        {
+          "time": 2.0
+        },
+        {
+          "time": 3.2
+        },
+        {
+          "time": 4.5
+        },
+        {
+          "time": 5.0
+        },
+        {
+          "time": 5.7
+        },
+        {
+          "time": 6.5
+        },
+        {
+          "time": 7.4
+        },
+        {
+          "time": 9.4
+        },
+        {
+          "time": 10.0
+        }
+      ]
+    },
+    {
+      "name": "guiro",
+      "hits": [
+        {
+          "time": 1.1
+        },
+        {
+          "time": 2.7
+        },
+        {
+          "time": 3.9
+        },
+        {
+          "time": 3.9
+        },
+        {
+          "time": 5.0,
+          "long": true,
+          "duration": 0.9
+        },
+        {
+          "time": 5.1,
+          "long": true,
+          "duration": 0.7
+        },
+        {
+          "time": 6.3
+        },
+        {
+          "time": 7.6
+        },
+        {
+          "time": 7.8
+        },
+        {
+          "time": 9.3
+        }
+      ]
+    }
+  ]
+}
