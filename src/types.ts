@@ -18,3 +18,9 @@ export type Song = {
   duration: number;
   instruments: SongInstrumentData[];
 };
+
+export type InstrumentsSvgData = {
+  [key in keyof typeof INSTRUMENTS]: {
+    svg: string;
+  };
+};

@@ -12,8 +12,10 @@ class PickSongScene extends Phaser.Scene {
   }
 
   create() {
+    const { width, height } = this.sys.game.canvas;
+
     this.add
-      .text(this.sys.game.canvas.width / 2, 100, "Pick a song", {
+      .text(width / 2, 100, "Wybierz utwór", {
         fontSize: "64px",
         color: Phaser.Display.Color.IntegerToColor(COLORS.textGreen).rgba,
         fontFamily: "'DynaPuff', cursive",
@@ -27,14 +29,6 @@ class PickSongScene extends Phaser.Scene {
 
     let songButtons: Phaser.GameObjects.Container[] = [];
 
-    this.add
-      .text(this.sys.game.canvas.width / 2, 100, "Pick a song", {
-        fontSize: "64px",
-        color: Phaser.Display.Color.IntegerToColor(COLORS.textGreen).rgba,
-        fontFamily: "'DynaPuff', cursive",
-      })
-      .setOrigin(0.5);
-
     const renderSongs = () => {
       songButtons.forEach((btn) => btn.destroy());
       songButtons = [];
@@ -46,38 +40,69 @@ class PickSongScene extends Phaser.Scene {
         const color = COLORS.pickScene[i - start];
         const { fill, stroke } = color;
 
-        const x = this.sys.game.canvas.width * 0.15;
-        const y = this.sys.game.canvas.height * 0.25 + (i - start) * 85;
-        const width = this.sys.game.canvas.width * 0.7;
-        const height = 70;
-        const radius = 20;
+        const btnX = width * 0.15;
+        const btnY = height * 0.25 + (i - start) * 85;
+        const btnWidth = width * 0.7;
+        const btnHeight = 70;
+        const btnRadius = 20;
 
         const graphics = this.add.graphics();
         graphics.fillStyle(fill, 1);
         graphics.lineStyle(4, stroke, 1);
-        graphics.fillRoundedRect(0, 0, width, height, radius);
-        graphics.strokeRoundedRect(0, 0, width, height, radius);
+        graphics.fillRoundedRect(0, 0, btnWidth, btnHeight, btnRadius);
+        graphics.strokeRoundedRect(0, 0, btnWidth, btnHeight, btnRadius);
 
         const songName = allSongs[i].songName || `Song ${i + 1}`;
         const text = this.add
-          .text(width / 2, height / 2, songName, {
+          .text(btnWidth / 2, btnHeight / 2, songName, {
             fontSize: "24px",
             color: "#000",
-            fontFamily: "'DynaPuff', cursive",
+            fontFamily: "'ABeeZee', cursive",
           })
           .setOrigin(0.5);
 
-        const button = this.add.container(x, y);
-        button.add([graphics, text]);
+        const button = this.add.container(btnX, btnY, [graphics, text]);
 
-        button.setSize(width, height);
-        button.setInteractive(
-          new Phaser.Geom.Rectangle(0, 0, width, height),
-          Phaser.Geom.Rectangle.Contains
-        );
+        button
+          .setSize(btnWidth, btnHeight)
+          .setInteractive(
+            new Phaser.Geom.Rectangle(
+              btnWidth / 2,
+              btnHeight / 2,
+              btnWidth,
+              btnHeight
+            ),
+            Phaser.Geom.Rectangle.Contains,
+            false
+          );
+
+        button.on("pointerover", () => {
+          this.input.manager.canvas.style.cursor = "pointer";
+          this.tweens.add({
+            targets: button,
+            scaleX: 1.03,
+            scaleY: 1.03,
+            duration: 120,
+            ease: "Quad.easeOut",
+          });
+        });
+
+        button.on("pointerout", () => {
+          this.input.manager.canvas.style.cursor = "default";
+
+          this.tweens.add({
+            targets: button,
+            scaleX: 1,
+            scaleY: 1,
+            duration: 120,
+            ease: "Quad.easeIn",
+          });
+        });
+
+        button.setData("songIndex", i);
 
         button.on("pointerdown", () => {
-          console.log("Picked song:", songName);
+          this.scene.start("PickInstrumentScene", { songIndex: button.getData("songIndex") });
         });
 
         songButtons.push(button);
@@ -85,22 +110,28 @@ class PickSongScene extends Phaser.Scene {
 
       if (totalPages > 1) {
         const arrow = this.add
-          .text(
-            this.sys.game.canvas.width / 2,
-            this.sys.game.canvas.height * 0.9,
-            "▼",
-            {
-              fontSize: "48px",
-              color: "#fff",
-              fontFamily: "'DynaPuff', cursive",
-            }
-          )
+          .text(width / 2, height * 0.9, "▼", {
+            fontSize: "48px",
+            color: "#fff",
+            fontFamily: "'DynaPuff', cursive",
+          })
           .setOrigin(0.5)
           .setInteractive();
 
         arrow.on("pointerdown", () => {
           currentPage = (currentPage + 1) % totalPages;
           renderSongs();
+        });
+
+        arrow.on("pointerover", () => {
+          this.input.manager.canvas.style.cursor = "pointer";
+          this.tweens.add({
+            targets: arrow,
+            scale: 1.2,
+            duration: 120,
+            yoyo: true,
+            ease: "Quad.easeOut",
+          });
         });
       }
     };

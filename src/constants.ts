@@ -9,31 +9,35 @@ export const INSTRUMENTS = {
 
 export const COLORS = {
   blockBlue: {
-    active: 0x6AD2FF,
-    faded: 0x3B57B4
+    active: 0x6ad2ff,
+    faded: 0x3b57b4,
   },
-  bgBlue: 0x3650A5,
-  textGreen: 0xD6E264,
+  bgBlue: 0x3650a5,
+  textGreen: 0xd6e264,
   pickScene: [
     {
-      fill: 0xFEF8DB,
-      stroke: 0xFFE879
+      fill: 0xfef8db,
+      stroke: 0xffe879,
     },
     {
-      fill: 0xEEE0FF,
-      stroke: 0x812BC7
-    }, 
-    {
-      fill: 0xFFDAD9,
-      stroke: 0xF66583
+      fill: 0xeee0ff,
+      stroke: 0x812bc7,
     },
     {
-      fill: 0xD0F6FF,
-      stroke: 0x2B8C9F
+      fill: 0xffdad9,
+      stroke: 0xf66583,
     },
     {
-      fill: 0xD6F4E4,
-      stroke: 0x1F8850
-    }
-  ]
+      fill: 0xd0f6ff,
+      stroke: 0x2b8c9f,
+    },
+    {
+      fill: 0xd6f4e4,
+      stroke: 0x1f8850,
+    },
+  ],
+  pickInstrumentBlock: {
+    fill: 0xf5f8d9,
+    stroke: 0xd6e264,
+  },
 } as const;

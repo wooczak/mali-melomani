@@ -1,6 +1,11 @@
 import Phaser from "phaser";
 import "./styles.css";
-import { HelloScene, PickInstrumentScene, PickSongScene, TimelineScene } from "./scenes";
+import {
+  HelloScene,
+  PickInstrumentScene,
+  PickSongScene,
+  TimelineScene,
+} from "./scenes";
 import { COLORS } from "./constants";
 
 const gameBg = Phaser.Display.Color.IntegerToColor(COLORS.bgBlue).rgba;
@@ -10,25 +15,36 @@ const config = {
   width: 1280,
   height: 700,
   scene: [
-    new HelloScene({ key: "HelloScene",  active: true,
+    new HelloScene({
+      key: "HelloScene",
       cameras: {
-        backgroundColor: gameBg
-      }
-     }),
-    new PickSongScene({ key: "PickSongScene", cameras: { backgroundColor: gameBg } }),
+        backgroundColor: gameBg,
+      },
+    }),
+    new PickSongScene({
+      key: "PickSongScene",
+      active: true,
+      cameras: { backgroundColor: gameBg },
+    }),
     new PickInstrumentScene({
       key: "PickInstrumentScene",
       cameras: {
-        backgroundColor: gameBg
+        backgroundColor: gameBg,
       },
     }),
     new TimelineScene({
       key: "TimelineScene",
       cameras: {
-        backgroundColor: gameBg
+        backgroundColor: gameBg,
       },
     }),
   ],
 };
 
-new Phaser.Game(config);
+async function startGame() {
+  await document.fonts.ready;
+
+  new Phaser.Game(config);
+}
+
+startGame();

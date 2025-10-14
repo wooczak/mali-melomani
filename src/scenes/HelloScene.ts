@@ -8,13 +8,15 @@ class HelloScene extends Phaser.Scene {
   preload() {}
 
   create() {
-    const textColor = Phaser.Display.Color.IntegerToColor(COLORS.textGreen).rgba;
+    const textColor = Phaser.Display.Color.IntegerToColor(
+      COLORS.textGreen
+    ).rgba;
 
     this.add
       .text(640, 250, "Mali Melomani", {
         fontFamily: "'DynaPuff', cursive",
         fontSize: "128px",
-        color: textColor
+        color: textColor,
       })
       .setOrigin(0.5);
 
@@ -26,7 +28,7 @@ class HelloScene extends Phaser.Scene {
         style: {
           fontFamily: "'DynaPuff', cursive",
           fontSize: "32px",
-          color: textColor
+          color: textColor,
         },
       })
       .setOrigin(0.5);
@@ -36,10 +38,10 @@ class HelloScene extends Phaser.Scene {
         pressSpaceText.x,
         pressSpaceText.y,
         pressSpaceText.width + 50,
-        pressSpaceText.height + 50,
+        pressSpaceText.height + 50
       )
       .setStrokeStyle(5, 0xffffff)
-      .setFillStyle(0xffffff, 0)
+      .setFillStyle(0xffffff, 0);
 
     const keyboard = this.input.keyboard;
 
