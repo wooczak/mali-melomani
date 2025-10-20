@@ -4,15 +4,19 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "tailwind:watch": "npx tailwindcss -i ./src/input.css -o ./src/styles.css --watch",
+    "dev": "concurrently \"npm run tailwind:watch\" \"vite\"",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
+    "concurrently": "^9.2.1",
     "typescript": "~5.8.3",
     "vite": "^7.1.6"
   },
   "dependencies": {
-    "phaser": "^3.90.0"
+    "@tailwindcss/cli": "^4.1.15",
+    "phaser": "^3.90.0",
+    "tailwindcss": "^4.1.15"
   }
 }

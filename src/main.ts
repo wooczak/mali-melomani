@@ -12,11 +12,13 @@ const gameBg = Phaser.Display.Color.IntegerToColor(COLORS.whiteBg).rgba;
 
 const config = {
   type: Phaser.AUTO,
-  width: 1280,
-  height: 700,
+  width: 1000,
+  height: 600,
+  parent: "game-container",
   scene: [
     new HelloScene({
       key: "HelloScene",
+      active: true,
       cameras: {
         backgroundColor: gameBg,
       },
@@ -33,7 +35,6 @@ const config = {
     }),
     new TimelineScene({
       key: "TimelineScene",
-      active: true,
       cameras: {
         backgroundColor: gameBg,
       },

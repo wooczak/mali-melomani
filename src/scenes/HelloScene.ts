@@ -8,30 +8,46 @@ class HelloScene extends Phaser.Scene {
   preload() {}
 
   create() {
-    const textColor = Phaser.Display.Color.IntegerToColor(
-      COLORS.textGreen
-    ).rgba;
+    const { width, height } = this.sys.game.canvas;
 
     this.add
-      .text(640, 250, "Mali Melomani", {
-        fontFamily: "'DynaPuff', cursive",
-        fontSize: "128px",
-        color: textColor,
+      .text(width / 2, height / 2 - 210, "Mali Melomani", {
+        font: "600 110px DynaPuff",
+        color: Phaser.Display.Color.IntegerToColor(COLORS.textRed).rgba
       })
       .setOrigin(0.5);
 
     const pressSpaceText = this.make
       .text({
-        x: 640,
-        y: 400,
+        x: width / 2,
+        y: height - 100,
         text: "Naciśnij spację, aby rozpocząć grę.",
         style: {
           fontFamily: "'DynaPuff', cursive",
           fontSize: "32px",
-          color: textColor,
+          color: Phaser.Display.Color.IntegerToColor(COLORS.textRed).rgba,
         },
       })
       .setOrigin(0.5);
+
+      this.add.circle(
+        width / 2,
+        height / 2,
+        128,
+        COLORS.playBtnCircleFill
+      ).setOrigin(0.5);
+
+      this.add.triangle(
+        width / 2 + 45,
+        height / 2 + 45,
+        -32,
+        -48,
+        -32,
+        48,
+        64,
+        0,
+        COLORS.textRed  
+      ).setOrigin(0.5);
 
     this.add
       .rectangle(

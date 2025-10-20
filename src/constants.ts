@@ -42,4 +42,5 @@ export const COLORS = {
     fill: 0xFEE8E3,
     stroke: 0xF95B37,
   },
+  playBtnCircleFill: 0xFEE8E3
 } as const;
