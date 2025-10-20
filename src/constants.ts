@@ -1,10 +1,10 @@
 export const INSTRUMENTS = {
-  drum: "drum",
-  rattle: "rattle",
-  triangle: "triangle",
-  tambourine: "tambourine",
-  woodBlocks: "woodBlocks",
-  guiro: "guiro",
+  bębenek: "bębenek",
+  grzechotka: "grzechotka",
+  trójkąt: "trójkąt",
+  tamburyno: "tamburyno",
+  drewienka: "drewienka",
+  tarka: "tarka",
 } as const;
 
 export const COLORS = {
@@ -12,8 +12,10 @@ export const COLORS = {
     active: 0x6ad2ff,
     faded: 0x3b57b4,
   },
+  whiteBg: 0xF9F5F2,
   bgBlue: 0x3650a5,
   textGreen: 0xd6e264,
+  textRed: 0xF95B37,
   pickScene: [
     {
       fill: 0xfef8db,
@@ -37,7 +39,7 @@ export const COLORS = {
     },
   ],
   pickInstrumentBlock: {
-    fill: 0xf5f8d9,
-    stroke: 0xd6e264,
+    fill: 0xFEE8E3,
+    stroke: 0xF95B37,
   },
 } as const;

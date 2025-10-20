@@ -5,7 +5,7 @@
   "duration": 60,
   "instruments": [
     {
-      "name": "triangle",
+      "name": "trójkąt",
       "hits": [
         {
           "time": 0.9
@@ -43,7 +43,7 @@
       ]
     },
     {
-      "name": "rattle",
+      "name": "grzechotka",
       "hits": [
         {
           "time": 1.8
@@ -77,7 +77,7 @@
       ]
     },
     {
-      "name": "woodBlocks",
+      "name": "drewienka",
       "hits": [
         {
           "time": 0.6
@@ -112,7 +112,7 @@
       ]
     },
     {
-      "name": "guiro",
+      "name": "tarka",
       "hits": [
         {
           "time": 1.1

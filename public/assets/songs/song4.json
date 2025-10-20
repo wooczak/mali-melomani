@@ -5,7 +5,7 @@
   "duration": 60,
   "instruments": [
     {
-      "name": "triangle",
+      "name": "trójkąt",
       "hits": [
         {
           "time": 0.9
@@ -40,7 +40,7 @@
       ]
     },
     {
-      "name": "woodBlocks",
+      "name": "drewienka",
       "hits": [
         {
           "time": 0.9,
@@ -76,7 +76,7 @@
       ]
     },
     {
-      "name": "tambourine",
+      "name": "tamburyno",
       "hits": [
         {
           "time": 1.5
@@ -109,7 +109,7 @@
       ]
     },
     {
-      "name": "drum",
+      "name": "bębenek",
       "hits": [
         {
           "time": 1

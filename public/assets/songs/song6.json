@@ -5,7 +5,7 @@
   "duration": 60,
   "instruments": [
     {
-      "name": "tambourine",
+      "name": "tamburyno",
       "hits": [
         {
           "time": 1.5
@@ -51,7 +51,7 @@
       ]
     },
     {
-      "name": "woodBlocks",
+      "name": "drewienka",
       "hits": [
         {
           "time": 1.1,
@@ -84,7 +84,7 @@
       ]
     },
     {
-      "name": "drum",
+      "name": "bębenek",
       "hits": [
         {
           "time": 1
@@ -118,7 +118,7 @@
       ]
     },
     {
-      "name": "rattle",
+      "name": "grzechotka",
       "hits": [
         {
           "time": 1.8
@@ -151,7 +151,7 @@
       ]
     },
     {
-      "name": "guiro",
+      "name": "tarka",
       "hits": [
         {
           "time": 1.1

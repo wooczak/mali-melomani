@@ -1,0 +1,20 @@
+{
+  "drewienka": {
+    "svg": "./svg/drewienka.svg"
+  },
+  "bębenek": {
+    "svg": "./svg/bębenek.svg"
+  },
+  "tarka": {
+    "svg": "./svg/tarka.svg"
+  },
+  "tamburyno": {
+    "svg": "./svg/tamburyno.svg"
+  },
+  "grzechotka": {
+    "svg": "./svg/grzechotka.svg"
+  },
+  "trójkąt": {
+    "svg": "./svg/trójkąt.svg"
+  }
+}

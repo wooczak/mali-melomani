@@ -8,7 +8,7 @@ import {
 } from "./scenes";
 import { COLORS } from "./constants";
 
-const gameBg = Phaser.Display.Color.IntegerToColor(COLORS.bgBlue).rgba;
+const gameBg = Phaser.Display.Color.IntegerToColor(COLORS.whiteBg).rgba;
 
 const config = {
   type: Phaser.AUTO,
@@ -23,7 +23,6 @@ const config = {
     }),
     new PickSongScene({
       key: "PickSongScene",
-      active: true,
       cameras: { backgroundColor: gameBg },
     }),
     new PickInstrumentScene({
@@ -34,6 +33,7 @@ const config = {
     }),
     new TimelineScene({
       key: "TimelineScene",
+      active: true,
       cameras: {
         backgroundColor: gameBg,
       },

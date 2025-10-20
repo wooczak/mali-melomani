@@ -4,15 +4,21 @@ import type { Song } from "../types";
 class TimelineScene extends Phaser.Scene {
   hitBoxContainer: Phaser.GameObjects.Container[] = [];
   countdownMs: number = 0;
+  chosenSongIndex: number = 0;
+  selectedInstrument: keyof typeof INSTRUMENTS = "bębenek";
 
   constructor(config: string | Phaser.Types.Scenes.SettingsConfig) {
     super(config);
   }
 
+  init(data: { chosenSong: number, chosenInstrument: keyof typeof INSTRUMENTS }) {
+    this.chosenSongIndex = data.chosenSong;
+    this.selectedInstrument = data.chosenInstrument;
+  }
+
   preload() {
-    this.load.json("song1", "src/assets/songs/song1.json");
-    this.load.json("instruments", "src/assets/songs/instruments.json");
-    this.load.audio("countdownStick", "src/assets/audio/countdown-stick.mp3");
+    this.load.json("song", `assets/songs/song${this.chosenSongIndex + 1}.json`);
+    this.load.audio("countdownStick", "assets/audio/countdown-stick.mp3");
   }
 
   create() {
@@ -33,7 +39,7 @@ class TimelineScene extends Phaser.Scene {
 
     let hitBoxContainer = this.add.container(0, 0);
 
-    this.registry.set("selectedInstrument", "drum");
+    this.registry.set("selectedInstrument", "bębenek");
 
     instruments.forEach((_i: string, index: number) => {
       const hitBox = this.add.graphics();

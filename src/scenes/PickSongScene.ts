@@ -7,7 +7,7 @@ class PickSongScene extends Phaser.Scene {
 
   preload() {
     for (let i = 1; i <= 10; i++) {
-      this.load.json(`song${i}`, `src/assets/songs/song${i}.json`);
+      this.load.json(`song${i}`, `assets/songs/song${i}.json`);
     }
   }
 
@@ -16,9 +16,8 @@ class PickSongScene extends Phaser.Scene {
 
     this.add
       .text(width / 2, 100, "Wybierz utwór", {
-        fontSize: "64px",
-        color: Phaser.Display.Color.IntegerToColor(COLORS.textGreen).rgba,
-        fontFamily: "'DynaPuff', cursive",
+        font: "600 64px DynaPuff",
+        color: Phaser.Display.Color.IntegerToColor(COLORS.textRed).rgba,
       })
       .setOrigin(0.5);
 
@@ -99,10 +98,10 @@ class PickSongScene extends Phaser.Scene {
           });
         });
 
-        button.setData("songIndex", i);
+        button.setData("chosenSongIndex", i);
 
         button.on("pointerdown", () => {
-          this.scene.start("PickInstrumentScene", { songIndex: button.getData("songIndex") });
+          this.scene.start("PickInstrumentScene", { chosenSongIndex: button.getData("chosenSongIndex") });
         });
 
         songButtons.push(button);
