@@ -5,7 +5,6 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link href="./src/styles.css" rel="stylesheet">
-      <link href="./src/fonts.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -19,14 +18,18 @@
     <title>Phaser game</title>
   </head>
   <body>
-    <nav>
-      <p>MaliMelomani</p>
+    <nav class="h-16 flex items-center justify-between px-5">
+      <p class="">MaliMelomani</p>
+      <ul class="flex gap-5">
+        <li>Instrukcja gry</li>
+        <li>Ciekawostki</li>
+      </ul>
     </nav>
-    <main>
-      <section id="game-container"></section>
+    <main class="ml-auto">
+      <section id="game-container" class="mx-auto w-[1000px]"></section>
     </main> 
-    <footer>
-
+    <footer class="h-16 flex items-center justify-center">
+      <p>Stopka</p>
     </footer>
     <script type="module" src="/src/main.ts"></script>
   </body>
