@@ -1,32 +1,59 @@
 import { COLORS, INSTRUMENTS } from "../constants";
-import type { Song } from "../types";
+import type { Song, WORLD } from "../types";
 
 class TimelineScene extends Phaser.Scene {
   hitBoxContainer: Phaser.GameObjects.Container[] = [];
   countdownMs: number = 0;
   chosenSongIndex: number = 0;
   selectedInstrument: keyof typeof INSTRUMENTS = "bębenek";
+  world: WORLD = "ocean";
+  objects = {};
 
   constructor(config: string | Phaser.Types.Scenes.SettingsConfig) {
     super(config);
   }
 
-  init(data: { chosenSong: number, chosenInstrument: keyof typeof INSTRUMENTS }) {
+  init(data: {
+    chosenSong: number;
+    chosenInstrument: keyof typeof INSTRUMENTS;
+  }) {
     this.chosenSongIndex = data.chosenSong;
     this.selectedInstrument = data.chosenInstrument;
   }
 
   preload() {
     this.load.json("song", `assets/songs/song${this.chosenSongIndex + 1}.json`);
+    this.load.audio(
+      "audio",
+      `assets/audio/song${this.chosenSongIndex + 1}.mp3`
+    );
     this.load.audio("countdownStick", "assets/audio/countdown-stick.mp3");
+    this.load.on("progress", (val: number) => {
+      console.log(`TimelineScene preload: ${val}`);
+    });
+    this.objects = {};
   }
 
   create() {
-    this.registry.set("selectedInstrument", this.data.get("selectedInstrument"));
-    const instruments = this.cache.json.get("instruments").instruments;
-    const song = this.cache.json.get("song1") as Song;
+    const instruments = (this.cache.json.get("song") as Song).instruments;
+    const song = this.cache.json.get("song") as Song;
+
     this.countdownMs = song.countdownMs;
-    const allTweens: Phaser.Tweens.Tween[] = [];
+    const allNotes: {
+      note: Phaser.GameObjects.Graphics;
+      tween: Phaser.Tweens.Tween;
+    }[] = [];
+
+    this.objects.camera = this.cameras.add(
+      0,
+      0,
+      this.sys.game.canvas.width,
+      this.sys.game.canvas.height
+    );
+
+    this.objects.camera.setBackgroundColor(
+      Phaser.Display.Color.IntegerToColor(COLORS.timeline[this.world].bg).rgba
+    );
 
     this.input.once("pointerdown", () => {
       if (
@@ -39,11 +66,15 @@ class TimelineScene extends Phaser.Scene {
 
     let hitBoxContainer = this.add.container(0, 0);
 
-    this.registry.set("selectedInstrument", "bębenek");
-
-    instruments.forEach((_i: string, index: number) => {
+    instruments.forEach((instrument, index: number) => {
       const hitBox = this.add.graphics();
-      hitBox.lineStyle(2, COLORS.blockBlue.active);
+      hitBox.lineStyle(
+        3,
+        instrument.name === this.selectedInstrument
+          ? COLORS.timeline[this.world].blockStroke.active
+          : COLORS.timeline[this.world].blockStroke.faded,
+        1
+      );
       hitBox.strokeRoundedRect(0, 0, 140, 78, 8);
 
       const total = instruments.length;
@@ -53,10 +84,7 @@ class TimelineScene extends Phaser.Scene {
       hitBox.x = 75 + index * spacing;
       hitBox.y = this.sys.game.canvas.height - 30 - 78;
 
-      const instrumentKeys = Object.keys(
-        INSTRUMENTS
-      ) as (keyof typeof INSTRUMENTS)[];
-      hitBox.name = INSTRUMENTS[instrumentKeys[index]];
+      hitBox.name = instrument.name;
 
       hitBoxContainer.add(hitBox);
     });
@@ -69,20 +97,27 @@ class TimelineScene extends Phaser.Scene {
       instrument.hits.forEach((hit) => {
         const note = this.add
           .graphics()
-          .fillStyle(instrument.name === this.registry.get("selectedInstrument") ? COLORS.blockBlue.active : COLORS.blockBlue.faded, 1)
+          .fillStyle(
+            instrument.name === this.selectedInstrument
+              ? COLORS.timeline[this.world].blockStroke.active
+              : COLORS.timeline[this.world].blockStroke.faded,
+            1
+          )
           .fillRoundedRect(instrumentLine.x, -100, 140, 78, 8);
+
+        note.setData("hitTime", hit.time);
 
         const noteTween = this.tweens.add({
           targets: note,
           paused: true,
           y: instrumentLine.y + 120,
           delay: hit.time * 1000 - 1000,
-          onComplete: () => {
-            note.destroy();
-          },
         });
 
-        allTweens.push(noteTween);
+        allNotes.push({
+          note,
+          tween: noteTween,
+        });
       });
     });
 
@@ -93,7 +128,7 @@ class TimelineScene extends Phaser.Scene {
         "",
         {
           fontSize: "64px",
-          color: COLORS.blockBlue.toString(),
+          color: COLORS.timeline[this.world].blockStroke.toString(),
         }
       )
       .setOrigin(0.5);
@@ -117,10 +152,16 @@ class TimelineScene extends Phaser.Scene {
     });
 
     let timeline = this.add.timeline(timelineSteps);
+    timeline.add({
+      at: this.countdownMs,
+      run: () => {
+        this.sound.play("audio");
+      },
+    });
     timeline.play();
 
     this.time.delayedCall(this.countdownMs, () => {
-      allTweens.forEach((tween) => tween.play());
+      allNotes.forEach((note) => note.tween.play());
     });
 
     let spaceObject: Phaser.Input.Keyboard.Key | undefined;
@@ -129,7 +170,7 @@ class TimelineScene extends Phaser.Scene {
       spaceObject = this.input.keyboard.addKey("SPACE");
     }
 
-    let possibleLatency = song.tempo > 100 ? 300 : 200;
+    let possibleLatency = 500;
 
     function between(x: number, min: number, max: number) {
       return x >= min && x <= max;
@@ -137,7 +178,7 @@ class TimelineScene extends Phaser.Scene {
 
     spaceObject?.on("down", () => {
       song.instruments
-        .find((inst) => inst.name === this.registry.get("selectedInstrument"))
+        .find((inst) => inst.name === this.selectedInstrument)
         ?.hits.forEach((hit) => {
           if (
             between(
@@ -146,7 +187,34 @@ class TimelineScene extends Phaser.Scene {
               hit.time * 1000 + possibleLatency
             )
           ) {
-            console.log("HIT!", hit);
+            const noteHit = allNotes.find((note) =>
+              between(
+                note.note.getData("hitTime") * 1000,
+                this.time.now - this.countdownMs - possibleLatency,
+                this.time.now - this.countdownMs + possibleLatency
+              )
+            );
+
+            console.log(
+              noteHit?.note.getData("hitTime") * 1000,
+              this.time.now - this.countdownMs - possibleLatency,
+              this.time.now - this.countdownMs + possibleLatency
+            );
+
+            if (noteHit) {
+              this.tweens.add({
+                targets: noteHit.note,
+                scaleX: 1.2,
+                scaleY: 1.2,
+                alpha: 0,
+                duration: 100,
+                onComplete: () => {
+                  this.tweens.killTweensOf(noteHit.note);
+                  noteHit.note.destroy(true); 
+                  allNotes.splice(allNotes.indexOf(noteHit), 1);
+                },
+              });
+            }
           }
         });
     });

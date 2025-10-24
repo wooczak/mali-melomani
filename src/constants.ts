@@ -8,14 +8,10 @@ export const INSTRUMENTS = {
 } as const;
 
 export const COLORS = {
-  blockBlue: {
-    active: 0x6ad2ff,
-    faded: 0x3b57b4,
-  },
-  whiteBg: 0xF9F5F2,
+  whiteBg: 0xf9f5f2,
   bgBlue: 0x3650a5,
   textGreen: 0xd6e264,
-  textRed: 0xF95B37,
+  textRed: 0xf95b37,
   pickScene: [
     {
       fill: 0xfef8db,
@@ -39,8 +35,17 @@ export const COLORS = {
     },
   ],
   pickInstrumentBlock: {
-    fill: 0xFEE8E3,
-    stroke: 0xF95B37,
+    fill: 0xfee8e3,
+    stroke: 0xf95b37,
   },
-  playBtnCircleFill: 0xFEE8E3
+  playBtnCircleFill: 0xfee8e3,
+  timeline: {
+    ocean: {
+      bg: 0x1869ce,
+      blockStroke: {
+        active: 0x6ad2ff,
+        faded: 0x3b57b4,
+      },
+    },
+  },
 } as const;

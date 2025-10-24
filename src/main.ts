@@ -18,7 +18,6 @@ const config = {
   scene: [
     new HelloScene({
       key: "HelloScene",
-      active: true,
       cameras: {
         backgroundColor: gameBg,
       },

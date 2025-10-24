@@ -24,3 +24,5 @@ export type InstrumentsSvgData = {
     svg: string;
   };
 };
+
+export type WORLD = "ocean"; /* | "forest" | "savanna"; */

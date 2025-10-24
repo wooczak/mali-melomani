@@ -23,7 +23,13 @@ class PickSongScene extends Phaser.Scene {
 
     let currentPage = 0;
     const SONGS_PER_PAGE = COLORS.pickScene.length;
-    const allSongs = this.cache.json.entries.getArray();
+    const allSongs: any[] = [];
+    for (let i = 1; i <= 10; i++) {
+      const song = this.cache.json.get(`song${i}`);
+      if (song) {
+        allSongs.push(song);
+      }
+    }
     const totalPages = Math.ceil(allSongs.length / SONGS_PER_PAGE);
 
     let songButtons: Phaser.GameObjects.Container[] = [];
@@ -101,7 +107,9 @@ class PickSongScene extends Phaser.Scene {
         button.setData("chosenSongIndex", i);
 
         button.on("pointerdown", () => {
-          this.scene.start("PickInstrumentScene", { chosenSongIndex: button.getData("chosenSongIndex") });
+          this.scene.start("PickInstrumentScene", {
+            chosenSongIndex: button.getData("chosenSongIndex"),
+          });
         });
 
         songButtons.push(button);

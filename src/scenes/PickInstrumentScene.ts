@@ -1,5 +1,11 @@
 import { COLORS } from "../constants";
 import type { Song } from "../types";
+import drum from "/assets/svg/drum.svg";
+import guiro from "/assets/svg/guiro.svg";
+import rattle from "/assets/svg/rattle.svg";
+import tambourine from "/assets/svg/tambourine.svg";
+import triangle from "/assets/svg/triangle.svg";
+import woodBlocks from "/assets/svg/woodBlocks.svg";
 
 interface PickInstrumentSceneData {
   chosenSongIndex: number;
@@ -24,12 +30,12 @@ class PickInstrumentScene extends Phaser.Scene {
       `assets/songs/song${this.chosenSongIndex + 1}.json`
     );
 
-    this.load.svg("bębenek", "assets/svg/bębenek.svg");
-    this.load.svg("tarka", "assets/svg/tarka.svg");
-    this.load.svg("grzechotka", "assets/svg/grzechotka.svg");
-    this.load.svg("tamburyno", "assets/svg/tamburyno.svg");
-    this.load.svg("trójkąt", "assets/svg/trójkąt.svg");
-    this.load.svg("drewienka", "assets/svg/drewienka.svg");
+    this.load.image("bębenek", drum);
+    this.load.image("tarka", guiro);
+    this.load.image("grzechotka", rattle);
+    this.load.image("tamburyno", tambourine);
+    this.load.image("trójkąt", triangle);
+    this.load.image("drewienka", woodBlocks);
   }
 
   createCardContainers() {
@@ -79,12 +85,7 @@ class PickInstrumentScene extends Phaser.Scene {
       const card = this.add
         .container(cardX, cardY, [cardGraphics, instrumentImage, cardText])
         .setInteractive(
-          new Phaser.Geom.Rectangle(
-            0,
-            0,
-            cardWidth,
-            cardHeight
-          ),
+          new Phaser.Geom.Rectangle(0, 0, cardWidth, cardHeight),
           Phaser.Geom.Rectangle.Contains,
           false
         );
