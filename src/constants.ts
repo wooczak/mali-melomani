@@ -2,7 +2,7 @@ export const INSTRUMENTS = {
   bębenek: "bębenek",
   grzechotka: "grzechotka",
   trójkąt: "trójkąt",
-  tamburyno: "tamburyno",
+  tamburyn: "tamburyn",
   drewienka: "drewienka",
   tarka: "tarka",
 } as const;
@@ -10,7 +10,7 @@ export const INSTRUMENTS = {
 export const COLORS = {
   whiteBg: 0xf9f5f2,
   bgBlue: 0x3650a5,
-  textGreen: 0xd6e264,
+  textGreen: 0x018741,
   textRed: 0xf95b37,
   pickScene: [
     {

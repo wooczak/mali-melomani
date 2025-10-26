@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link href="./src/styles.css" rel="stylesheet">
+    <link href="./src/styles.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -27,10 +27,18 @@
     </nav>
     <main class="ml-auto">
       <section id="game-container" class="mx-auto w-[1000px]"></section>
-    </main> 
+    </main>
     <footer class="h-16 flex items-center justify-center">
       <p>Stopka</p>
     </footer>
     <script type="module" src="/src/main.ts"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script>
+      WebFont.load({
+        google: {
+          families: ["Bugglegum Sans", "DynaPuff", "ABeeZee"],
+        },
+      });
+    </script>
   </body>
 </html>

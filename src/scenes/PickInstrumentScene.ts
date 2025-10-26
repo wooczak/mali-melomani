@@ -33,7 +33,7 @@ class PickInstrumentScene extends Phaser.Scene {
     this.load.image("bębenek", drum);
     this.load.image("tarka", guiro);
     this.load.image("grzechotka", rattle);
-    this.load.image("tamburyno", tambourine);
+    this.load.image("tamburyn", tambourine);
     this.load.image("trójkąt", triangle);
     this.load.image("drewienka", woodBlocks);
   }
