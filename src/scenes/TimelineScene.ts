@@ -43,14 +43,14 @@ class TimelineScene extends Phaser.Scene {
       note: Phaser.GameObjects.Graphics;
       tween: Phaser.Tweens.Tween;
     }[] = [];
-
+// @ts-ignore
     this.objects.camera = this.cameras.add(
       0,
       0,
       this.sys.game.canvas.width,
       this.sys.game.canvas.height
     );
-
+// @ts-ignore
     this.objects.camera.setBackgroundColor(
       Phaser.Display.Color.IntegerToColor(COLORS.timeline[this.world].bg).rgba
     );

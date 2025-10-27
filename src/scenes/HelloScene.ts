@@ -13,7 +13,7 @@ class HelloScene extends Phaser.Scene {
     this.add
       .text(width / 2, height / 2 - 210, "Mali Melomani", {
         font: "600 110px DynaPuff",
-        color: Phaser.Display.Color.IntegerToColor(COLORS.textRed).rgba
+        color: Phaser.Display.Color.IntegerToColor(COLORS.textRed).rgba,
       })
       .setOrigin(0.5);
 
@@ -30,14 +30,12 @@ class HelloScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
 
-      this.add.circle(
-        width / 2,
-        height / 2,
-        128,
-        COLORS.playBtnCircleFill
-      ).setOrigin(0.5);
+    this.add
+      .circle(width / 2, height / 2, 128, COLORS.playBtnCircleFill)
+      .setOrigin(0.5);
 
-      this.add.triangle(
+    this.add
+      .triangle(
         width / 2 + 45,
         height / 2 + 45,
         -32,
@@ -46,8 +44,9 @@ class HelloScene extends Phaser.Scene {
         48,
         64,
         0,
-        COLORS.textRed  
-      ).setOrigin(0.5);
+        COLORS.textRed
+      )
+      .setOrigin(0.5);
 
     this.add
       .rectangle(
