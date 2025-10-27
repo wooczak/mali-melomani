@@ -9,13 +9,14 @@ class PickSongScene extends Phaser.Scene {
     for (let i = 1; i <= 10; i++) {
       this.load.json(`song${i}`, `assets/songs/song${i}.json`);
     }
+    this.load.svg("start", "/assets/svg/pick-song-star.svg");
   }
 
   create() {
     const { width, height } = this.sys.game.canvas;
 
     this.add
-      .text(width / 2, 100, "Wybierz utwór", {
+      .text(width / 2, 75, "Wybierz utwór", {
         font: "600 64px DynaPuff",
         color: Phaser.Display.Color.IntegerToColor(COLORS.textRed).rgba,
       })
@@ -24,6 +25,7 @@ class PickSongScene extends Phaser.Scene {
     let currentPage = 0;
     const SONGS_PER_PAGE = COLORS.pickScene.length;
     const allSongs: any[] = [];
+
     for (let i = 1; i <= 10; i++) {
       const song = this.cache.json.get(`song${i}`);
       if (song) {
@@ -43,30 +45,30 @@ class PickSongScene extends Phaser.Scene {
 
       for (let i = start; i < end; i++) {
         const color = COLORS.pickScene[i - start];
-        const { fill, stroke } = color;
+        const { fill } = color;
 
         const btnX = width * 0.15;
-        const btnY = height * 0.25 + (i - start) * 85;
+        const btnY = height * 0.25 + (i - start) * 73;
         const btnWidth = width * 0.7;
-        const btnHeight = 70;
-        const btnRadius = 20;
+        const btnHeight = 60;
+        const btnRadius = 10;
 
         const graphics = this.add.graphics();
         graphics.fillStyle(fill, 1);
-        graphics.lineStyle(4, stroke, 1);
         graphics.fillRoundedRect(0, 0, btnWidth, btnHeight, btnRadius);
-        graphics.strokeRoundedRect(0, 0, btnWidth, btnHeight, btnRadius);
 
         const songName = allSongs[i].songName || `Song ${i + 1}`;
         const text = this.add
           .text(btnWidth / 2, btnHeight / 2, songName, {
             fontSize: "24px",
-            color: "#000",
+            color: "#fff",
             fontFamily: "'ABeeZee', cursive",
           })
           .setOrigin(0.5);
 
         const button = this.add.container(btnX, btnY, [graphics, text]);
+
+        button.setData("songIndex", i);
 
         button
           .setSize(btnWidth, btnHeight)
@@ -80,6 +82,8 @@ class PickSongScene extends Phaser.Scene {
             Phaser.Geom.Rectangle.Contains,
             false
           );
+
+        button.setData("chosenSongIndex", i);
 
         button.on("pointerover", () => {
           this.input.manager.canvas.style.cursor = "pointer";
@@ -104,8 +108,6 @@ class PickSongScene extends Phaser.Scene {
           });
         });
 
-        button.setData("chosenSongIndex", i);
-
         button.on("pointerdown", () => {
           this.scene.start("PickInstrumentScene", {
             chosenSongIndex: button.getData("chosenSongIndex"),
@@ -119,7 +121,7 @@ class PickSongScene extends Phaser.Scene {
         const arrow = this.add
           .text(width / 2, height * 0.9, "▼", {
             fontSize: "48px",
-            color: "#fff",
+            color: "#000",
             fontFamily: "'DynaPuff', cursive",
           })
           .setOrigin(0.5)

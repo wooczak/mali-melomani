@@ -2,7 +2,7 @@ export const INSTRUMENTS = {
   bębenek: "bębenek",
   grzechotka: "grzechotka",
   trójkąt: "trójkąt",
-  tamburyno: "tamburyno",
+  tamburyn: "tamburyn",
   drewienka: "drewienka",
   tarka: "tarka",
 } as const;
@@ -10,28 +10,23 @@ export const INSTRUMENTS = {
 export const COLORS = {
   whiteBg: 0xf9f5f2,
   bgBlue: 0x3650a5,
-  textGreen: 0xd6e264,
+  textGreen: 0x018741,
   textRed: 0xf95b37,
   pickScene: [
     {
-      fill: 0xfef8db,
-      stroke: 0xffe879,
+      fill: 0x1869ce,
     },
     {
-      fill: 0xeee0ff,
-      stroke: 0x812bc7,
+      fill: 0x680e8b,
     },
     {
-      fill: 0xffdad9,
-      stroke: 0xf66583,
+      fill: 0x018741,
     },
     {
-      fill: 0xd0f6ff,
-      stroke: 0x2b8c9f,
+      fill: 0xf556b3,
     },
     {
-      fill: 0xd6f4e4,
-      stroke: 0x1f8850,
+      fill: 0xec293d,
     },
   ],
   pickInstrumentBlock: {

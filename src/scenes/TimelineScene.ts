@@ -1,6 +1,10 @@
 import { COLORS, INSTRUMENTS } from "../constants";
 import type { Song, WORLD } from "../types";
 
+function between(x: number, min: number, max: number) {
+  return x >= min && x <= max;
+}
+
 class TimelineScene extends Phaser.Scene {
   hitBoxContainer: Phaser.GameObjects.Container[] = [];
   countdownMs: number = 0;
@@ -8,6 +12,15 @@ class TimelineScene extends Phaser.Scene {
   selectedInstrument: keyof typeof INSTRUMENTS = "bębenek";
   world: WORLD = "ocean";
   objects = {};
+  spaceObject: Phaser.Input.Keyboard.Key | undefined;
+  allNotes: {
+    note: Phaser.GameObjects.Graphics;
+    tween: Phaser.Tweens.Tween;
+  }[] = [];
+  latency = 200;
+  songStartTimestamp: number | null = null;
+  startTime = 0;
+  spaceKey!: Phaser.Input.Keyboard.Key;
 
   constructor(config: string | Phaser.Types.Scenes.SettingsConfig) {
     super(config);
@@ -39,18 +52,21 @@ class TimelineScene extends Phaser.Scene {
     const song = this.cache.json.get("song") as Song;
 
     this.countdownMs = song.countdownMs;
-    const allNotes: {
-      note: Phaser.GameObjects.Graphics;
-      tween: Phaser.Tweens.Tween;
-    }[] = [];
-// @ts-ignore
+
+    this.startTime = this.time.now;
+    this.spaceKey = this.input.keyboard!.addKey(
+      Phaser.Input.Keyboard.KeyCodes.SPACE
+    );
+
+    // @ts-ignore
     this.objects.camera = this.cameras.add(
       0,
       0,
       this.sys.game.canvas.width,
       this.sys.game.canvas.height
     );
-// @ts-ignore
+
+    // @ts-ignore
     this.objects.camera.setBackgroundColor(
       Phaser.Display.Color.IntegerToColor(COLORS.timeline[this.world].bg).rgba
     );
@@ -63,6 +79,10 @@ class TimelineScene extends Phaser.Scene {
         this.sound.context.resume();
       }
     });
+
+    // ----------
+    // Creating hit boxes and notes
+    // ----------
 
     let hitBoxContainer = this.add.container(0, 0);
 
@@ -89,6 +109,12 @@ class TimelineScene extends Phaser.Scene {
       hitBoxContainer.add(hitBox);
     });
 
+    // ----------
+    // Creating note boxes
+    // ----------
+
+    const finalY = this.sys.game.canvas.height + 300;
+
     song.instruments.forEach((instrument, index) => {
       const instrumentLine = hitBoxContainer.list[
         index
@@ -106,20 +132,26 @@ class TimelineScene extends Phaser.Scene {
           .fillRoundedRect(instrumentLine.x, -100, 140, 78, 8);
 
         note.setData("hitTime", hit.time);
+        note.setData("instrument", instrument.name);
 
         const noteTween = this.tweens.add({
           targets: note,
           paused: true,
-          y: instrumentLine.y + 120,
+          y: finalY,
           delay: hit.time * 1000 - 1000,
+          duration: (finalY / (instrumentLine.y + 120)) * 1000,
         });
 
-        allNotes.push({
+        this.allNotes.push({
           note,
           tween: noteTween,
         });
       });
     });
+
+    // ----
+    // Creating countdown
+    // ----
 
     let countdownText = this.add
       .text(
@@ -156,68 +188,105 @@ class TimelineScene extends Phaser.Scene {
       at: this.countdownMs,
       run: () => {
         this.sound.play("audio");
+        this.songStartTimestamp = this.time.now;
       },
     });
+
     timeline.play();
 
     this.time.delayedCall(this.countdownMs, () => {
-      allNotes.forEach((note) => note.tween.play());
+      this.allNotes.forEach((note) => note.tween.play());
     });
 
-    let spaceObject: Phaser.Input.Keyboard.Key | undefined;
-
     if (this.input.keyboard) {
-      spaceObject = this.input.keyboard.addKey("SPACE");
+      this.spaceObject = this.input.keyboard.addKey("SPACE");
     }
 
-    let possibleLatency = 500;
-
-    function between(x: number, min: number, max: number) {
-      return x >= min && x <= max;
-    }
-
-    spaceObject?.on("down", () => {
-      song.instruments
-        .find((inst) => inst.name === this.selectedInstrument)
-        ?.hits.forEach((hit) => {
-          if (
-            between(
-              this.time.now - this.countdownMs,
-              hit.time * 1000 - possibleLatency,
-              hit.time * 1000 + possibleLatency
-            )
-          ) {
-            const noteHit = allNotes.find((note) =>
-              between(
-                note.note.getData("hitTime") * 1000,
-                this.time.now - this.countdownMs - possibleLatency,
-                this.time.now - this.countdownMs + possibleLatency
-              )
-            );
-
-            console.log(
-              noteHit?.note.getData("hitTime") * 1000,
-              this.time.now - this.countdownMs - possibleLatency,
-              this.time.now - this.countdownMs + possibleLatency
-            );
-
-            if (noteHit) {
-              this.tweens.add({
-                targets: noteHit.note,
-                scaleX: 1.2,
-                scaleY: 1.2,
-                alpha: 0,
-                duration: 100,
-                onComplete: () => {
-                  this.tweens.killTweensOf(noteHit.note);
-                  noteHit.note.destroy(true); 
-                  allNotes.splice(allNotes.indexOf(noteHit), 1);
-                },
-              });
-            }
+    this.allNotes.forEach((note) => {
+      if (this.selectedInstrument !== note.note.getData("instrument")) {
+        this.time.delayedCall(
+          this.countdownMs + note.note.getData("hitTime") * 1000 - 200,
+          () => {
+            this.tweens.add({
+              targets: note.note,
+              alpha: 0,
+              duration: 300,
+              ease: "Power1",
+              onComplete: () => {
+                note.note.destroy();
+              },
+            });
           }
+        );
+      } else {
+        this.time.delayedCall(
+          this.countdownMs + note.note.getData("hitTime") * 1000 + 200,
+          () => {
+            this.tweens.add({
+              targets: note.note,
+              alpha: 0,
+              duration: 300,
+              ease: "Power1",
+              onComplete: () => {
+                note.note.destroy();
+              },
+            });
+          }
+        );
+      }
+    });
+
+    this.spaceObject?.on("down", () => {
+      if (this.songStartTimestamp === null) return;
+
+      const currentGameTime = (this.time.now - this.songStartTimestamp) / 1000;
+      if (currentGameTime < 0) return;
+
+      const hitNote = this.allNotes.find(
+        (n) =>
+          n.note.getData("instrument") === this.selectedInstrument &&
+          between(
+            currentGameTime,
+            n.note.getData("hitTime") - this.latency / 1000,
+            n.note.getData("hitTime") + this.latency / 1000
+          )
+      );
+
+      if (hitNote) {
+        hitNote.tween.stop();
+        this.tweens.add({
+          targets: hitNote.note,
+          alpha: 0,
+          scaleY: "+=0.5",
+          duration: 100,
+          ease: "Power1",
+          onComplete: () => {
+            hitNote.note.destroy();
+          },
         });
+      } else {
+        const upcomingNote = this.allNotes.find(
+          (n) =>
+            n.note.getData("instrument") === this.selectedInstrument &&
+            n.note.getData("hitTime") > currentGameTime &&
+            !n.note.getData("jiggling")
+        );
+
+        if (upcomingNote) {
+          upcomingNote.note.setData("jiggling", true);
+
+          this.tweens.add({
+            targets: upcomingNote.note,
+            x: upcomingNote.note.x + 10,
+            duration: 50,
+            yoyo: true,
+            repeat: 2,
+            onComplete: () => upcomingNote.note.setData("jiggling", false),
+          });
+        }
+      }
     });
   }
 }
+
 export default TimelineScene;

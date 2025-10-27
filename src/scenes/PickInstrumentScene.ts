@@ -33,7 +33,7 @@ class PickInstrumentScene extends Phaser.Scene {
     this.load.image("bębenek", drum);
     this.load.image("tarka", guiro);
     this.load.image("grzechotka", rattle);
-    this.load.image("tamburyno", tambourine);
+    this.load.image("tamburyn", tambourine);
     this.load.image("trójkąt", triangle);
     this.load.image("drewienka", woodBlocks);
   }
@@ -74,7 +74,7 @@ class PickInstrumentScene extends Phaser.Scene {
           220,
           instrument.name.charAt(0).toUpperCase() + instrument.name.slice(1),
           {
-            fontFamily: "'ABeeZee', cursive",
+            fontFamily: "'ABeeZee', Arial",
             fontSize: "28px",
             color: "#000000",
             wordWrap: { width: 30 },

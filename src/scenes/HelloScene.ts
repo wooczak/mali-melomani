@@ -1,7 +1,7 @@
 import { COLORS } from "../constants";
 
 class HelloScene extends Phaser.Scene {
-  constructor(config: string | Phaser.Types.Scenes.SettingsConfig | undefined) {
+  constructor(config?: string | Phaser.Types.Scenes.SettingsConfig) {
     super(config);
   }
 
@@ -10,62 +10,56 @@ class HelloScene extends Phaser.Scene {
   create() {
     const { width, height } = this.sys.game.canvas;
 
-    this.add
-      .text(width / 2, height / 2 - 210, "Mali Melomani", {
+    const centerX = Math.round(width / 2);
+    const centerY = Math.round(height / 2);
+
+    const title = this.add
+      .text(centerX, centerY - 210, "Mali Melomani", {
         font: "600 110px DynaPuff",
-        color: Phaser.Display.Color.IntegerToColor(COLORS.textRed).rgba,
+        color: Phaser.Display.Color.IntegerToColor(COLORS.textGreen).rgba,
       })
       .setOrigin(0.5);
 
-    const pressSpaceText = this.make
-      .text({
-        x: width / 2,
-        y: height - 100,
-        text: "Naciśnij spację, aby rozpocząć grę.",
-        style: {
-          fontFamily: "'DynaPuff', cursive",
-          fontSize: "32px",
-          color: Phaser.Display.Color.IntegerToColor(COLORS.textRed).rgba,
-        },
-      })
-      .setOrigin(0.5);
+    title.setPosition(Math.round(title.x), Math.round(title.y));
+
+    console.log(centerX, centerY, title.x, title.y);
 
     this.add
-      .circle(width / 2, height / 2, 128, COLORS.playBtnCircleFill)
-      .setOrigin(0.5);
+      .circle(centerX, centerY, 128, COLORS.playBtnCircleFill)
+      .setOrigin(0.5)
+      .setPosition(Math.round(centerX), Math.round(centerY));
 
     this.add
       .triangle(
-        width / 2 + 45,
-        height / 2 + 45,
+        centerX + 45,
+        centerY + 45,
         -32,
         -48,
         -32,
         48,
         64,
         0,
-        COLORS.textRed
+        COLORS.textGreen
       )
-      .setOrigin(0.5);
+      .setOrigin(0.5)
+      .setPosition(Math.round(centerX + 45), Math.round(centerY + 45));
 
-    this.add
-      .rectangle(
-        pressSpaceText.x,
-        pressSpaceText.y,
-        pressSpaceText.width + 50,
-        pressSpaceText.height + 50
-      )
-      .setStrokeStyle(5, 0xffffff)
-      .setFillStyle(0xffffff, 0);
+    this.make
+      .text({
+        x: centerX,
+        y: height - 100,
+        text: "Naciśnij spację, aby rozpocząć grę.",
+        style: {
+          fontFamily: "'DynaPuff', cursive",
+          fontSize: "32px",
+          color: Phaser.Display.Color.IntegerToColor(COLORS.textGreen).rgba,
+        },
+      })
+      .setOrigin(0.5)
+      .setPosition(centerX, Math.round(height - 100));
 
-    const keyboard = this.input.keyboard;
-
-    if (keyboard) {
-      const space = keyboard.addKey("SPACE");
-      space.on("down", () => {
-        this.scene.start("PickSongScene");
-      });
-    }
+    const space = this.input.keyboard?.addKey("SPACE");
+    space?.on("down", () => this.scene.start("PickSongScene"));
   }
 }
 
