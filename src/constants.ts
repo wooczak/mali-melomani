@@ -14,24 +14,19 @@ export const COLORS = {
   textRed: 0xf95b37,
   pickScene: [
     {
-      fill: 0xfef8db,
-      stroke: 0xffe879,
+      fill: 0x1869ce,
     },
     {
-      fill: 0xeee0ff,
-      stroke: 0x812bc7,
+      fill: 0x680e8b,
     },
     {
-      fill: 0xffdad9,
-      stroke: 0xf66583,
+      fill: 0x018741,
     },
     {
-      fill: 0xd0f6ff,
-      stroke: 0x2b8c9f,
+      fill: 0xf556b3,
     },
     {
-      fill: 0xd6f4e4,
-      stroke: 0x1f8850,
+      fill: 0xec293d,
     },
   ],
   pickInstrumentBlock: {

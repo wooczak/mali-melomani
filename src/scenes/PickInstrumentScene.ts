@@ -74,7 +74,7 @@ class PickInstrumentScene extends Phaser.Scene {
           220,
           instrument.name.charAt(0).toUpperCase() + instrument.name.slice(1),
           {
-            fontFamily: "'ABeeZee', cursive",
+            fontFamily: "'ABeeZee', Arial",
             fontSize: "28px",
             color: "#000000",
             wordWrap: { width: 30 },
