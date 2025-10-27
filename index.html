@@ -18,19 +18,32 @@
     <link rel="stylesheet" href="src/scenes/styles.css" />
     <title>Phaser game</title>
   </head>
-  <body>
-    <nav class="h-16 flex items-center justify-between px-5">
-      <a href="/"><p class="dynapuff-bold">MaliMelomani</p></a>
-      <ul class="flex gap-5 dynapuff-bold">
+  <body class="min-h-screen flex flex-col">
+    <nav class="h-32 flex items-center justify-between px-5">
+      <a href="/"
+        ><p>Mali<b>Melomani</b></p></a
+      >
+      <ul class="flex gap-5">
         <a href="/instrukcja-gry"><li>Instrukcja gry</li></a>
         <a href="/ciekawostki"><li>Ciekawostki</li></a>
       </ul>
     </nav>
-    <main class="ml-auto">
-      <section id="game-container" class="mx-auto w-[1000px]"></section>
+    <main class="flex-1">
+      <section
+        id="game-container"
+        class="mx-auto w-[1000px] max-w-full box-border outline outline-[5px] outline-white shadow-xl"
+      ></section>
     </main>
-    <footer class="h-16 flex items-center justify-center">
-      <p class="dynapuff-bold">Projekt finansowany przez XYZ</p>
+    <footer class="h-48 flex items-center justify-center mt-4">
+      <div class="container justify-center items-center mx-auto">
+        <p class="text-center p-5">Projekt finansowany przez</p>
+        <div class="flex justify-evenly bg-white p-5">
+          <img src="public/assets/svg/banner-1.svg" alt="banner-1" />
+          <img src="public/assets/svg/banner-2.svg" alt="banner-2" />
+          <img src="public/assets/svg/banner-3.svg" alt="banner-3" />
+          <img src="public/assets/svg/banner-4.svg" alt="banner-4" />
+        </div>
+      </div>
     </footer>
     <script type="module" src="/src/nav-router.ts"></script>
     <script type="module" src="/src/main.ts"></script>
