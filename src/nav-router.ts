@@ -9,10 +9,10 @@ export function initNavRouter() {
 
       if (href === "/instrukcja-gry") {
         e.preventDefault();
-        window.location.href = "/pages/instrukcja-gry.html";
+        window.location.href = "/instrukcja-gry";
       } else if (href === "/ciekawostki") {
         e.preventDefault();
-        window.location.href = "/pages/ciekawostki.html";
+        window.location.href = "/ciekawostki";
       }
     }
   });
