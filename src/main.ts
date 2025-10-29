@@ -43,6 +43,38 @@ const config = {
 
 async function startGame() {
   await document.fonts.ready;
+  // If on a mobile device, don't initialize the Phaser game.
+  // Show a friendly message in the #game-container instead.
+  const isMobile = (): boolean => {
+    if (
+      typeof navigator !== "undefined" &&
+      /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+    ) {
+      return true;
+    }
+    if (
+      typeof window !== "undefined" &&
+      window.innerWidth &&
+      window.innerWidth < 768
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  const container = document.getElementById("game-container");
+
+  if (isMobile()) {
+    if (container) {
+      container.innerHTML = `
+        <div class="mx-auto max-w-md w-full bg-white/90 text-center p-6 rounded-lg shadow-lg">
+          <h2 class="text-2xl abezee-regular mb-2">Gra "Mali Melomani" jest dostępna tylko na komputerze. Zagraj na większym ekranie!</h2>
+          <p class="text-lg abezee-regular">Przepraszamy za niedogodności.</p>
+        </div>
+      `;
+    }
+    return;
+  }
 
   new Phaser.Game(config);
 }
