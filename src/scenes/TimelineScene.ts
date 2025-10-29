@@ -21,6 +21,13 @@ class TimelineScene extends Phaser.Scene {
   songStartTimestamp: number | null = null;
   startTime = 0;
   spaceKey!: Phaser.Input.Keyboard.Key;
+  song: Song = {
+    songName: "",
+    countdownMs: 0,
+    tempo: 0,
+    duration: 0,
+    instruments: [],
+  };
 
   constructor(config: string | Phaser.Types.Scenes.SettingsConfig) {
     super(config);
@@ -41,17 +48,20 @@ class TimelineScene extends Phaser.Scene {
       `assets/audio/song${this.chosenSongIndex + 1}.mp3`
     );
     this.load.audio("countdownStick", "assets/audio/countdown-stick.mp3");
-    this.load.on("progress", (val: number) => {
-      console.log(`TimelineScene preload: ${val}`);
-    });
+    this.load.svg(INSTRUMENTS.bębenek, "assets/svg/drum.svg");
+    this.load.svg(INSTRUMENTS.tarka, "assets/svg/guiro.svg");
+    this.load.svg(INSTRUMENTS.grzechotka, "assets/svg/rattle.svg");
+    this.load.svg(INSTRUMENTS.tamburyn, "assets/svg/tambourine.svg");
+    this.load.svg(INSTRUMENTS.drewienka, "assets/svg/woodBlocks.svg");
+    this.load.svg(INSTRUMENTS.trójkąt, "assets/svg/triangle.svg");
     this.objects = {};
   }
 
   create() {
     const instruments = (this.cache.json.get("song") as Song).instruments;
-    const song = this.cache.json.get("song") as Song;
+    this.song = this.cache.json.get("song") as Song;
 
-    this.countdownMs = song.countdownMs;
+    this.countdownMs = this.song.countdownMs;
 
     this.startTime = this.time.now;
     this.spaceKey = this.input.keyboard!.addKey(
@@ -86,6 +96,9 @@ class TimelineScene extends Phaser.Scene {
 
     let hitBoxContainer = this.add.container(0, 0);
 
+    const width = 140;
+    const height = 78;
+
     instruments.forEach((instrument, index: number) => {
       const hitBox = this.add.graphics();
       hitBox.lineStyle(
@@ -95,16 +108,20 @@ class TimelineScene extends Phaser.Scene {
           : COLORS.timeline[this.world].blockStroke.faded,
         1
       );
-      hitBox.strokeRoundedRect(0, 0, 140, 78, 8);
+      hitBox.strokeRoundedRect(0, 0, width, height, 8);
 
       const total = instruments.length;
       const rectWidth = 140;
       const spacing = (this.sys.game.canvas.width - rectWidth) / total;
 
       hitBox.x = 75 + index * spacing;
-      hitBox.y = this.sys.game.canvas.height - 30 - 78;
+      hitBox.y = this.sys.game.canvas.height - 30 - 150;
 
       hitBox.name = instrument.name;
+
+      this.add
+        .image(hitBox.x + width / 2, hitBox.y + height + 20, instrument.name)
+        .setScale(0.5, 0.5);
 
       hitBoxContainer.add(hitBox);
     });
@@ -115,7 +132,7 @@ class TimelineScene extends Phaser.Scene {
 
     const finalY = this.sys.game.canvas.height + 300;
 
-    song.instruments.forEach((instrument, index) => {
+    this.song.instruments.forEach((instrument, index) => {
       const instrumentLine = hitBoxContainer.list[
         index
       ] as Phaser.GameObjects.Graphics;
@@ -286,6 +303,20 @@ class TimelineScene extends Phaser.Scene {
         }
       }
     });
+  }
+
+  update(time: number) {
+    console.log(time);
+    if (
+      time / 1000 ===
+      this.song.duration + this.countdownMs / 1000 + this.startTime
+    ) {
+      console.log(
+        time,
+        this.song.duration * 1000 + this.countdownMs + this.startTime
+      );
+      console.log("END");
+    }
   }
 }
 
