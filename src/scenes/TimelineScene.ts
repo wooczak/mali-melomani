@@ -1,11 +1,18 @@
 import { COLORS, INSTRUMENTS } from "../constants";
 import type { Song, WORLD } from "../types";
+import loaderNote1 from "/assets/svg/loader-note1.svg?raw";
+import loaderNote2 from "/assets/svg/loader-note2.svg?raw";
+import loaderNote3 from "/assets/svg/loader-note3.svg?raw";
 
 function between(x: number, min: number, max: number) {
   return x >= min && x <= max;
 }
 
 class TimelineScene extends Phaser.Scene {
+  private loader1?: HTMLElement;
+  private loader2?: HTMLElement;
+  private loader3?: HTMLElement;
+
   hitBoxContainer: Phaser.GameObjects.Container[] = [];
   countdownMs: number = 0;
   chosenSongIndex: number = 0;
@@ -19,7 +26,6 @@ class TimelineScene extends Phaser.Scene {
   }[] = [];
   latency = 200;
   songStartTimestamp: number | null = null;
-  startTime = 0;
   spaceKey!: Phaser.Input.Keyboard.Key;
   song: Song = {
     songName: "",
@@ -42,7 +48,46 @@ class TimelineScene extends Phaser.Scene {
   }
 
   preload() {
+    this.loader1 = document.createElement("div");
+    this.loader2 = document.createElement("div");
+    this.loader3 = document.createElement("div");
+    this.loader1.innerHTML = loaderNote1;
+    this.loader2.innerHTML = loaderNote2;
+    this.loader3.innerHTML = loaderNote3;
+
+    Object.assign(this.loader1.style, {
+      position: "absolute",
+      top: "50%",
+      left: "calc(50% - 150px)",
+      transform: "translate(-50%, -50%)",
+      animation: "loader-note-bounce 1.5s infinite",
+      zIndex: "1000",
+    });
+
+    Object.assign(this.loader2.style, {
+      position: "absolute",
+      top: "50%",
+      left: "calc(50% + 0px)",
+      animation: "loader-note-bounce 0.5s infinite",
+      transform: "translate(-50%, -50%)",
+      zIndex: "1000",
+    });
+
+    Object.assign(this.loader3.style, {
+      position: "absolute",
+      top: "50%",
+      left: "calc(50% + 100px)",
+      transform: "translate(-50%, -50%)",
+      animation: "loader-note-bounce 1s infinite",
+      zIndex: "1000",
+    });
+
+    document.body.appendChild(this.loader1);
+    document.body.appendChild(this.loader2);
+    document.body.appendChild(this.loader3);
+
     this.load.json("song", `assets/songs/song${this.chosenSongIndex + 1}.json`);
+
     this.load.audio(
       "audio",
       `assets/audio/song${this.chosenSongIndex + 1}.mp3`
@@ -54,6 +99,12 @@ class TimelineScene extends Phaser.Scene {
     this.load.svg(INSTRUMENTS.tamburyn, "assets/svg/tambourine.svg");
     this.load.svg(INSTRUMENTS.drewienka, "assets/svg/woodBlocks.svg");
     this.load.svg(INSTRUMENTS.trójkąt, "assets/svg/triangle.svg");
+
+    this.load.once("complete", () => {
+      this.loader1?.remove();
+      this.loader2?.remove();
+      this.loader3?.remove();
+    });
     this.objects = {};
   }
 
@@ -63,7 +114,6 @@ class TimelineScene extends Phaser.Scene {
 
     this.countdownMs = this.song.countdownMs;
 
-    this.startTime = this.time.now;
     this.spaceKey = this.input.keyboard!.addKey(
       Phaser.Input.Keyboard.KeyCodes.SPACE
     );
@@ -121,7 +171,7 @@ class TimelineScene extends Phaser.Scene {
 
       this.add
         .image(hitBox.x + width / 2, hitBox.y + height + 20, instrument.name)
-        .setScale(0.5, 0.5);
+        .setScale(0.7, 0.7);
 
       hitBoxContainer.add(hitBox);
     });
@@ -306,16 +356,11 @@ class TimelineScene extends Phaser.Scene {
   }
 
   update(time: number) {
-    console.log(time);
-    if (
-      time / 1000 ===
-      this.song.duration + this.countdownMs / 1000 + this.startTime
-    ) {
-      console.log(
-        time,
-        this.song.duration * 1000 + this.countdownMs + this.startTime
-      );
-      console.log("END");
+    if (time / 1000 >= this.song.duration + this.countdownMs / 1000) {
+      this.scene.start("ScoreScene", {
+        chosenSong: this.chosenSongIndex,
+        chosenInstrument: this.selectedInstrument,
+      });
     }
   }
 }

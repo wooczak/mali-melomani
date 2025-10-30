@@ -22,8 +22,6 @@ class HelloScene extends Phaser.Scene {
 
     title.setPosition(Math.round(title.x), Math.round(title.y));
 
-    console.log(centerX, centerY, title.x, title.y);
-
     this.add
       .circle(centerX, centerY, 128, COLORS.playBtnCircleFill)
       .setOrigin(0.5)
@@ -39,7 +37,7 @@ class HelloScene extends Phaser.Scene {
         48,
         64,
         0,
-        COLORS.textGreen
+        COLORS.playBtnTriangleFill
       )
       .setOrigin(0.5)
       .setPosition(Math.round(centerX + 45), Math.round(centerY + 45));

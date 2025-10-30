@@ -33,7 +33,8 @@ export const COLORS = {
     fill: 0xfee8e3,
     stroke: 0xf95b37,
   },
-  playBtnCircleFill: 0xfee8e3,
+  playBtnCircleFill: 0xC6DCF7,
+  playBtnTriangleFill: 0x1869CE,
   timeline: {
     ocean: {
       bg: 0x1869ce,
