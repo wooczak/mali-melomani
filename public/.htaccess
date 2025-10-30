@@ -1,0 +1,11 @@
+# Włącz mod_rewrite
+RewriteEngine On
+
+# Jeśli użytkownik wchodzi na adres bez .html
+# i istnieje odpowiadający plik .html — serwuj go
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^([^/]+)/?$ $1.html [L]
+
+# Dodatkowo — jeśli ktoś wpisze z .html, możesz przekierować na czystą wersję (opcjonalnie)
+RewriteCond %{THE_REQUEST} "GET /(.*)\.html "
+RewriteRule ^(.*)\.html$ /$1 [R=301,L]
