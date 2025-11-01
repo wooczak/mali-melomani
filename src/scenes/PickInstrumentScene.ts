@@ -21,15 +21,11 @@ class PickInstrumentScene extends Phaser.Scene {
   }
 
   init(data: PickInstrumentSceneData): void {
-    this.chosenSongIndex = data.chosenSongIndex;
+    console.log(data);
+    this.chosenSongIndex = data.chosenSongIndex ?? 0;
   }
 
   preload() {
-    this.load.json(
-      "chosenSong",
-      `assets/songs/song${this.chosenSongIndex + 1}.json`
-    );
-
     this.load.image("bębenek", drum);
     this.load.image("tarka", guiro);
     this.load.image("grzechotka", rattle);
@@ -41,8 +37,9 @@ class PickInstrumentScene extends Phaser.Scene {
   createCardContainers() {
     this.cardContainers = [];
 
-    const chosenSongInstruments = (this.cache.json.get("chosenSong") as Song)
-      .instruments;
+    const chosenSongInstruments = (
+      this.cache.json.get(`song${this.chosenSongIndex + 1}`) as Song
+    ).instruments;
 
     chosenSongInstruments.forEach((instrument, index, arr) => {
       const canvasWidth = this.sys.game.canvas.width;
@@ -181,6 +178,7 @@ class PickInstrumentScene extends Phaser.Scene {
     });
 
     tuttiContainer.on("pointerdown", () => {
+      this.scene.stop("PickInstrumentScene");
       this.scene.start("TimelineScene", {
         chosenSong: this.chosenSongIndex,
         chosenInstrument: null,
