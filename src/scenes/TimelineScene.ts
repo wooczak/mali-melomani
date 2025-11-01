@@ -34,6 +34,7 @@ class TimelineScene extends Phaser.Scene {
     duration: 0,
     instruments: [],
   };
+  isTutti: boolean = false;
 
   constructor(config: string | Phaser.Types.Scenes.SettingsConfig) {
     super(config);
@@ -42,9 +43,11 @@ class TimelineScene extends Phaser.Scene {
   init(data: {
     chosenSong: number;
     chosenInstrument: keyof typeof INSTRUMENTS;
+    tutti?: boolean;
   }) {
     this.chosenSongIndex = data.chosenSong;
     this.selectedInstrument = data.chosenInstrument;
+    this.isTutti = !!data.tutti;
   }
 
   preload() {
@@ -153,7 +156,9 @@ class TimelineScene extends Phaser.Scene {
       const hitBox = this.add.graphics();
       hitBox.lineStyle(
         3,
-        instrument.name === this.selectedInstrument
+        this.isTutti
+          ? COLORS.timeline[this.world].blockStroke.active
+          : instrument.name === this.selectedInstrument
           ? COLORS.timeline[this.world].blockStroke.active
           : COLORS.timeline[this.world].blockStroke.faded,
         1
@@ -162,9 +167,11 @@ class TimelineScene extends Phaser.Scene {
 
       const total = instruments.length;
       const rectWidth = 140;
-      const spacing = (this.sys.game.canvas.width - rectWidth) / total;
 
-      hitBox.x = 75 + index * spacing;
+      const available = this.sys.game.canvas.width;
+      const gap = Math.max(0, (available - rectWidth * total) / (total + 1));
+      const startX = gap;
+      hitBox.x = startX + index * (rectWidth + gap);
       hitBox.y = this.sys.game.canvas.height - 30 - 150;
 
       hitBox.name = instrument.name;
@@ -188,15 +195,19 @@ class TimelineScene extends Phaser.Scene {
       ] as Phaser.GameObjects.Graphics;
 
       instrument.hits.forEach((hit) => {
-        const note = this.add
-          .graphics()
-          .fillStyle(
-            instrument.name === this.selectedInstrument
-              ? COLORS.timeline[this.world].blockStroke.active
-              : COLORS.timeline[this.world].blockStroke.faded,
-            1
-          )
-          .fillRoundedRect(instrumentLine.x, -100, 140, 78, 8);
+        const w = 140;
+        const h = 78;
+
+        const color = this.isTutti
+          ? COLORS.timeline[this.world].blockStroke.active
+          : instrument.name === this.selectedInstrument
+          ? COLORS.timeline[this.world].blockStroke.active
+          : COLORS.timeline[this.world].blockStroke.faded;
+
+        const note = this.add.graphics();
+
+        note.fillStyle(color, 1).fillRoundedRect(-w / 2, -h / 2, w, h, 8);
+        note.setPosition(instrumentLine.x + width / 2, -100 + height / 2);
 
         note.setData("hitTime", hit.time);
         note.setData("instrument", instrument.name);
@@ -226,8 +237,9 @@ class TimelineScene extends Phaser.Scene {
         this.sys.game.canvas.height / 2,
         "",
         {
-          fontSize: "64px",
-          color: COLORS.timeline[this.world].blockStroke.toString(),
+          fontSize: "350px",
+          color: "#FFFFFF",
+          fontFamily: "ABeeZee, Arial",
         }
       )
       .setOrigin(0.5);
@@ -270,40 +282,56 @@ class TimelineScene extends Phaser.Scene {
     }
 
     this.allNotes.forEach((note) => {
-      if (this.selectedInstrument !== note.note.getData("instrument")) {
+      if (this.isTutti) {
         this.time.delayedCall(
-          this.countdownMs + note.note.getData("hitTime") * 1000 - 200,
+          this.countdownMs + note.note.getData("hitTime") * 1000,
           () => {
             this.tweens.add({
               targets: note.note,
               alpha: 0,
-              duration: 300,
+              scale: 2,
+              duration: 150,
               ease: "Power1",
-              onComplete: () => {
-                note.note.destroy();
-              },
+              onComplete: () => note.note.destroy(),
             });
           }
         );
       } else {
-        this.time.delayedCall(
-          this.countdownMs + note.note.getData("hitTime") * 1000 + 200,
-          () => {
-            this.tweens.add({
-              targets: note.note,
-              alpha: 0,
-              duration: 300,
-              ease: "Power1",
-              onComplete: () => {
-                note.note.destroy();
-              },
-            });
-          }
-        );
+        if (this.selectedInstrument !== note.note.getData("instrument")) {
+          this.time.delayedCall(
+            this.countdownMs + note.note.getData("hitTime") * 1000 - 200,
+            () => {
+              this.tweens.add({
+                targets: note.note,
+                alpha: 0,
+                duration: 300,
+                ease: "Power1",
+                onComplete: () => note.note.destroy(),
+              });
+            }
+          );
+        } else {
+          this.time.delayedCall(
+            this.countdownMs + note.note.getData("hitTime") * 1000 + 200,
+            () => {
+              this.tweens.add({
+                targets: note.note,
+                alpha: 0,
+                duration: 300,
+                ease: "Power1",
+                onComplete: () => note.note.destroy(),
+              });
+            }
+          );
+        }
       }
     });
 
     this.spaceObject?.on("down", () => {
+      if (this.isTutti) {
+        this.input.keyboard?.removeKey("SPACE");
+      }
+
       if (this.songStartTimestamp === null) return;
 
       const currentGameTime = (this.time.now - this.songStartTimestamp) / 1000;
@@ -324,7 +352,7 @@ class TimelineScene extends Phaser.Scene {
         this.tweens.add({
           targets: hitNote.note,
           alpha: 0,
-          scaleY: "+=0.5",
+          scale: 2,
           duration: 100,
           ease: "Power1",
           onComplete: () => {
@@ -355,14 +383,14 @@ class TimelineScene extends Phaser.Scene {
     });
   }
 
-  update(time: number) {
+  /*   update(time: number) {
     if (time / 1000 >= this.song.duration + this.countdownMs / 1000) {
       this.scene.start("ScoreScene", {
         chosenSong: this.chosenSongIndex,
         chosenInstrument: this.selectedInstrument,
       });
     }
-  }
+  } */
 }
 
 export default TimelineScene;
