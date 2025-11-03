@@ -13,6 +13,9 @@ class TimelineScene extends Phaser.Scene {
   private loader2?: HTMLElement;
   private loader3?: HTMLElement;
 
+  gameOverContainer?: Phaser.GameObjects.Container;
+  isSongStarted: boolean = false;
+  gameOver: boolean = false;
   hitBoxContainer: Phaser.GameObjects.Container[] = [];
   countdownMs: number = 0;
   chosenSongIndex: number = 0;
@@ -34,6 +37,7 @@ class TimelineScene extends Phaser.Scene {
     duration: 0,
     instruments: [],
   };
+  isTutti: boolean = false;
 
   constructor(config: string | Phaser.Types.Scenes.SettingsConfig) {
     super(config);
@@ -42,9 +46,14 @@ class TimelineScene extends Phaser.Scene {
   init(data: {
     chosenSong: number;
     chosenInstrument: keyof typeof INSTRUMENTS;
+    tutti?: boolean;
   }) {
     this.chosenSongIndex = data.chosenSong;
     this.selectedInstrument = data.chosenInstrument;
+    this.isTutti = !!data.tutti;
+    this.gameOver = false;
+    this.gameOverContainer?.destroy();
+    this.songStartTimestamp = null;
   }
 
   preload() {
@@ -86,8 +95,6 @@ class TimelineScene extends Phaser.Scene {
     document.body.appendChild(this.loader2);
     document.body.appendChild(this.loader3);
 
-    this.load.json("song", `assets/songs/song${this.chosenSongIndex + 1}.json`);
-
     this.load.audio(
       "audio",
       `assets/audio/song${this.chosenSongIndex + 1}.mp3`
@@ -99,18 +106,23 @@ class TimelineScene extends Phaser.Scene {
     this.load.svg(INSTRUMENTS.tamburyn, "assets/svg/tambourine.svg");
     this.load.svg(INSTRUMENTS.drewienka, "assets/svg/woodBlocks.svg");
     this.load.svg(INSTRUMENTS.trójkąt, "assets/svg/triangle.svg");
+    this.load.svg("game-over-box", "assets/svg/game-over-box.svg");
+    this.load.svg("arrow-back", "assets/svg/arrow-back.svg");
 
     this.load.once("complete", () => {
       this.loader1?.remove();
       this.loader2?.remove();
       this.loader3?.remove();
     });
+
     this.objects = {};
   }
 
   create() {
-    const instruments = (this.cache.json.get("song") as Song).instruments;
-    this.song = this.cache.json.get("song") as Song;
+    const instruments = (
+      this.cache.json.get(`song${this.chosenSongIndex + 1}`) as Song
+    ).instruments;
+    this.song = this.cache.json.get(`song${this.chosenSongIndex + 1}`) as Song;
 
     this.countdownMs = this.song.countdownMs;
 
@@ -140,6 +152,37 @@ class TimelineScene extends Phaser.Scene {
       }
     });
 
+
+    // ----
+    // Creating arrow back
+    // ----
+
+    const arrowBack = this.add
+      .image(50, 50, "arrow-back")
+      .setOrigin(0.5)
+      .setScale(0.5)
+      .setInteractive();
+
+    arrowBack.on("pointerover", () => {
+      this.input.manager.canvas.style.cursor = "pointer";
+    });
+
+    arrowBack.on("pointerout", () => {
+      this.input.manager.canvas.style.cursor = "default";
+    });
+
+    arrowBack.on("pointerdown", () => {
+      this.tweens.killAll();
+      this.time.removeAllEvents();  
+      this.sound.stopAll();
+      this.sound.removeAll();
+      this.cache.audio.remove("audio");
+      this.cache.audio.remove("countdownStick");
+      this.scene.stop();
+      this.scene.start("PickSongScene");
+    });
+    
+
     // ----------
     // Creating hit boxes and notes
     // ----------
@@ -153,25 +196,30 @@ class TimelineScene extends Phaser.Scene {
       const hitBox = this.add.graphics();
       hitBox.lineStyle(
         3,
-        instrument.name === this.selectedInstrument
+        this.isTutti
+          ? COLORS.timeline[this.world].blockStroke.active
+          : instrument.name === this.selectedInstrument
           ? COLORS.timeline[this.world].blockStroke.active
           : COLORS.timeline[this.world].blockStroke.faded,
         1
       );
-      hitBox.strokeRoundedRect(0, 0, width, height, 8);
+
+      hitBox.strokeRoundedRect(-width / 2, -height / 2, width, height, 8);
 
       const total = instruments.length;
       const rectWidth = 140;
-      const spacing = (this.sys.game.canvas.width - rectWidth) / total;
+      const available = this.sys.game.canvas.width;
+      const gap = Math.max(0, (available - rectWidth * total) / (total + 1));
+      const startX = gap;
 
-      hitBox.x = 75 + index * spacing;
-      hitBox.y = this.sys.game.canvas.height - 30 - 150;
+      hitBox.x = startX + index * (rectWidth + gap) + width / 2;
+      hitBox.y = this.sys.game.canvas.height - 30 - 150 + height / 2;
 
       hitBox.name = instrument.name;
 
       this.add
-        .image(hitBox.x + width / 2, hitBox.y + height + 20, instrument.name)
-        .setScale(0.7, 0.7);
+        .image(hitBox.x, hitBox.y + height / 2 + 20, instrument.name)
+        .setScale(0.7);
 
       hitBoxContainer.add(hitBox);
     });
@@ -188,15 +236,19 @@ class TimelineScene extends Phaser.Scene {
       ] as Phaser.GameObjects.Graphics;
 
       instrument.hits.forEach((hit) => {
-        const note = this.add
-          .graphics()
-          .fillStyle(
-            instrument.name === this.selectedInstrument
-              ? COLORS.timeline[this.world].blockStroke.active
-              : COLORS.timeline[this.world].blockStroke.faded,
-            1
-          )
-          .fillRoundedRect(instrumentLine.x, -100, 140, 78, 8);
+        const w = 140;
+        const h = 78;
+
+        const color = this.isTutti
+          ? COLORS.timeline[this.world].blockStroke.active
+          : instrument.name === this.selectedInstrument
+          ? COLORS.timeline[this.world].blockStroke.active
+          : COLORS.timeline[this.world].blockStroke.faded;
+
+        const note = this.add.graphics();
+
+        note.fillStyle(color, 1).fillRoundedRect(-w / 2, -h / 2, w, h, 8);
+        note.setPosition(instrumentLine.x, -100 + height / 2);
 
         note.setData("hitTime", hit.time);
         note.setData("instrument", instrument.name);
@@ -205,7 +257,7 @@ class TimelineScene extends Phaser.Scene {
           targets: note,
           paused: true,
           y: finalY,
-          delay: hit.time * 1000 - 1000,
+          delay: hit.time * 1000 - 800,
           duration: (finalY / (instrumentLine.y + 120)) * 1000,
         });
 
@@ -226,8 +278,9 @@ class TimelineScene extends Phaser.Scene {
         this.sys.game.canvas.height / 2,
         "",
         {
-          fontSize: "64px",
-          color: COLORS.timeline[this.world].blockStroke.toString(),
+          fontSize: "350px",
+          color: "#FFFFFF",
+          fontFamily: "ABeeZee, Arial",
         }
       )
       .setOrigin(0.5);
@@ -262,6 +315,7 @@ class TimelineScene extends Phaser.Scene {
     timeline.play();
 
     this.time.delayedCall(this.countdownMs, () => {
+      this.isSongStarted = true;
       this.allNotes.forEach((note) => note.tween.play());
     });
 
@@ -270,40 +324,78 @@ class TimelineScene extends Phaser.Scene {
     }
 
     this.allNotes.forEach((note) => {
-      if (this.selectedInstrument !== note.note.getData("instrument")) {
+      if (this.isTutti) {
         this.time.delayedCall(
-          this.countdownMs + note.note.getData("hitTime") * 1000 - 200,
+          this.countdownMs + note.note.getData("hitTime") * 1000,
           () => {
             this.tweens.add({
               targets: note.note,
               alpha: 0,
-              duration: 300,
+              scale: 2,
+              duration: 150,
               ease: "Power1",
-              onComplete: () => {
-                note.note.destroy();
-              },
+              onComplete: () => note.note.destroy(),
             });
           }
         );
       } else {
-        this.time.delayedCall(
-          this.countdownMs + note.note.getData("hitTime") * 1000 + 200,
-          () => {
-            this.tweens.add({
-              targets: note.note,
-              alpha: 0,
-              duration: 300,
-              ease: "Power1",
-              onComplete: () => {
-                note.note.destroy();
-              },
-            });
-          }
-        );
+        if (this.selectedInstrument !== note.note.getData("instrument")) {
+          this.time.delayedCall(
+            this.countdownMs + note.note.getData("hitTime") * 1000,
+            () => {
+              this.tweens.add({
+                targets: note.note,
+                alpha: 0,
+                duration: 100,
+                ease: "Power1",
+                onComplete: () => note.note.destroy(),
+              });
+
+              this.tweens.add({
+                targets: hitBoxContainer.list.find(
+                  (hb) => hb.name === note.note.getData("instrument")
+                ),
+                scaleX: 1.1,
+                scaleY: 1.1,
+                duration: 100,
+                yoyo: true,
+                ease: "Power1",
+                onComplete: () => {
+                  this.tweens.add({
+                    targets: hitBoxContainer.list.find(
+                      (hb) => hb.name === note.note.getData("instrument")
+                    ),
+                    scaleX: 1,
+                    scaleY: 1,
+                    duration: 100,
+                    ease: "Power1",
+                  });
+                },
+              });
+            }
+          );
+        } else {
+          this.time.delayedCall(
+            this.countdownMs + note.note.getData("hitTime") * 1000 + 200,
+            () => {
+              this.tweens.add({
+                targets: note.note,
+                alpha: 0,
+                duration: 300,
+                ease: "Power1",
+                onComplete: () => note.note.destroy(),
+              });
+            }
+          );
+        }
       }
     });
 
     this.spaceObject?.on("down", () => {
+      if (this.isTutti) {
+        this.input.keyboard?.removeKey("SPACE");
+      }
+
       if (this.songStartTimestamp === null) return;
 
       const currentGameTime = (this.time.now - this.songStartTimestamp) / 1000;
@@ -324,11 +416,33 @@ class TimelineScene extends Phaser.Scene {
         this.tweens.add({
           targets: hitNote.note,
           alpha: 0,
-          scaleY: "+=0.5",
+          scale: 2,
           duration: 100,
           ease: "Power1",
           onComplete: () => {
             hitNote.note.destroy();
+          },
+        });
+
+        this.tweens.add({
+          targets: hitBoxContainer.list.find(
+            (hb) => hb.name === hitNote.note.getData("instrument")
+          ),
+          scaleX: 1.1,
+          scaleY: 1.1,
+          duration: 50,
+          yoyo: true,
+          ease: "Power1",
+          onComplete: () => {
+            this.tweens.add({
+              targets: hitBoxContainer.list.find(
+                (hb) => hb.name === hitNote.note.getData("instrument")
+              ),
+              scaleX: 1,
+              scaleY: 1,
+              duration: 50,
+              ease: "Power1",
+            });
           },
         });
       } else {
@@ -356,10 +470,156 @@ class TimelineScene extends Phaser.Scene {
   }
 
   update(time: number) {
-    if (time / 1000 >= this.song.duration + this.countdownMs / 1000) {
-      this.scene.start("ScoreScene", {
-        chosenSong: this.chosenSongIndex,
-        chosenInstrument: this.selectedInstrument,
+    if (!this.songStartTimestamp) return;
+
+    if (
+      Math.floor(time / 1000 - this.songStartTimestamp / 1000) >=
+      this.song.duration
+    ) {
+      this.gameOver = true;
+      this.gameOverContainer = this.add.container(0, 0);
+
+      const gameOverBox = this.add
+        .image(
+          this.sys.game.canvas.width / 2,
+          this.sys.game.canvas.height / 2,
+          "game-over-box"
+        )
+        .setOrigin(0.5)
+        .setScale(0.8, 0.8);
+
+      const gameOverText = this.add
+        .text(
+          this.sys.game.canvas.width / 2,
+          this.sys.game.canvas.height / 2 - 100,
+          "Koniec gry!",
+          {
+            fontSize: "64px",
+            color: "#000000",
+            fontFamily: "DynaPuff, Arial",
+          }
+        )
+        .setOrigin(0.5);
+
+      const width = 300;
+      const height = 60;
+
+      const repickSongButton = this.add
+        .graphics({
+          x: this.sys.game.canvas.width / 2 - width / 2,
+          y: this.sys.game.canvas.height / 2 + 10 - height / 2,
+          fillStyle: { color: COLORS.textRed, alpha: 1 },
+        })
+        .fillRoundedRect(0, 0, width, height, 8)
+        .setInteractive(
+          new Phaser.Geom.Rectangle(0, 0, width, height),
+          Phaser.Geom.Rectangle.Contains
+        );
+
+      const repickSongButtonText = this.add
+        .text(
+          this.sys.game.canvas.width / 2,
+          this.sys.game.canvas.height / 2 + 10,
+          "Wybierz inny utwór",
+          {
+            font: "600 22px ABeeZee",
+            color: "#fff",
+          }
+        )
+        .setOrigin(0.5);
+
+      const replaySongButton = this.add
+        .graphics({
+          x: this.sys.game.canvas.width / 2 - width / 2,
+          y: this.sys.game.canvas.height / 2 + 90 - height / 2,
+          fillStyle: { color: COLORS.textRed, alpha: 1 },
+        })
+        .fillRoundedRect(0, 0, width, height, 8)
+        .setInteractive(
+          new Phaser.Geom.Rectangle(0, 0, width, height),
+          Phaser.Geom.Rectangle.Contains
+        );
+
+      const replaySongButtonText = this.add
+        .text(
+          this.sys.game.canvas.width / 2,
+          this.sys.game.canvas.height / 2 + 90,
+          "Zagraj ponownie",
+          {
+            font: "600 22px ABeeZee",
+            color: "#fff",
+          }
+        )
+        .setOrigin(0.5);
+
+      replaySongButton.on("pointerover", () => {
+        this.input.manager.canvas.style.cursor = "pointer";
+      });
+
+      replaySongButton.on("pointerout", () => {
+        this.input.manager.canvas.style.cursor = "default";
+      });
+
+      this.gameOverContainer?.add([
+        gameOverBox,
+        gameOverText,
+        repickSongButton,
+        repickSongButtonText,
+        replaySongButton,
+        replaySongButtonText,
+      ]);
+
+      replaySongButton.on("pointerdown", () => {
+        this.gameOver = true;
+        this.tweens.killAll();
+        this.time.removeAllEvents();
+        this.sound.stopAll();
+        this.sound.removeAll();
+        this.cache.audio.remove("audio");
+        this.cache.audio.remove("countdownStick");
+        this.scene.restart({
+          chosenSong: this.chosenSongIndex,
+          chosenInstrument: this.selectedInstrument,
+          tutti: this.isTutti,
+          gameOverContainer: null,
+        });
+      });
+
+      repickSongButton.on("pointerover", () => {
+        this.input.manager.canvas.style.cursor = "pointer";
+
+        repickSongButton.clear();
+        repickSongButton.fillStyle(COLORS.bgBlue, 1);
+        repickSongButton.fillRoundedRect(0, 0, width, height, 8);
+      });
+
+      repickSongButton.on("pointerout", () => {
+        this.input.manager.canvas.style.cursor = "default";
+
+        this.tweens.add({
+          targets: repickSongButton,
+          scaleX: 1,
+          scaleY: 1,
+          duration: 120,
+          ease: "Quad.easeIn",
+        });
+      });
+
+      repickSongButton.on("pointerdown", () => {
+        this.gameOver = true;
+        this.tweens.killAll();
+        this.time.removeAllEvents();
+        this.sound.stopAll();
+        this.sound.removeAll();
+        this.cache.audio.remove("audio");
+        this.cache.audio.remove("countdownStick");
+        this.scene.stop();
+        this.scene.stop("TimelineScene", {
+          chosenSong: 0,
+          chosenInstrument: "bębenek",
+          tutti: false,
+        });
+        this.scene.start("PickSongScene");
       });
     }
   }

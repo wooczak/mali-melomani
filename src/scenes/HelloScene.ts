@@ -25,7 +25,17 @@ class HelloScene extends Phaser.Scene {
     this.add
       .circle(centerX, centerY, 128, COLORS.playBtnCircleFill)
       .setOrigin(0.5)
-      .setPosition(Math.round(centerX), Math.round(centerY));
+      .setPosition(Math.round(centerX), Math.round(centerY))
+      .setInteractive({ useHandCursor: true })
+      .on("pointerdown", () => {
+        this.scene.start("PickSongScene");
+      })
+      .on("pointerover", () => {
+        this.input.manager.canvas.style.cursor = "pointer";
+      })
+      .on("pointerout", () => {
+        this.input.manager.canvas.style.cursor = "default";
+      });
 
     this.add
       .triangle(
@@ -40,13 +50,23 @@ class HelloScene extends Phaser.Scene {
         COLORS.playBtnTriangleFill
       )
       .setOrigin(0.5)
-      .setPosition(Math.round(centerX + 45), Math.round(centerY + 45));
+      .setPosition(Math.round(centerX + 45), Math.round(centerY + 45))
+      .setInteractive({ useHandCursor: true })
+      .on("pointerdown", () => {
+        this.scene.start("PickSongScene");
+      })
+      .on("pointerover", () => {
+        this.input.manager.canvas.style.cursor = "pointer";
+      })
+      .on("pointerout", () => {
+        this.input.manager.canvas.style.cursor = "default";
+      });
 
     this.make
       .text({
         x: centerX,
         y: height - 100,
-        text: "Naciśnij spację, aby rozpocząć grę.",
+        text: "Naciśnij ▶ lub spację, aby rozpocząć grę.",
         style: {
           fontFamily: "'DynaPuff', cursive",
           fontSize: "32px",

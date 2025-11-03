@@ -21,15 +21,11 @@ class PickInstrumentScene extends Phaser.Scene {
   }
 
   init(data: PickInstrumentSceneData): void {
-    this.chosenSongIndex = data.chosenSongIndex;
+    console.log(data);
+    this.chosenSongIndex = data.chosenSongIndex ?? 0;
   }
 
   preload() {
-    this.load.json(
-      "chosenSong",
-      `assets/songs/song${this.chosenSongIndex + 1}.json`
-    );
-
     this.load.image("bębenek", drum);
     this.load.image("tarka", guiro);
     this.load.image("grzechotka", rattle);
@@ -41,8 +37,9 @@ class PickInstrumentScene extends Phaser.Scene {
   createCardContainers() {
     this.cardContainers = [];
 
-    const chosenSongInstruments = (this.cache.json.get("chosenSong") as Song)
-      .instruments;
+    const chosenSongInstruments = (
+      this.cache.json.get(`song${this.chosenSongIndex + 1}`) as Song
+    ).instruments;
 
     chosenSongInstruments.forEach((instrument, index, arr) => {
       const canvasWidth = this.sys.game.canvas.width;
@@ -119,6 +116,7 @@ class PickInstrumentScene extends Phaser.Scene {
         this.scene.start("TimelineScene", {
           chosenSong: this.chosenSongIndex,
           chosenInstrument: card.getData("instrument"),
+          tutti: false,
         });
       });
 
@@ -127,7 +125,7 @@ class PickInstrumentScene extends Phaser.Scene {
   }
 
   create() {
-    const { width } = this.sys.game.canvas;
+    const { width, height } = this.sys.game.canvas;
 
     this.add
       .text(width / 2, 100, "Wybierz instrument", {
@@ -137,6 +135,56 @@ class PickInstrumentScene extends Phaser.Scene {
       .setOrigin(0.5);
 
     this.createCardContainers();
+
+    const tuttiText = this.add
+      .text(0, 0, "TUTTI", {
+        font: "36px ABeeZee",
+        color: Phaser.Display.Color.IntegerToColor(COLORS.textRed).rgba,
+      })
+      .setOrigin(0.5);
+
+    const underline = this.add.graphics();
+    underline.lineStyle(4, COLORS.textRed, 1);
+    underline.beginPath();
+    underline.moveTo(-tuttiText.width / 2, tuttiText.height / 2 + 10);
+    underline.lineTo(tuttiText.width / 2, tuttiText.height / 2 + 10);
+    underline.strokePath();
+
+    const tuttiContainer = this.add
+      .container(width / 2, height - 50, [tuttiText, underline])
+      .setSize(tuttiText.width, tuttiText.height + 10)
+      .setInteractive();
+
+    tuttiContainer.on("pointerover", () => {
+      this.input.manager.canvas.style.cursor = "pointer";
+      this.tweens.add({
+        targets: tuttiContainer,
+        scaleX: 1.1,
+        scaleY: 1.1,
+        duration: 120,
+        ease: "Quad.easeOut",
+      });
+    });
+
+    tuttiContainer.on("pointerout", () => {
+      this.input.manager.canvas.style.cursor = "default";
+      this.tweens.add({
+        targets: tuttiContainer,
+        scaleX: 1,
+        scaleY: 1,
+        duration: 120,
+        ease: "Quad.easeIn",
+      });
+    });
+
+    tuttiContainer.on("pointerdown", () => {
+      this.scene.stop("PickInstrumentScene");
+      this.scene.start("TimelineScene", {
+        chosenSong: this.chosenSongIndex,
+        chosenInstrument: null,
+        tutti: true,
+      });
+    });
   }
 }
 export default PickInstrumentScene;

@@ -10,7 +10,7 @@ import { COLORS } from "./constants";
 
 const gameBg = Phaser.Display.Color.IntegerToColor(COLORS.whiteBg).rgba;
 
-const config = {
+const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   width: 1000,
   height: 600,
@@ -18,9 +18,7 @@ const config = {
   scene: [
     new HelloScene({
       key: "HelloScene",
-      cameras: {
-        backgroundColor: gameBg,
-      },
+      cameras: { backgroundColor: gameBg },
     }),
     new PickSongScene({
       key: "PickSongScene",
@@ -28,19 +26,24 @@ const config = {
     }),
     new PickInstrumentScene({
       key: "PickInstrumentScene",
-      cameras: {
-        backgroundColor: gameBg,
-      },
+      cameras: { backgroundColor: gameBg },
     }),
     new TimelineScene({
       key: "TimelineScene",
-      cameras: {
-        backgroundColor: gameBg,
-      },
+      cameras: { backgroundColor: gameBg },
     }),
   ],
 };
 
+function loadFontsAndStartGame(): Promise<void> {
+  return new Promise((resolve) => {
+    const WebFont = (window as any).WebFont;
+    WebFont.load({
+      google: {
+        families: ["DynaPuff", "ABeeZee", "Bubblegum Sans", "Roboto"],
+      },
+      active: async () => {
+        await document.fonts.ready;
 async function startGame() {
   await document.fonts.ready;
   // If on a mobile device, don't initialize the Phaser game.
@@ -76,7 +79,25 @@ async function startGame() {
     return;
   }
 
-  new Phaser.Game(config);
+        const polishChars = "ąćęłńóśźżĄĆĘŁŃÓŚŹŻ";
+        const families = ["DynaPuff", "ABeeZee", "Bubblegum Sans", "Roboto"];
+
+        await Promise.all(
+          families.map((family) =>
+            document.fonts.load(`20px "${family}"`, polishChars)
+          )
+        );
+
+        requestAnimationFrame(() => resolve());
+      },
+      inactive: () => {
+        console.warn("⚠️ WebFont loading failed — starting anyway");
+        resolve();
+      },
+    });
+  });
 }
 
-startGame();
+loadFontsAndStartGame().then(() => {
+  new Phaser.Game(config);
+});
