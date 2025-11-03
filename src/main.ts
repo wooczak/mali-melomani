@@ -36,6 +36,8 @@ const config: Phaser.Types.Core.GameConfig = {
 };
 
 function loadFontsAndStartGame(): Promise<void> {
+  checkMobile();
+
   return new Promise((resolve) => {
     const WebFont = (window as any).WebFont;
     WebFont.load({
@@ -44,10 +46,18 @@ function loadFontsAndStartGame(): Promise<void> {
       },
       active: async () => {
         await document.fonts.ready;
-async function startGame() {
-  await document.fonts.ready;
-  // If on a mobile device, don't initialize the Phaser game.
-  // Show a friendly message in the #game-container instead.
+        checkMobile();
+        resolve();
+      },
+      inactive: () => {
+        console.warn("⚠️ WebFont loading failed — starting anyway");
+        resolve();
+      },
+    });
+  });
+}
+
+async function checkMobile(): Promise<boolean> {
   const isMobile = (): boolean => {
     if (
       typeof navigator !== "undefined" &&
@@ -76,28 +86,18 @@ async function startGame() {
         </div>
       `;
     }
-    return;
+    return true;
   }
 
-        const polishChars = "ąćęłńóśźżĄĆĘŁŃÓŚŹŻ";
-        const families = ["DynaPuff", "ABeeZee", "Bubblegum Sans", "Roboto"];
-
-        await Promise.all(
-          families.map((family) =>
-            document.fonts.load(`20px "${family}"`, polishChars)
-          )
-        );
-
-        requestAnimationFrame(() => resolve());
-      },
-      inactive: () => {
-        console.warn("⚠️ WebFont loading failed — starting anyway");
-        resolve();
-      },
-    });
-  });
+  return false;
 }
 
-loadFontsAndStartGame().then(() => {
+async function startGame() {
+  const isOnMobile = await checkMobile();
+  if (isOnMobile) return;
+
+  await loadFontsAndStartGame();
   new Phaser.Game(config);
-});
+}
+
+startGame();

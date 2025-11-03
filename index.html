@@ -15,17 +15,14 @@
       href="https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&family=DynaPuff:wght@400..700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="src/scenes/styles.css" />
     <title>Phaser game</title>
   </head>
   <body class="min-h-screen flex flex-col">
-    <nav
-      class="h-auto flex items-center justify-between px-5 md:px-[78px] py-4 md:py-[57px]"
-    >
+    <nav class="h-auto flex items-center justify-between px-[78px] py-[57px]">
       <a href="/"
-        ><h1 class="text-2xl md:text-[48px]">Mali<b>Melomani</b></h1></a
+        ><h1 class="text-[48px]">Mali<b>Melomani</b></h1></a
       >
-      <ul class="flex gap-3 md:gap-5 text-sm md:text-[24px]">
+      <ul class="flex gap-5 text-[24px]">
         <a href="/instrukcja-gry"><li>Instrukcja gry</li></a>
         <a href="/ciekawostki"><li>Ciekawostki</li></a>
       </ul>
@@ -33,7 +30,7 @@
     <main class="flex-1">
       <section
         id="game-container"
-        class="mx-auto w-[1000px] max-w-full box-border outline outline-[5px] outline-white shadow-xl"
+        class="mx-auto w-[1000px] max-w-full"
       ></section>
     </main>
     <footer
@@ -45,7 +42,7 @@
         class="h-[100px]"
       />
     </footer>
-    <script type="module" src="/src/nav-router.ts"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
