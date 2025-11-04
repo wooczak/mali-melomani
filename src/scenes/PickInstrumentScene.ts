@@ -1,11 +1,12 @@
 import { COLORS } from "../constants";
-import type { Song } from "../types";
+import { WORLD, type Song } from "../types";
 import drum from "/assets/svg/drum.svg";
 import guiro from "/assets/svg/guiro.svg";
 import rattle from "/assets/svg/rattle.svg";
 import tambourine from "/assets/svg/tambourine.svg";
 import triangle from "/assets/svg/triangle.svg";
 import woodBlocks from "/assets/svg/woodBlocks.svg";
+import sleighBells from "/assets/svg/sleighbells.svg";
 
 interface PickInstrumentSceneData {
   chosenSongIndex: number;
@@ -21,7 +22,6 @@ class PickInstrumentScene extends Phaser.Scene {
   }
 
   init(data: PickInstrumentSceneData): void {
-    console.log(data);
     this.chosenSongIndex = data.chosenSongIndex ?? 0;
   }
 
@@ -32,6 +32,7 @@ class PickInstrumentScene extends Phaser.Scene {
     this.load.image("tamburyn", tambourine);
     this.load.image("trójkąt", triangle);
     this.load.image("drewienka", woodBlocks);
+    this.load.image("janczary", sleighBells);
   }
 
   createCardContainers() {
@@ -59,11 +60,9 @@ class PickInstrumentScene extends Phaser.Scene {
       cardGraphics.lineStyle(6, COLORS.pickInstrumentBlock.stroke, 1);
       cardGraphics.strokeRoundedRect(0, 0, cardWidth, cardHeight, 12);
 
-      const instrumentImage = this.add.image(
-        cardWidth / 2,
-        100,
-        instrument.name
-      );
+      const instrumentImage = this.add
+        .image(cardWidth / 2, 100, instrument.name)
+        .setScale(instrument.name === "janczary" ? 0.6 : 0.8);
 
       const cardText = this.add
         .text(
@@ -116,6 +115,7 @@ class PickInstrumentScene extends Phaser.Scene {
         this.scene.start("TimelineScene", {
           chosenSong: this.chosenSongIndex,
           chosenInstrument: card.getData("instrument"),
+          world: [WORLD.ocean, WORLD.forest][Math.floor(Math.random() * 2)],
           tutti: false,
         });
       });
@@ -138,7 +138,7 @@ class PickInstrumentScene extends Phaser.Scene {
 
     const tuttiText = this.add
       .text(0, 0, "TUTTI", {
-        font: "36px ABeeZee",
+        font: "36px DynaPuff",
         color: Phaser.Display.Color.IntegerToColor(COLORS.textRed).rgba,
       })
       .setOrigin(0.5);
@@ -182,6 +182,7 @@ class PickInstrumentScene extends Phaser.Scene {
       this.scene.start("TimelineScene", {
         chosenSong: this.chosenSongIndex,
         chosenInstrument: null,
+        world: [WORLD.ocean, WORLD.forest][Math.floor(Math.random() * 2)],
         tutti: true,
       });
     });

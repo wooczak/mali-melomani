@@ -25,4 +25,8 @@ export type InstrumentsSvgData = {
   };
 };
 
-export type WORLD = "ocean"; /* | "forest" | "savanna"; */
+export const WORLD = {
+  ocean: "ocean",
+  forest: "forest",
+  /* savanna: "savanna", */
+} as const;

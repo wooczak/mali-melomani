@@ -1,5 +1,5 @@
 import { COLORS, INSTRUMENTS } from "../constants";
-import type { Song, WORLD } from "../types";
+import { type Song, WORLD } from "../types";
 import loaderNote1 from "/assets/svg/loader-note1.svg?raw";
 import loaderNote2 from "/assets/svg/loader-note2.svg?raw";
 import loaderNote3 from "/assets/svg/loader-note3.svg?raw";
@@ -16,11 +16,11 @@ class TimelineScene extends Phaser.Scene {
   gameOverContainer?: Phaser.GameObjects.Container;
   isSongStarted: boolean = false;
   gameOver: boolean = false;
-  hitBoxContainer: Phaser.GameObjects.Container[] = [];
+  hitBoxContainer: Phaser.GameObjects.Graphics[] = [];
   countdownMs: number = 0;
   chosenSongIndex: number = 0;
   selectedInstrument: keyof typeof INSTRUMENTS = "bębenek";
-  world: WORLD = "ocean";
+  world: keyof typeof WORLD = "ocean";
   objects = {};
   spaceObject: Phaser.Input.Keyboard.Key | undefined;
   allNotes: {
@@ -46,10 +46,12 @@ class TimelineScene extends Phaser.Scene {
   init(data: {
     chosenSong: number;
     chosenInstrument: keyof typeof INSTRUMENTS;
+    world: keyof typeof WORLD;
     tutti?: boolean;
   }) {
     this.chosenSongIndex = data.chosenSong;
     this.selectedInstrument = data.chosenInstrument;
+    this.world = data.world;
     this.isTutti = !!data.tutti;
     this.gameOver = false;
     this.gameOverContainer?.destroy();
@@ -108,6 +110,11 @@ class TimelineScene extends Phaser.Scene {
     this.load.svg(INSTRUMENTS.trójkąt, "assets/svg/triangle.svg");
     this.load.svg("game-over-box", "assets/svg/game-over-box.svg");
     this.load.svg("arrow-back", "assets/svg/arrow-back.svg");
+    this.load.svg("world-animal1", `assets/svg/animal-${this.world}1.svg`);
+    this.load.svg("world-animal2", `assets/svg/animal-${this.world}2.svg`);
+    this.load.svg("world-animal3", `assets/svg/animal-${this.world}3.svg`);
+    this.load.svg("world-animal4", `assets/svg/animal-${this.world}4.svg`);
+    this.load.svg("world-animal5", `assets/svg/animal-${this.world}5.svg`);
 
     this.load.once("complete", () => {
       this.loader1?.remove();
@@ -152,7 +159,6 @@ class TimelineScene extends Phaser.Scene {
       }
     });
 
-
     // ----
     // Creating arrow back
     // ----
@@ -173,15 +179,15 @@ class TimelineScene extends Phaser.Scene {
 
     arrowBack.on("pointerdown", () => {
       this.tweens.killAll();
-      this.time.removeAllEvents();  
+      this.time.removeAllEvents();
       this.sound.stopAll();
       this.sound.removeAll();
+      [1, 2, 3, 4, 5].forEach((i) => this.textures.remove("world-animal" + i));
       this.cache.audio.remove("audio");
       this.cache.audio.remove("countdownStick");
       this.scene.stop();
       this.scene.start("PickSongScene");
     });
-    
 
     // ----------
     // Creating hit boxes and notes
@@ -218,8 +224,17 @@ class TimelineScene extends Phaser.Scene {
       hitBox.name = instrument.name;
 
       this.add
+        .image(hitBox.x, 100, "world-animal" + (index + 1))
+        .setOrigin(0.5)
+        .setDepth(20);
+
+      this.add
         .image(hitBox.x, hitBox.y + height / 2 + 20, instrument.name)
-        .setScale(0.7);
+        .setScale(
+          instrument.name === "janczary" || instrument.name === "tamburyn"
+            ? 0.6
+            : 0.8
+        );
 
       hitBoxContainer.add(hitBox);
     });
@@ -252,6 +267,7 @@ class TimelineScene extends Phaser.Scene {
 
         note.setData("hitTime", hit.time);
         note.setData("instrument", instrument.name);
+        note.setDepth(10);
 
         const noteTween = this.tweens.add({
           targets: note,
@@ -576,6 +592,9 @@ class TimelineScene extends Phaser.Scene {
         this.sound.stopAll();
         this.sound.removeAll();
         this.cache.audio.remove("audio");
+        [1, 2, 3, 4, 5].forEach((i) =>
+          this.textures.remove("world-animal" + i)
+        );
         this.cache.audio.remove("countdownStick");
         this.scene.restart({
           chosenSong: this.chosenSongIndex,
@@ -610,6 +629,10 @@ class TimelineScene extends Phaser.Scene {
         this.tweens.killAll();
         this.time.removeAllEvents();
         this.sound.stopAll();
+        [1, 2, 3, 4, 5].forEach((i) =>
+          this.textures.remove("world-animal" + i)
+        );
+
         this.sound.removeAll();
         this.cache.audio.remove("audio");
         this.cache.audio.remove("countdownStick");

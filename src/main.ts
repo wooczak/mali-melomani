@@ -46,8 +46,17 @@ function loadFontsAndStartGame(): Promise<void> {
       },
       active: async () => {
         await document.fonts.ready;
-        checkMobile();
-        resolve();
+
+        const polishChars = "ąćęłńóśźżĄĆĘŁŃÓŚŹŻ";
+        const families = ["DynaPuff", "ABeeZee", "Bubblegum Sans", "Roboto"];
+
+        await Promise.all(
+          families.map((family) =>
+            document.fonts.load(`20px "${family}"`, polishChars)
+          )
+        );
+
+        requestAnimationFrame(() => resolve());
       },
       inactive: () => {
         console.warn("⚠️ WebFont loading failed — starting anyway");

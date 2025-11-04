@@ -5,6 +5,7 @@ export const INSTRUMENTS = {
   tamburyn: "tamburyn",
   drewienka: "drewienka",
   tarka: "tarka",
+  janczary: "janczary",
 } as const;
 
 export const COLORS = {
@@ -33,14 +34,21 @@ export const COLORS = {
     fill: 0xfee8e3,
     stroke: 0xf95b37,
   },
-  playBtnCircleFill: 0xC6DCF7,
-  playBtnTriangleFill: 0x1869CE,
+  playBtnCircleFill: 0xc6dcf7,
+  playBtnTriangleFill: 0x1869ce,
   timeline: {
     ocean: {
       bg: 0x1869ce,
       blockStroke: {
         active: 0x6ad2ff,
         faded: 0x3b57b4,
+      },
+    },
+    forest: {
+      bg: 0xc4ffd6,
+      blockStroke: {
+        active: 0x018741,
+        faded: 0x9cebb6,
       },
     },
   },
