@@ -10,6 +10,97 @@ import { COLORS } from "./constants";
 
 const gameBg = Phaser.Display.Color.IntegerToColor(COLORS.whiteBg).rgba;
 
+function initializeHamburgerMenu() {
+  const hamburgerButton = document.getElementById("hamburger-menu");
+  const mobileMenu = document.getElementById("mobile-menu");
+  const mobileMenuItems = document.querySelectorAll(".mobile-menu-item");
+  const mainContent = document.querySelector("main");
+
+  if (!hamburgerButton || !mobileMenu) return;
+
+  let isMenuOpen = false;
+
+  // Toggle menu function with smooth animation
+  const toggleMenu = () => {
+    isMenuOpen = !isMenuOpen;
+
+    if (isMenuOpen) {
+      // Open menu
+      hamburgerButton.classList.add("hamburger-active");
+      mobileMenu.classList.remove("mobile-menu-closed");
+      mobileMenu.classList.add("mobile-menu-open");
+
+      // Add smooth push-down effect to main content
+      if (mainContent) {
+        mainContent.style.transition =
+          "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
+        mainContent.style.transform = "translateY(0)"; // Content flows naturally
+      }
+    } else {
+      // Close menu
+      hamburgerButton.classList.remove("hamburger-active");
+      mobileMenu.classList.remove("mobile-menu-open");
+      mobileMenu.classList.add("mobile-menu-closed");
+
+      // Reset main content position
+      if (mainContent) {
+        mainContent.style.transform = "translateY(0)";
+      }
+    }
+  };
+
+  // Close menu function
+  const closeMenu = () => {
+    if (isMenuOpen) {
+      isMenuOpen = false;
+      hamburgerButton.classList.remove("hamburger-active");
+      mobileMenu.classList.remove("mobile-menu-open");
+      mobileMenu.classList.add("mobile-menu-closed");
+
+      if (mainContent) {
+        mainContent.style.transform = "translateY(0)";
+      }
+    }
+  };
+
+  // Add click event to hamburger button
+  hamburgerButton.addEventListener("click", toggleMenu);
+
+  // Close menu when clicking on menu items
+  mobileMenuItems.forEach((item) => {
+    item.addEventListener("click", closeMenu);
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener("click", (e) => {
+    const target = e.target as Node;
+    if (
+      isMenuOpen &&
+      !hamburgerButton.contains(target) &&
+      !mobileMenu.contains(target)
+    ) {
+      closeMenu();
+    }
+  });
+
+  // Close menu on escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && isMenuOpen) {
+      closeMenu();
+    }
+  });
+
+  // Handle window resize - close menu on desktop
+  window.addEventListener("resize", () => {
+    if (window.innerWidth >= 768 && isMenuOpen) {
+      closeMenu();
+    }
+  });
+}
+
+// Call this function after DOM is loaded
+document.addEventListener("DOMContentLoaded", initializeHamburgerMenu);
+
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   width: 1000,
@@ -89,10 +180,11 @@ async function checkMobile(): Promise<boolean> {
   if (isMobile()) {
     if (container) {
       container.innerHTML = `
-        <div class="mx-auto max-w-md w-full bg-white/90 text-center p-6 rounded-lg shadow-lg">
-          <h2 class="text-2xl abezee-regular mb-2">Gra "Mali Melomani" jest dostępna tylko na komputerze. Zagraj na większym ekranie!</h2>
-          <p class="text-lg abezee-regular">Przepraszamy za niedogodności.</p>
-        </div>
+     <div class="mx-[20px] bg-[#F95B37] text-center p-6 rounded-2xl shadow-lg">
+    <img src="/assets/svg/note.svg" alt="note-icon" class="mx-auto my-10" />
+    <h2 class="text-5xl dynapuff-regular text-white mb-5">Zagraj na większym ekranie!</h2>
+    <p class="text-2xl abezee-regular text-white">Gra MaliMelomani jest niedostępna na <br>urządzeniach mobilnych.</p>
+  </div>
       `;
     }
     return true;

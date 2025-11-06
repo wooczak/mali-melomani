@@ -19,14 +19,71 @@
      <title>Mali Melomani</title>
   </head>
   <body class="min-h-screen flex flex-col">
-     <nav class="h-auto flex flex-col md:flex-row items-center justify-between px-4 sm:px-8 md:px-16 lg:px-[78px] py-4 sm:py-6 md:py-8 lg:py-[57px] gap-4 md:gap-0">
-      <a href="/" class="flex-shrink-0">
-        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-[48px] text-center md:text-left">Mali<b>Melomani</b></h1>
-      </a>
-      <ul class="flex flex-col sm:flex-row gap-2 sm:gap-4 md:gap-5 text-base sm:text-lg md:text-xl lg:text-[24px] text-center">
-        <a href="/instrukcja-gry" class="hover:underline"><li>Instrukcja gry</li></a>
-        <a href="/ciekawostki" class="hover:underline"><li>Ciekawostki</li></a>
-      </ul>
+ <nav class="relative bg-[#f9f5f2] z-20">
+      <!-- Main navbar -->
+      <div
+        class="h-auto flex flex-row items-center justify-between px-4 sm:px-8 md:px-16 lg:px-[78px] py-4 sm:py-6 md:py-8 lg:py-[57px] gap-4 md:gap-0"
+      >
+        <a href="/" class="flex-shrink-0">
+          <h1
+            class="text-2xl sm:text-3xl md:text-4xl lg:text-[48px] text-center md:text-left"
+          >
+            Mali<b>Melomani</b>
+          </h1>
+        </a>
+
+        <!-- Hamburger button (visible on mobile) -->
+        <button
+          id="hamburger-menu"
+          class="md:hidden flex flex-col justify-center items-center w-10 h-10 space-y-1 focus:outline-none relative z-30"
+          aria-label="Toggle menu"
+        >
+          <span
+            class="hamburger-line w-6 h-0.5 bg-[#F95B37] transition-all duration-300 origin-center"
+          ></span>
+          <span
+            class="hamburger-line w-6 h-0.5 bg-[#F95B37] transition-all duration-300"
+          ></span>
+          <span
+            class="hamburger-line w-6 h-0.5 bg-[#F95B37] transition-all duration-300 origin-center"
+          ></span>
+        </button>
+
+        <!-- Desktop menu (hidden on mobile) -->
+        <ul
+          class="hidden md:flex gap-2 sm:gap-4 md:gap-5 text-base sm:text-lg md:text-xl lg:text-[24px]"
+        >
+          <a href="/instrukcja-gry" class="hover:underline"
+            ><li>Instrukcja gry</li></a
+          >
+          <a href="/ciekawostki" class="hover:underline"
+            ><li>Ciekawostki</li></a
+          >
+        </ul>
+      </div>
+
+      <!-- Mobile menu dropdown -->
+      <div
+        id="mobile-menu"
+        class="md:hidden overflow-hidden bg-[#f9f5f2] border-t border-[#F95B37]/20 mobile-menu-closed"
+      >
+        <ul class="flex flex-col">
+          <a href="/instrukcja-gry" class="mobile-menu-item">
+            <li
+              class="px-4 sm:px-8 py-4 text-lg hover:bg-[#F95B37]/10 hover:text-[#F95B37] transition-all duration-200"
+            >
+              Instrukcja gry
+            </li>
+          </a>
+          <a href="/ciekawostki" class="mobile-menu-item">
+            <li
+              class="px-4 sm:px-8 py-4 text-lg hover:bg-[#F95B37]/10 hover:text-[#F95B37] transition-all duration-200 border-t border-[#F95B37]/10"
+            >
+              Ciekawostki
+            </li>
+          </a>
+        </ul>
+      </div>
     </nav>
     <main class="flex-1">
       <h1 class="text-center p-5 text-[24px]">Czy wiesz że:</h1>
@@ -64,5 +121,6 @@
         class="h-[100px]"
       />
     </footer>
+        <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
