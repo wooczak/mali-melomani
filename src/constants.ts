@@ -6,6 +6,7 @@ export const INSTRUMENTS = {
   drewienka: "drewienka",
   tarka: "tarka",
   janczary: "janczary",
+  talerze: "talerze"
 } as const;
 
 export const COLORS = {
@@ -38,18 +39,25 @@ export const COLORS = {
   playBtnTriangleFill: 0x1869ce,
   timeline: {
     ocean: {
-      bg: 0x1869ce,
+      bg: 0xC4ECFE,
       blockStroke: {
-        active: 0x6ad2ff,
-        faded: 0x3b57b4,
+        active: 0x1052A3,
+        faded: 0x9BD9FE,
       },
     },
     forest: {
-      bg: 0xc4ffd6,
+      bg: 0xE0F3DC,
       blockStroke: {
-        active: 0x018741,
-        faded: 0x9cebb6,
+        active: 0x1F713A,
+        faded: 0xA1D99B,
       },
     },
+    savanna: {
+      bg: 0xF9F5F2,
+      blockStroke: {
+        active: 0xF95B37,
+        faded: 0xFFE1DA,
+      },
+    }
   },
 } as const;

@@ -2,8 +2,8 @@ import { INSTRUMENTS } from "./constants";
 
 type InstrumentHits = {
   time: number;
-  long?: true;
-  duration?: number;
+  type?: "long";
+  length?: number; // in seconds
 };
 
 type SongInstrumentData = {
@@ -16,6 +16,7 @@ export type Song = {
   countdownMs: number;
   tempo: number;
   duration: number;
+  world: keyof typeof WORLD;
   instruments: SongInstrumentData[];
 };
 
