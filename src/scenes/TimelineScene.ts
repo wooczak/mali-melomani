@@ -34,7 +34,6 @@ class TimelineScene extends Phaser.Scene {
   world: keyof typeof WORLD = "ocean";
   latency = 200;
   gameOverContainer?: Phaser.GameObjects.Container;
-  objects: Record<string, any> = {};
   spaceObject?: Phaser.Input.Keyboard.Key;
 
   constructor(config: string | Phaser.Types.Scenes.SettingsConfig) {
@@ -83,14 +82,17 @@ class TimelineScene extends Phaser.Scene {
       "audio",
       `assets/audio/song${this.chosenSongIndex + 1}.mp3`
     );
+
     this.load.audio("countdownStick", "assets/audio/countdown-stick.mp3");
 
     Object.values(INSTRUMENTS).forEach((i) =>
       this.load.svg(i, `assets/svg/${i}.svg`)
     );
-    ["game-over-box", "arrow-back"].forEach((i) =>
+
+    ["game-over-box", `arrow-back-${this.world}`].forEach((i) =>
       this.load.svg(i, `assets/svg/${i}.svg`)
     );
+
     for (let i = 1; i <= 5; i++)
       this.load.svg(
         `world-animal${i}`,
@@ -98,7 +100,7 @@ class TimelineScene extends Phaser.Scene {
       );
 
     this.load.once("complete", () => this.loaders.forEach((l) => l.remove()));
-    this.objects = {};
+
   }
 
   create() {
@@ -128,9 +130,9 @@ class TimelineScene extends Phaser.Scene {
 
     // Back arrow
     const arrowBack = this.add
-      .image(50, 50, "arrow-back")
+      .image(50, 50, `arrow-back-${this.world}`)
       .setOrigin(0.5)
-      .setScale(0.5)
+      .setScale(1)
       .setInteractive();
     arrowBack.on(
       "pointerover",
