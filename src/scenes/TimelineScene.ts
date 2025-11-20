@@ -4,647 +4,464 @@ import loaderNote1 from "/assets/svg/loader-note1.svg?raw";
 import loaderNote2 from "/assets/svg/loader-note2.svg?raw";
 import loaderNote3 from "/assets/svg/loader-note3.svg?raw";
 
-function between(x: number, min: number, max: number) {
-  return x >= min && x <= max;
-}
+const between = (x: number, min: number, max: number) => x >= min && x <= max;
+const loaderNotes = [loaderNote1, loaderNote2, loaderNote3];
 
 class TimelineScene extends Phaser.Scene {
-  private loader1?: HTMLElement;
-  private loader2?: HTMLElement;
-  private loader3?: HTMLElement;
-
-  gameOverContainer?: Phaser.GameObjects.Container;
-  isSongStarted: boolean = false;
-  gameOver: boolean = false;
-  hitBoxContainer: Phaser.GameObjects.Graphics[] = [];
-  countdownMs: number = 0;
-  chosenSongIndex: number = 0;
-  selectedInstrument: keyof typeof INSTRUMENTS = "bębenek";
-  world: keyof typeof WORLD = "ocean";
-  objects = {};
-  spaceObject: Phaser.Input.Keyboard.Key | undefined;
-  allNotes: {
-    note: Phaser.GameObjects.Graphics;
-    tween: Phaser.Tweens.Tween;
-  }[] = [];
-  latency = 200;
-  songStartTimestamp: number | null = null;
-  spaceKey!: Phaser.Input.Keyboard.Key;
-  song: Song = {
+  private loaders: HTMLElement[] = [];
+  private spaceKey!: Phaser.Input.Keyboard.Key;
+  private song: Song = {
     songName: "",
     countdownMs: 0,
     tempo: 0,
+    world: "ocean",
     duration: 0,
     instruments: [],
   };
-  isTutti: boolean = false;
+  private allNotes: {
+    note: Phaser.GameObjects.Graphics;
+    tween: Phaser.Tweens.Tween;
+  }[] = [];
+  private hitBoxContainer!: Phaser.GameObjects.Container;
+  private songStartTimestamp: number | null = null;
+
+  isSongStarted = false;
+  isTutti = false;
+  gameOver = false;
+  countdownMs = 0;
+  chosenSongIndex = 0;
+  selectedInstrument: keyof typeof INSTRUMENTS = "bębenek";
+  world: keyof typeof WORLD = "ocean";
+  latency = 200;
+  gameOverContainer?: Phaser.GameObjects.Container;
+  objects: Record<string, any> = {};
+  spaceObject?: Phaser.Input.Keyboard.Key;
 
   constructor(config: string | Phaser.Types.Scenes.SettingsConfig) {
     super(config);
   }
 
-  init(data: {
+  init({
+    chosenSong,
+    chosenInstrument,
+    world,
+    tutti,
+  }: {
     chosenSong: number;
     chosenInstrument: keyof typeof INSTRUMENTS;
     world: keyof typeof WORLD;
     tutti?: boolean;
   }) {
-    this.chosenSongIndex = data.chosenSong;
-    this.selectedInstrument = data.chosenInstrument;
-    this.world = data.world;
-    this.isTutti = !!data.tutti;
-    this.gameOver = false;
+    Object.assign(this, {
+      chosenSongIndex: chosenSong,
+      selectedInstrument: chosenInstrument,
+      world,
+      isTutti: !!tutti,
+      gameOver: false,
+      songStartTimestamp: null,
+    });
     this.gameOverContainer?.destroy();
-    this.songStartTimestamp = null;
   }
 
   preload() {
-    this.loader1 = document.createElement("div");
-    this.loader2 = document.createElement("div");
-    this.loader3 = document.createElement("div");
-    this.loader1.innerHTML = loaderNote1;
-    this.loader2.innerHTML = loaderNote2;
-    this.loader3.innerHTML = loaderNote3;
-
-    Object.assign(this.loader1.style, {
-      position: "absolute",
-      top: "50%",
-      left: "calc(50% - 150px)",
-      transform: "translate(-50%, -50%)",
-      animation: "loader-note-bounce 1.5s infinite",
-      zIndex: "1000",
+    loaderNotes.forEach((html, i) => {
+      const div = document.createElement("div");
+      div.innerHTML = html;
+      Object.assign(div.style, {
+        position: "absolute",
+        top: "50%",
+        transform: "translate(-50%, -50%)",
+        left: `calc(50% + ${i * 100 - 150}px)`,
+        animation: `loader-note-bounce ${[1.5, 0.5, 1][i]}s infinite`,
+        zIndex: "1000",
+      });
+      document.body.appendChild(div);
+      this.loaders.push(div);
     });
-
-    Object.assign(this.loader2.style, {
-      position: "absolute",
-      top: "50%",
-      left: "calc(50% + 0px)",
-      animation: "loader-note-bounce 0.5s infinite",
-      transform: "translate(-50%, -50%)",
-      zIndex: "1000",
-    });
-
-    Object.assign(this.loader3.style, {
-      position: "absolute",
-      top: "50%",
-      left: "calc(50% + 100px)",
-      transform: "translate(-50%, -50%)",
-      animation: "loader-note-bounce 1s infinite",
-      zIndex: "1000",
-    });
-
-    document.body.appendChild(this.loader1);
-    document.body.appendChild(this.loader2);
-    document.body.appendChild(this.loader3);
 
     this.load.audio(
       "audio",
       `assets/audio/song${this.chosenSongIndex + 1}.mp3`
     );
     this.load.audio("countdownStick", "assets/audio/countdown-stick.mp3");
-    this.load.svg(INSTRUMENTS.bębenek, "assets/svg/drum.svg");
-    this.load.svg(INSTRUMENTS.tarka, "assets/svg/guiro.svg");
-    this.load.svg(INSTRUMENTS.grzechotka, "assets/svg/rattle.svg");
-    this.load.svg(INSTRUMENTS.tamburyn, "assets/svg/tambourine.svg");
-    this.load.svg(INSTRUMENTS.drewienka, "assets/svg/woodBlocks.svg");
-    this.load.svg(INSTRUMENTS.trójkąt, "assets/svg/triangle.svg");
-    this.load.svg("game-over-box", "assets/svg/game-over-box.svg");
-    this.load.svg("arrow-back", "assets/svg/arrow-back.svg");
-    this.load.svg("world-animal1", `assets/svg/animal-${this.world}1.svg`);
-    this.load.svg("world-animal2", `assets/svg/animal-${this.world}2.svg`);
-    this.load.svg("world-animal3", `assets/svg/animal-${this.world}3.svg`);
-    this.load.svg("world-animal4", `assets/svg/animal-${this.world}4.svg`);
-    this.load.svg("world-animal5", `assets/svg/animal-${this.world}5.svg`);
 
-    this.load.once("complete", () => {
-      this.loader1?.remove();
-      this.loader2?.remove();
-      this.loader3?.remove();
-    });
+    Object.values(INSTRUMENTS).forEach((i) =>
+      this.load.svg(i, `assets/svg/${i}.svg`)
+    );
+    ["game-over-box", "arrow-back"].forEach((i) =>
+      this.load.svg(i, `assets/svg/${i}.svg`)
+    );
+    for (let i = 1; i <= 5; i++)
+      this.load.svg(
+        `world-animal${i}`,
+        `assets/svg/animal-${this.world}${i}.svg`
+      );
 
+    this.load.once("complete", () => this.loaders.forEach((l) => l.remove()));
     this.objects = {};
   }
 
   create() {
-    const instruments = (
-      this.cache.json.get(`song${this.chosenSongIndex + 1}`) as Song
-    ).instruments;
     this.song = this.cache.json.get(`song${this.chosenSongIndex + 1}`) as Song;
-
+    const instruments = this.song.instruments;
     this.countdownMs = this.song.countdownMs;
 
-    this.spaceKey = this.input.keyboard!.addKey(
+    this.spaceKey! = this.input.keyboard!.addKey(
       Phaser.Input.Keyboard.KeyCodes.SPACE
     );
 
-    // @ts-ignore
-    this.objects.camera = this.cameras.add(
+    // Camera setup
+    const cam = this.cameras.add(
       0,
       0,
       this.sys.game.canvas.width,
       this.sys.game.canvas.height
     );
-
-    // @ts-ignore
-    this.objects.camera.setBackgroundColor(
+    cam.setBackgroundColor(
       Phaser.Display.Color.IntegerToColor(COLORS.timeline[this.world].bg).rgba
     );
 
     this.input.once("pointerdown", () => {
-      if (
-        this.sound instanceof Phaser.Sound.WebAudioSoundManager &&
-        this.sound.context.state === "suspended"
-      ) {
-        this.sound.context.resume();
-      }
+      const ctx = (this.sound as Phaser.Sound.WebAudioSoundManager).context;
+      if (ctx.state === "suspended") ctx.resume();
     });
 
-    // ----
-    // Creating arrow back
-    // ----
-
+    // Back arrow
     const arrowBack = this.add
       .image(50, 50, "arrow-back")
       .setOrigin(0.5)
       .setScale(0.5)
       .setInteractive();
+    arrowBack.on(
+      "pointerover",
+      () => (this.input.manager.canvas.style.cursor = "pointer")
+    );
+    arrowBack.on(
+      "pointerout",
+      () => (this.input.manager.canvas.style.cursor = "default")
+    );
+    arrowBack.on("pointerdown", () => this.resetScene("PickSongScene"));
 
-    arrowBack.on("pointerover", () => {
-      this.input.manager.canvas.style.cursor = "pointer";
-    });
+    // Hit boxes
+    const { width, height } = { width: 140, height: 78 };
+    this.hitBoxContainer = this.add.container(0, 0);
+    const total = instruments.length;
+    const gap = Math.max(
+      0,
+      (this.sys.game.canvas.width - width * total) / (total + 1)
+    );
 
-    arrowBack.on("pointerout", () => {
-      this.input.manager.canvas.style.cursor = "default";
-    });
-
-    arrowBack.on("pointerdown", () => {
-      this.tweens.killAll();
-      this.time.removeAllEvents();
-      this.sound.stopAll();
-      this.sound.removeAll();
-      [1, 2, 3, 4, 5].forEach((i) => this.textures.remove("world-animal" + i));
-      this.cache.audio.remove("audio");
-      this.cache.audio.remove("countdownStick");
-      this.scene.stop();
-      this.scene.start("PickSongScene");
-    });
-
-    // ----------
-    // Creating hit boxes and notes
-    // ----------
-
-    let hitBoxContainer = this.add.container(0, 0);
-
-    const width = 140;
-    const height = 78;
-
-    instruments.forEach((instrument, index: number) => {
-      const hitBox = this.add.graphics();
-      hitBox.lineStyle(
-        3,
-        this.isTutti
-          ? COLORS.timeline[this.world].blockStroke.active
-          : instrument.name === this.selectedInstrument
-          ? COLORS.timeline[this.world].blockStroke.active
-          : COLORS.timeline[this.world].blockStroke.faded,
-        1
-      );
-
-      hitBox.strokeRoundedRect(-width / 2, -height / 2, width, height, 8);
-
-      const total = instruments.length;
-      const rectWidth = 140;
-      const available = this.sys.game.canvas.width;
-      const gap = Math.max(0, (available - rectWidth * total) / (total + 1));
-      const startX = gap;
-
-      hitBox.x = startX + index * (rectWidth + gap) + width / 2;
-      hitBox.y = this.sys.game.canvas.height - 30 - 150 + height / 2;
-
-      hitBox.name = instrument.name;
-
-      this.add
-        .image(hitBox.x, 100, "world-animal" + (index + 1))
-        .setOrigin(0.5)
-        .setDepth(20);
-
-      this.add
-        .image(hitBox.x, hitBox.y + height / 2 + 20, instrument.name)
-        .setScale(
-          instrument.name === "janczary" || instrument.name === "tamburyn"
-            ? 0.6
-            : 0.8
-        );
-
-      hitBoxContainer.add(hitBox);
-    });
-
-    // ----------
-    // Creating note boxes
-    // ----------
-
-    const finalY = this.sys.game.canvas.height + 300;
-
-    this.song.instruments.forEach((instrument, index) => {
-      const instrumentLine = hitBoxContainer.list[
-        index
-      ] as Phaser.GameObjects.Graphics;
-
-      instrument.hits.forEach((hit) => {
-        const w = 140;
-        const h = 78;
-
-        const color = this.isTutti
-          ? COLORS.timeline[this.world].blockStroke.active
-          : instrument.name === this.selectedInstrument
+    instruments.forEach((instrument, i) => {
+      const color =
+        this.isTutti || instrument.name === this.selectedInstrument
           ? COLORS.timeline[this.world].blockStroke.active
           : COLORS.timeline[this.world].blockStroke.faded;
 
-        const note = this.add.graphics();
+      const hitBox = this.add
+        .graphics()
+        .lineStyle(3, color, 1)
+        .strokeRoundedRect(-width / 2, -height / 2, width, height, 8);
 
-        note.fillStyle(color, 1).fillRoundedRect(-w / 2, -h / 2, w, h, 8);
-        note.setPosition(instrumentLine.x, -100 + height / 2);
+      hitBox.setPosition(
+        gap + i * (width + gap) + width / 2,
+        this.sys.game.canvas.height - 180 + height / 2
+      );
+      hitBox.name = instrument.name;
+      this.add.image(hitBox.x, 100, "world-animal" + (i + 1)).setDepth(20);
+      this.add
+        .image(hitBox.x, hitBox.y + height / 2 + 20, instrument.name)
+        .setScale(
+          ["janczary", "tamburyn"].includes(instrument.name) ? 0.6 : 0.8
+        );
 
-        note.setData("hitTime", hit.time);
-        note.setData("instrument", instrument.name);
-        note.setDepth(10);
+      this.hitBoxContainer.add(hitBox);
+    });
 
-        const noteTween = this.tweens.add({
+    // Notes
+    const finalY = this.sys.game.canvas.height + 300;
+    instruments.forEach((instrument, i) => {
+      const line = this.hitBoxContainer.list[i] as Phaser.GameObjects.Graphics;
+      const noteStartY = -100 + height / 2;
+      const tweenDur = (finalY / (line.y + 120)) * 1000;
+      const pxPerSec = (finalY - noteStartY) / (tweenDur / 1000);
+
+      instrument.hits.forEach((hit) => {
+        const isLong = hit.type === "long" && hit.length! > 0;
+        const h = isLong ? hit.length! * pxPerSec : height;
+        const color =
+          this.isTutti || instrument.name === this.selectedInstrument
+            ? COLORS.timeline[this.world].blockStroke.active
+            : COLORS.timeline[this.world].blockStroke.faded;
+
+        const yStart = noteStartY - (h - height) / 2;
+
+        const note = this.add
+          .graphics()
+          .fillStyle(color, 1)
+          .fillRoundedRect(-width / 2, -h / 2, width, h, 8)
+          .setPosition(line.x, yStart)
+          .setData({ hitTime: hit.time, instrument: instrument.name })
+          .setDepth(10);
+
+        const tween = this.tweens.add({
           targets: note,
           paused: true,
           y: finalY,
           delay: hit.time * 1000 - 800,
-          duration: (finalY / (instrumentLine.y + 120)) * 1000,
+          duration: tweenDur,
         });
 
-        this.allNotes.push({
-          note,
-          tween: noteTween,
-        });
+        this.allNotes.push({ note, tween });
       });
     });
 
-    // ----
-    // Creating countdown
-    // ----
-
-    let countdownText = this.add
+    // Countdown
+    const countdown = this.add
       .text(
         this.sys.game.canvas.width / 2,
         this.sys.game.canvas.height / 2,
         "",
-        {
-          fontSize: "350px",
-          color: "#FFFFFF",
-          fontFamily: "ABeeZee, Arial",
-        }
+        { fontSize: "350px", color: "#FFF", fontFamily: "ABeeZee, Arial" }
       )
       .setOrigin(0.5);
 
-    const steps = 4;
-    const stepDuration = this.countdownMs / steps;
+    const steps = 4,
+      dur = this.countdownMs / steps;
+    const events = Array.from({ length: steps }, (_, i) => ({
+      at: i * dur,
+      run: () => (
+        countdown.setText(String(steps - i)), this.sound.play("countdownStick")
+      ),
+    }));
 
-    let timelineSteps = [];
-    for (let i = 0; i < steps; i++) {
-      timelineSteps.push({
-        at: i * stepDuration,
-        run: () => {
-          countdownText.setText(String(steps - i)),
-            this.sound.play("countdownStick");
-        },
-      });
-    }
-    timelineSteps.push({
-      at: this.countdownMs,
-      run: () => countdownText.destroy(),
-    });
-
-    let timeline = this.add.timeline(timelineSteps);
-    timeline.add({
-      at: this.countdownMs,
-      run: () => {
-        this.sound.play("audio");
-        this.songStartTimestamp = this.time.now;
-      },
-    });
-
-    timeline.play();
+    this.add
+      .timeline([
+        ...events,
+        { at: this.countdownMs, run: () => countdown.destroy() },
+      ])
+      .add({
+        at: this.countdownMs,
+        run: () => (
+          this.sound.play("audio"), (this.songStartTimestamp = this.time.now)
+        ),
+      })
+      .play();
 
     this.time.delayedCall(this.countdownMs, () => {
       this.isSongStarted = true;
-      this.allNotes.forEach((note) => note.tween.play());
+      this.allNotes.forEach((n) => n.tween.play());
     });
 
     if (this.input.keyboard) {
       this.spaceObject = this.input.keyboard.addKey("SPACE");
     }
 
+    this.setupNoteFadeouts();
+    this.spaceObject?.on("down", () => this.handleHit());
+  }
+
+  private setupNoteFadeouts() {
     this.allNotes.forEach((note) => {
-      if (this.isTutti) {
-        this.time.delayedCall(
-          this.countdownMs + note.note.getData("hitTime") * 1000,
-          () => {
-            this.tweens.add({
-              targets: note.note,
-              alpha: 0,
-              scale: 2,
-              duration: 150,
-              ease: "Power1",
-              onComplete: () => note.note.destroy(),
-            });
-          }
-        );
-      } else {
-        if (this.selectedInstrument !== note.note.getData("instrument")) {
-          this.time.delayedCall(
-            this.countdownMs + note.note.getData("hitTime") * 1000,
-            () => {
-              this.tweens.add({
-                targets: note.note,
-                alpha: 0,
-                duration: 100,
-                ease: "Power1",
-                onComplete: () => note.note.destroy(),
-              });
-
-              this.tweens.add({
-                targets: hitBoxContainer.list.find(
-                  (hb) => hb.name === note.note.getData("instrument")
-                ),
-                scaleX: 1.1,
-                scaleY: 1.1,
-                duration: 100,
-                yoyo: true,
-                ease: "Power1",
-                onComplete: () => {
-                  this.tweens.add({
-                    targets: hitBoxContainer.list.find(
-                      (hb) => hb.name === note.note.getData("instrument")
-                    ),
-                    scaleX: 1,
-                    scaleY: 1,
-                    duration: 100,
-                    ease: "Power1",
-                  });
-                },
-              });
-            }
-          );
-        } else {
-          this.time.delayedCall(
-            this.countdownMs + note.note.getData("hitTime") * 1000 + 200,
-            () => {
-              this.tweens.add({
-                targets: note.note,
-                alpha: 0,
-                duration: 300,
-                ease: "Power1",
-                onComplete: () => note.note.destroy(),
-              });
-            }
-          );
-        }
-      }
-    });
-
-    this.spaceObject?.on("down", () => {
-      if (this.isTutti) {
-        this.input.keyboard?.removeKey("SPACE");
-      }
-
-      if (this.songStartTimestamp === null) return;
-
-      const currentGameTime = (this.time.now - this.songStartTimestamp) / 1000;
-      if (currentGameTime < 0) return;
-
-      const hitNote = this.allNotes.find(
-        (n) =>
-          n.note.getData("instrument") === this.selectedInstrument &&
-          between(
-            currentGameTime,
-            n.note.getData("hitTime") - this.latency / 1000,
-            n.note.getData("hitTime") + this.latency / 1000
-          )
+      const instrument = note.note.getData("instrument");
+      const time = this.countdownMs + note.note.getData("hitTime") * 1000;
+      const hitBox = this.hitBoxContainer.list.find(
+        (hb: any) => hb.name === instrument
       );
 
-      if (hitNote) {
-        hitNote.tween.stop();
-        this.tweens.add({
-          targets: hitNote.note,
-          alpha: 0,
-          scale: 2,
-          duration: 100,
-          ease: "Power1",
-          onComplete: () => {
-            hitNote.note.destroy();
-          },
-        });
-
-        this.tweens.add({
-          targets: hitBoxContainer.list.find(
-            (hb) => hb.name === hitNote.note.getData("instrument")
-          ),
-          scaleX: 1.1,
-          scaleY: 1.1,
-          duration: 50,
-          yoyo: true,
-          ease: "Power1",
-          onComplete: () => {
+      if (this.isTutti || this.selectedInstrument !== instrument) {
+        this.time.delayedCall(time, () => {
+          this.tweens.add({
+            targets: note.note,
+            alpha: 0,
+            duration: this.isTutti ? 150 : 100,
+            onComplete: () => note.note.destroy(),
+          });
+          if (!this.isTutti)
             this.tweens.add({
-              targets: hitBoxContainer.list.find(
-                (hb) => hb.name === hitNote.note.getData("instrument")
-              ),
-              scaleX: 1,
-              scaleY: 1,
-              duration: 50,
-              ease: "Power1",
+              targets: hitBox,
+              scaleX: 1.1,
+              scaleY: 1.1,
+              duration: 100,
+              yoyo: true,
             });
-          },
         });
       } else {
-        const upcomingNote = this.allNotes.find(
-          (n) =>
-            n.note.getData("instrument") === this.selectedInstrument &&
-            n.note.getData("hitTime") > currentGameTime &&
-            !n.note.getData("jiggling")
-        );
-
-        if (upcomingNote) {
-          upcomingNote.note.setData("jiggling", true);
-
+        this.time.delayedCall(time + 200, () =>
           this.tweens.add({
-            targets: upcomingNote.note,
-            x: upcomingNote.note.x + 10,
-            duration: 50,
-            yoyo: true,
-            repeat: 2,
-            onComplete: () => upcomingNote.note.setData("jiggling", false),
-          });
-        }
+            targets: note.note,
+            alpha: 0,
+            duration: 300,
+            onComplete: () => note.note.destroy(),
+          })
+        );
       }
     });
+  }
+
+  private handleHit() {
+    if (this.isTutti) this.input.keyboard?.removeKey("SPACE");
+    if (!this.songStartTimestamp) return;
+
+    const current = (this.time.now - this.songStartTimestamp) / 1000;
+    const hitNote = this.allNotes.find(
+      (n) =>
+        n.note.getData("instrument") === this.selectedInstrument &&
+        between(
+          current,
+          n.note.getData("hitTime") - this.latency / 1000,
+          n.note.getData("hitTime") + this.latency / 1000
+        )
+    );
+
+    if (hitNote) {
+      hitNote.tween.stop();
+      this.tweens.add({
+        targets: hitNote.note,
+        alpha: 0,
+        scale: 2,
+        duration: 100,
+        onComplete: () => hitNote.note.destroy(),
+      });
+      const hb = this.hitBoxContainer.list.find(
+        (hb: any) => hb.name === hitNote.note.getData("instrument")
+      );
+      this.tweens.add({
+        targets: hb,
+        scaleX: 1.1,
+        scaleY: 1.1,
+        duration: 50,
+        yoyo: true,
+      });
+    } else {
+      const next = this.allNotes.find(
+        (n) =>
+          n.note.getData("instrument") === this.selectedInstrument &&
+          n.note.getData("hitTime") > current &&
+          !n.note.getData("jiggling")
+      );
+      if (next) {
+        next.note.setData("jiggling", true);
+        this.tweens.add({
+          targets: next.note,
+          x: next.note.x + 10,
+          duration: 50,
+          yoyo: true,
+          repeat: 2,
+          onComplete: () => next.note.setData("jiggling", false),
+        });
+      }
+    }
   }
 
   update(time: number) {
     if (!this.songStartTimestamp) return;
 
+    /* TODO: Complete the updates */
+    /*     const elapsed = (time - this.songStartTimestamp) / 1000;
+
+    for (const { note } of this.allNotes) {
+      const hitTime = note.getData("hitTime");
+
+      if (
+        !note.getData("triggered") &&
+        Math.abs(hitTime - elapsed) < 0.05 // within 50 ms
+      ) {
+        note.setData("triggered", true);
+      }
+    } */
+
     if (
       Math.floor(time / 1000 - this.songStartTimestamp / 1000) >=
       this.song.duration
-    ) {
-      this.gameOver = true;
-      this.gameOverContainer = this.add.container(0, 0);
+    )
+      this.showGameOver();
+  }
 
-      const gameOverBox = this.add
-        .image(
-          this.sys.game.canvas.width / 2,
-          this.sys.game.canvas.height / 2,
-          "game-over-box"
-        )
-        .setOrigin(0.5)
-        .setScale(0.8, 0.8);
+  private resetScene(sceneName: string) {
+    this.tweens.killAll();
+    this.time.removeAllEvents();
+    this.sound.stopAll();
+    this.sound.removeAll();
+    for (let i = 1; i <= 5; i++) this.textures.remove("world-animal" + i);
+    this.cache.audio.remove("audio");
+    this.cache.audio.remove("countdownStick");
+    this.scene.stop();
+    this.scene.start(sceneName);
+  }
 
-      const gameOverText = this.add
-        .text(
-          this.sys.game.canvas.width / 2,
-          this.sys.game.canvas.height / 2 - 100,
-          "Koniec gry!",
-          {
-            fontSize: "64px",
-            color: "#000000",
-            fontFamily: "DynaPuff, Arial",
-          }
-        )
-        .setOrigin(0.5);
+  private showGameOver() {
+    this.gameOver = true;
+    const c = this.sys.game.canvas;
+    const { width, height } = { width: 300, height: 60 };
+    const centerX = c.width / 2,
+      centerY = c.height / 2;
+    this.gameOverContainer = this.add.container(0, 0);
 
-      const width = 300;
-      const height = 60;
+    const box = this.add
+      .image(centerX, centerY, "game-over-box")
+      .setOrigin(0.5)
+      .setScale(0.8);
+    const txt = this.add
+      .text(centerX, centerY - 100, "Koniec gry!", {
+        fontSize: "64px",
+        color: "#000",
+        fontFamily: "DynaPuff, Arial",
+      })
+      .setOrigin(0.5);
 
-      const repickSongButton = this.add
+    const makeBtn = (y: number, text: string, cb: () => void) => {
+      const g = this.add
         .graphics({
-          x: this.sys.game.canvas.width / 2 - width / 2,
-          y: this.sys.game.canvas.height / 2 + 10 - height / 2,
-          fillStyle: { color: COLORS.textRed, alpha: 1 },
+          x: centerX - width / 2,
+          y: centerY + y - height / 2,
+          fillStyle: { color: COLORS.textRed },
         })
         .fillRoundedRect(0, 0, width, height, 8)
         .setInteractive(
           new Phaser.Geom.Rectangle(0, 0, width, height),
           Phaser.Geom.Rectangle.Contains
-        );
-
-      const repickSongButtonText = this.add
-        .text(
-          this.sys.game.canvas.width / 2,
-          this.sys.game.canvas.height / 2 + 10,
-          "Wybierz inny utwór",
-          {
-            font: "600 22px ABeeZee",
-            color: "#fff",
-          }
         )
-        .setOrigin(0.5);
-
-      const replaySongButton = this.add
-        .graphics({
-          x: this.sys.game.canvas.width / 2 - width / 2,
-          y: this.sys.game.canvas.height / 2 + 90 - height / 2,
-          fillStyle: { color: COLORS.textRed, alpha: 1 },
+        .on("pointerdown", cb);
+      const t = this.add
+        .text(centerX, centerY + y, text, {
+          font: "600 22px ABeeZee",
+          color: "#fff",
         })
-        .fillRoundedRect(0, 0, width, height, 8)
-        .setInteractive(
-          new Phaser.Geom.Rectangle(0, 0, width, height),
-          Phaser.Geom.Rectangle.Contains
-        );
-
-      const replaySongButtonText = this.add
-        .text(
-          this.sys.game.canvas.width / 2,
-          this.sys.game.canvas.height / 2 + 90,
-          "Zagraj ponownie",
-          {
-            font: "600 22px ABeeZee",
-            color: "#fff",
-          }
-        )
         .setOrigin(0.5);
+      return [g, t];
+    };
 
-      replaySongButton.on("pointerover", () => {
-        this.input.manager.canvas.style.cursor = "pointer";
-      });
+    const [repickBtn, repickTxt] = makeBtn(10, "Wybierz inny utwór", () =>
+      this.resetScene("PickSongScene")
+    );
+    const [replayBtn, replayTxt] = makeBtn(90, "Zagraj ponownie", () =>
+      this.scene.restart({
+        chosenSong: this.chosenSongIndex,
+        chosenInstrument: this.selectedInstrument,
+        tutti: this.isTutti,
+        world: this.world,
+      })
+    );
 
-      replaySongButton.on("pointerout", () => {
-        this.input.manager.canvas.style.cursor = "default";
-      });
+    [repickBtn, replayBtn].forEach((btn) => {
+      btn.on(
+        "pointerover",
+        () => (this.input.manager.canvas.style.cursor = "pointer")
+      );
+      btn.on(
+        "pointerout",
+        () => (this.input.manager.canvas.style.cursor = "default")
+      );
+    });
 
-      this.gameOverContainer?.add([
-        gameOverBox,
-        gameOverText,
-        repickSongButton,
-        repickSongButtonText,
-        replaySongButton,
-        replaySongButtonText,
-      ]);
-
-      replaySongButton.on("pointerdown", () => {
-        this.gameOver = true;
-        this.tweens.killAll();
-        this.time.removeAllEvents();
-        this.sound.stopAll();
-        this.sound.removeAll();
-        this.cache.audio.remove("audio");
-        [1, 2, 3, 4, 5].forEach((i) =>
-          this.textures.remove("world-animal" + i)
-        );
-        this.cache.audio.remove("countdownStick");
-        this.scene.restart({
-          chosenSong: this.chosenSongIndex,
-          chosenInstrument: this.selectedInstrument,
-          tutti: this.isTutti,
-          gameOverContainer: null,
-        });
-      });
-
-      repickSongButton.on("pointerover", () => {
-        this.input.manager.canvas.style.cursor = "pointer";
-
-        repickSongButton.clear();
-        repickSongButton.fillStyle(COLORS.bgBlue, 1);
-        repickSongButton.fillRoundedRect(0, 0, width, height, 8);
-      });
-
-      repickSongButton.on("pointerout", () => {
-        this.input.manager.canvas.style.cursor = "default";
-
-        this.tweens.add({
-          targets: repickSongButton,
-          scaleX: 1,
-          scaleY: 1,
-          duration: 120,
-          ease: "Quad.easeIn",
-        });
-      });
-
-      repickSongButton.on("pointerdown", () => {
-        this.gameOver = true;
-        this.tweens.killAll();
-        this.time.removeAllEvents();
-        this.sound.stopAll();
-        [1, 2, 3, 4, 5].forEach((i) =>
-          this.textures.remove("world-animal" + i)
-        );
-
-        this.sound.removeAll();
-        this.cache.audio.remove("audio");
-        this.cache.audio.remove("countdownStick");
-        this.scene.stop();
-        this.scene.stop("TimelineScene", {
-          chosenSong: 0,
-          chosenInstrument: "bębenek",
-          tutti: false,
-        });
-        this.scene.start("PickSongScene");
-      });
-    }
+    this.gameOverContainer.add([
+      box,
+      txt,
+      repickBtn,
+      repickTxt,
+      replayBtn,
+      replayTxt,
+    ]);
   }
 }
 

@@ -1,7 +1,8 @@
 {
-  "songName": "Haendel - Taniec Anitry",
+  "songName": "Grieg - Taniec Anitry",
   "countdownMs": 4000,
   "duration": 215.1,
+  "world": "forest",
   "instruments": [
     {
       "name": "janczary",
@@ -177,24 +178,24 @@
       ]
     },
     {
-      "name": "tamburyn",
+      "name": "grzechotka",
       "hits": [
-        { "time": 49.5 },
-        { "time": 52.2 },
-        { "time": 55.4 },
-        { "time": 57.1 },
-        { "time": 59.3 },
-        { "time": 61.7 },
-        { "time": 65.0 },
-        { "time": 66.6 },
-        { "time": 128.4 },
-        { "time": 131.0 },
-        { "time": 134.4 },
-        { "time": 136.0 },
-        { "time": 138.2 },
-        { "time": 140.5 },
-        { "time": 143.8 },
-        { "time": 145.4 }
+        { "time": 49.5, "type": "long", "length": 1.35 },
+        { "time": 52.2, "type": "long", "length": 1.35 },
+        { "time": 55.4, "type": "long", "length": 1.35 },
+        { "time": 57.1, "type": "long", "length": 1.35 },
+        { "time": 59.3, "type": "long", "length": 1.35 },
+        { "time": 61.7, "type": "long", "length": 1.35 },
+        { "time": 65.0, "type": "long", "length": 1.35 },
+        { "time": 66.6, "type": "long", "length": 1.35 },
+        { "time": 128.4, "type": "long", "length": 1.35 },
+        { "time": 131.0, "type": "long", "length": 1.35 },
+        { "time": 134.4, "type": "long", "length": 1.35 },
+        { "time": 136.0, "type": "long", "length": 1.35 },
+        { "time": 138.2, "type": "long", "length": 1.35 },
+        { "time": 140.5, "type": "long", "length": 1.35 },
+        { "time": 143.8, "type": "long", "length": 1.35 },
+        { "time": 145.4, "type": "long", "length": 1.35 }
       ]
     }
   ]
