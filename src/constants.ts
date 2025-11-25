@@ -1,7 +1,7 @@
 export const INSTRUMENTS = {
-  bębenek: "bębenek",
+  bebenek: "bebenek",
   grzechotka: "grzechotka",
-  trójkąt: "trójkąt",
+  trojkat: "trojkat",
   tamburyn: "tamburyn",
   drewienka: "drewienka",
   tarka: "tarka",

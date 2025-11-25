@@ -7,15 +7,18 @@ import tambourine from "/assets/svg/tambourine.svg";
 import triangle from "/assets/svg/triangle.svg";
 import woodBlocks from "/assets/svg/woodBlocks.svg";
 import sleighBells from "/assets/svg/sleighbells.svg";
+import { bringBackPolishChars } from "../utils";
 
 interface PickInstrumentSceneData {
   chosenSongIndex: number;
+  world: keyof typeof WORLD;
 }
 
 class PickInstrumentScene extends Phaser.Scene {
   cursorKeys?: Phaser.Types.Input.Keyboard.CursorKeys;
   cardContainers: Phaser.GameObjects.Container[] = [];
   chosenSongIndex: number = 0;
+  world: keyof typeof WORLD = WORLD.ocean;
 
   constructor(config: string | Phaser.Types.Scenes.SettingsConfig | undefined) {
     super(config);
@@ -23,14 +26,15 @@ class PickInstrumentScene extends Phaser.Scene {
 
   init(data: PickInstrumentSceneData): void {
     this.chosenSongIndex = data.chosenSongIndex ?? 0;
+    this.world = data.world ?? WORLD.ocean;
   }
 
   preload() {
-    this.load.image("bębenek", drum);
+    this.load.image("bebenek", drum);
     this.load.image("tarka", guiro);
     this.load.image("grzechotka", rattle);
     this.load.image("tamburyn", tambourine);
-    this.load.image("trójkąt", triangle);
+    this.load.image("trojkat", triangle);
     this.load.image("drewienka", woodBlocks);
     this.load.image("janczary", sleighBells);
   }
@@ -68,7 +72,7 @@ class PickInstrumentScene extends Phaser.Scene {
         .text(
           cardWidth / 2,
           220,
-          instrument.name.charAt(0).toUpperCase() + instrument.name.slice(1),
+          bringBackPolishChars(instrument.name.charAt(0).toUpperCase() + instrument.name.slice(1)),
           {
             fontFamily: "'ABeeZee', Arial",
             fontSize: "28px",
@@ -115,7 +119,7 @@ class PickInstrumentScene extends Phaser.Scene {
         this.scene.start("TimelineScene", {
           chosenSong: this.chosenSongIndex,
           chosenInstrument: card.getData("instrument"),
-          world: [WORLD.ocean, WORLD.forest][Math.floor(Math.random() * 2)],
+          world: this.world,
           tutti: false,
         });
       });
@@ -182,7 +186,7 @@ class PickInstrumentScene extends Phaser.Scene {
       this.scene.start("TimelineScene", {
         chosenSong: this.chosenSongIndex,
         chosenInstrument: null,
-        world: [WORLD.ocean, WORLD.forest][Math.floor(Math.random() * 2)],
+        world: this.world,
         tutti: true,
       });
     });

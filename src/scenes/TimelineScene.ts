@@ -30,7 +30,7 @@ class TimelineScene extends Phaser.Scene {
   gameOver = false;
   countdownMs = 0;
   chosenSongIndex = 0;
-  selectedInstrument: keyof typeof INSTRUMENTS = "bębenek";
+  selectedInstrument: keyof typeof INSTRUMENTS = "bebenek";
   world: keyof typeof WORLD = "ocean";
   latency = 200;
   gameOverContainer?: Phaser.GameObjects.Container;
@@ -85,22 +85,20 @@ class TimelineScene extends Phaser.Scene {
 
     this.load.audio("countdownStick", "assets/audio/countdown-stick.mp3");
 
-    Object.values(INSTRUMENTS).forEach((i) =>
-      this.load.svg(i, `assets/svg/${i}.svg`)
-    );
-
     ["game-over-box", `arrow-back-${this.world}`].forEach((i) =>
       this.load.svg(i, `assets/svg/${i}.svg`)
     );
 
-    for (let i = 1; i <= 5; i++)
+    for (let i = 0; i <= Object.values(INSTRUMENTS).length; i++) {
+      if (!Object.values(INSTRUMENTS)[i]) break;
+
       this.load.svg(
-        `world-animal${i}`,
-        `assets/svg/animal-${this.world}${i}.svg`
+        `${this.world}-${Object.values(INSTRUMENTS)[i]}`,
+        `assets/svg/${this.world}-${Object.values(INSTRUMENTS)[i]}.svg`
       );
+    }
 
     this.load.once("complete", () => this.loaders.forEach((l) => l.remove()));
-
   }
 
   create() {
@@ -169,7 +167,9 @@ class TimelineScene extends Phaser.Scene {
         this.sys.game.canvas.height - 180 + height / 2
       );
       hitBox.name = instrument.name;
-      this.add.image(hitBox.x, 100, "world-animal" + (i + 1)).setDepth(20);
+      this.add
+        .image(hitBox.x, 100, `${this.world}-${instrument.name}`)
+        .setDepth(20);
       this.add
         .image(hitBox.x, hitBox.y + height / 2 + 20, instrument.name)
         .setScale(

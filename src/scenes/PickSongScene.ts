@@ -1,4 +1,5 @@
 import { COLORS } from "../constants";
+import type { Song } from "../types";
 
 class PickSongScene extends Phaser.Scene {
   constructor(config: string | Phaser.Types.Scenes.SettingsConfig) {
@@ -27,7 +28,7 @@ class PickSongScene extends Phaser.Scene {
     const allSongs: any[] = [];
 
     for (let i = 1; i <= 10; i++) {
-      const song = this.cache.json.get(`song${i}`);
+      const song = this.cache.json.get(`song${i}`) as Song;
       if (song) {
         allSongs.push(song);
       }
@@ -111,6 +112,7 @@ class PickSongScene extends Phaser.Scene {
         button.on("pointerdown", () => {
           this.scene.start("PickInstrumentScene", {
             chosenSongIndex: button.getData("chosenSongIndex"),
+            world: allSongs[button.getData("chosenSongIndex")].world,
           });
         });
 

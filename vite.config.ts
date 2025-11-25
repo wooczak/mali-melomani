@@ -5,6 +5,7 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
   ],
+  assetsInclude: ['**/*.svg'],
   build: {
     rollupOptions: {
       input: {
