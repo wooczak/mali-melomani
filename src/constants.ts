@@ -13,7 +13,7 @@ export const COLORS = {
   whiteBg: 0xf9f5f2,
   bgBlue: 0x3650a5,
   textGreen: 0x018741,
-  textRed: 0xf95b37,
+  textRed: 0xA41034,
   pickScene: [
     {
       fill: 0x1869ce,
@@ -35,8 +35,8 @@ export const COLORS = {
     fill: 0xfee8e3,
     stroke: 0xf95b37,
   },
-  playBtnCircleFill: 0xc6dcf7,
-  playBtnTriangleFill: 0x1869ce,
+  playBtnCircleFill: 0xFFE5B3,
+  playBtnTriangleFill: 0x8C0129,
   timeline: {
     ocean: {
       bg: 0xC4ECFE,

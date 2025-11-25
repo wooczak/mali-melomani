@@ -51,7 +51,7 @@ class PickInstrumentScene extends Phaser.Scene {
 
     chosenSongInstruments.forEach((instrument, index, arr) => {
       const canvasWidth = this.sys.game.canvas.width;
-      const cardWidth = 200;
+      const cardWidth = arr.length < 5 ? 200 : 175;
       const cardHeight = 280;
       const count = arr.length;
 

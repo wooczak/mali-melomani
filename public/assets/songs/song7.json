@@ -5,7 +5,7 @@
   "world": "forest",
   "instruments": [
     {
-      "name": "bębenek",
+      "name": "bebenek",
       "hits": [
         { "time": 0.5 },
         { "time": 1.4 },
@@ -261,7 +261,7 @@
       ]
     },
     {
-      "name": "trójkąt",
+      "name": "trojkat",
       "hits": [
         { "time": 16 },
         { "time": 16.8 },

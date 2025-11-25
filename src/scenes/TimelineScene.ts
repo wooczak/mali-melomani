@@ -70,7 +70,7 @@ class TimelineScene extends Phaser.Scene {
         position: "absolute",
         top: "50%",
         transform: "translate(-50%, -50%)",
-        left: `calc(50% + ${i * 100 - 150}px)`,
+        left: `calc(50% + ${(i - 1) * 170}px)`,
         animation: `loader-note-bounce ${[1.5, 0.5, 1][i]}s infinite`,
         zIndex: "1000",
       });

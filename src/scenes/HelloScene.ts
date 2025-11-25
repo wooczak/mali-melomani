@@ -16,7 +16,7 @@ class HelloScene extends Phaser.Scene {
     const title = this.add
       .text(centerX, centerY - 210, "Mali Melomani", {
         font: "600 110px DynaPuff",
-        color: Phaser.Display.Color.IntegerToColor(COLORS.textGreen).rgba,
+        color: Phaser.Display.Color.IntegerToColor(COLORS.textRed).rgba,
       })
       .setOrigin(0.5);
 
@@ -70,7 +70,7 @@ class HelloScene extends Phaser.Scene {
         style: {
           fontFamily: "'DynaPuff', cursive",
           fontSize: "32px",
-          color: Phaser.Display.Color.IntegerToColor(COLORS.textGreen).rgba,
+          color: Phaser.Display.Color.IntegerToColor(COLORS.textRed).rgba,
         },
       })
       .setOrigin(0.5)
