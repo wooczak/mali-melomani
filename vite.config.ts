@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import tailwindcss from '@tailwindcss/vite'
+import { defineConfig } from "vite";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   plugins: [
@@ -9,10 +9,11 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: './index.html',
-        instrukcja: './instrukcja-gry.html',
-        ciekawostki: './ciekawostki.html',
+        main: "./index.html",
+        instrukcja: "./instrukcja-gry.html",
+        ciekawostki: "./ciekawostki.html",
+        oprojekcie: "./o-projekcie.html",
       },
     },
   },
-})
+});
