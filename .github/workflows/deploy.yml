@@ -3,7 +3,7 @@ name: Deploy via FTP
 on:
   push:
     branches:
-      - main # or your default branch name
+      - webpage-front
 
 jobs:
   deploy:
@@ -30,5 +30,5 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./dist/ # or wherever your build output is
-          server-dir: /public_html/ # your remote directory
+          local-dir: ./dist/ 
+          server-dir: /public_html/
