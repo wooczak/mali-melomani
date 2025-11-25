@@ -106,6 +106,15 @@ const config: Phaser.Types.Core.GameConfig = {
   width: 1000,
   height: 600,
   parent: "game-container",
+  audio: {
+    disableWebAudio: false,
+  },
+  fps: {
+    forceSetTimeOut: false
+  },
+  autoFocus: true,
+  callbacks: {},
+  banner: false,
   scene: [
     new HelloScene({
       key: "HelloScene",

@@ -121,9 +121,20 @@ class TimelineScene extends Phaser.Scene {
       Phaser.Display.Color.IntegerToColor(COLORS.timeline[this.world].bg).rgba
     );
 
-    this.input.once("pointerdown", () => {
-      const ctx = (this.sound as Phaser.Sound.WebAudioSoundManager).context;
-      if (ctx.state === "suspended") ctx.resume();
+    this.sound.unlock();
+    window.addEventListener("focus", () => {
+      if ("context" in this.sound) {
+        (this.sound as Phaser.Sound.WebAudioSoundManager).context.resume();
+      } else {
+        this.sound.resumeAll();
+      }
+    });
+    window.addEventListener("blur", () => {
+      if ("context" in this.sound) {
+        (this.sound as Phaser.Sound.WebAudioSoundManager).context.resume();
+      } else {
+        this.sound.resumeAll();
+      }
     });
 
     // Back arrow
