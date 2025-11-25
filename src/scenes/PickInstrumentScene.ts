@@ -7,6 +7,7 @@ import tambourine from "/assets/svg/tambourine.svg";
 import triangle from "/assets/svg/triangle.svg";
 import woodBlocks from "/assets/svg/woodBlocks.svg";
 import sleighBells from "/assets/svg/sleighbells.svg";
+import cymbals from "/assets/svg/cymbals.svg";
 
 interface PickInstrumentSceneData {
   chosenSongIndex: number;
@@ -33,6 +34,7 @@ class PickInstrumentScene extends Phaser.Scene {
     this.load.image("trójkąt", triangle);
     this.load.image("drewienka", woodBlocks);
     this.load.image("janczary", sleighBells);
+    this.load.image("talerze", cymbals);
   }
 
   createCardContainers() {
