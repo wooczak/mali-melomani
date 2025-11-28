@@ -9,7 +9,6 @@ const loaderNotes = [loaderNote1, loaderNote2, loaderNote3];
 
 class TimelineScene extends Phaser.Scene {
   private loaders: HTMLElement[] = [];
-  private spaceKey!: Phaser.Input.Keyboard.Key;
   private song: Song = {
     songName: "",
     countdownMs: 0,
@@ -24,8 +23,8 @@ class TimelineScene extends Phaser.Scene {
   }[] = [];
   private hitBoxContainer!: Phaser.GameObjects.Container;
   private songStartTimestamp: number | null = null;
+  private isSpaceHeld = false;
 
-  isSongStarted = false;
   isTutti = false;
   gameOver = false;
   countdownMs = 0;
@@ -105,10 +104,6 @@ class TimelineScene extends Phaser.Scene {
     this.song = this.cache.json.get(`song${this.chosenSongIndex + 1}`) as Song;
     const instruments = this.song.instruments;
     this.countdownMs = this.song.countdownMs;
-
-    this.spaceKey! = this.input.keyboard!.addKey(
-      Phaser.Input.Keyboard.KeyCodes.SPACE
-    );
 
     // Camera setup
     const cam = this.cameras.add(
@@ -213,7 +208,7 @@ class TimelineScene extends Phaser.Scene {
           .fillStyle(color, 1)
           .fillRoundedRect(-width / 2, -h / 2, width, h, 8)
           .setPosition(line.x, yStart)
-          .setData({ hitTime: hit.time, instrument: instrument.name })
+          .setData({ hitTime: hit.time, instrument: instrument.name, isLong })
           .setDepth(10);
 
         const tween = this.tweens.add({
@@ -261,7 +256,6 @@ class TimelineScene extends Phaser.Scene {
       .play();
 
     this.time.delayedCall(this.countdownMs, () => {
-      this.isSongStarted = true;
       this.allNotes.forEach((n) => n.tween.play());
     });
 
@@ -270,7 +264,10 @@ class TimelineScene extends Phaser.Scene {
     }
 
     this.setupNoteFadeouts();
-    this.spaceObject?.on("down", () => this.handleHit());
+    this.spaceObject?.on("down", () => {
+      this.isSpaceHeld = true;
+      this.handleHit();
+    });
   }
 
   private setupNoteFadeouts() {
@@ -328,22 +325,27 @@ class TimelineScene extends Phaser.Scene {
 
     if (hitNote) {
       hitNote.tween.stop();
+
+      if (hitNote.note.getData("isLong")) {
+        const holdDuration = 1350;
+        this.time.delayedCall(holdDuration, () => {
+          this.tweens.add({
+            targets: hitNote.note,
+            alpha: 0,
+            scale: 2,
+            duration: 100,
+            onComplete: () => hitNote.note.destroy(),
+          });
+        });
+        return;
+      }
+
       this.tweens.add({
         targets: hitNote.note,
         alpha: 0,
         scale: 2,
         duration: 100,
         onComplete: () => hitNote.note.destroy(),
-      });
-      const hb = this.hitBoxContainer.list.find(
-        (hb: any) => hb.name === hitNote.note.getData("instrument")
-      );
-      this.tweens.add({
-        targets: hb,
-        scaleX: 1.1,
-        scaleY: 1.1,
-        duration: 50,
-        yoyo: true,
       });
     } else {
       const next = this.allNotes.find(
@@ -368,20 +370,6 @@ class TimelineScene extends Phaser.Scene {
 
   update(time: number) {
     if (!this.songStartTimestamp) return;
-
-    /* TODO: Complete the updates */
-    /*     const elapsed = (time - this.songStartTimestamp) / 1000;
-
-    for (const { note } of this.allNotes) {
-      const hitTime = note.getData("hitTime");
-
-      if (
-        !note.getData("triggered") &&
-        Math.abs(hitTime - elapsed) < 0.05 // within 50 ms
-      ) {
-        note.setData("triggered", true);
-      }
-    } */
 
     if (
       Math.floor(time / 1000 - this.songStartTimestamp / 1000) >=

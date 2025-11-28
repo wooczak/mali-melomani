@@ -189,7 +189,7 @@ async function checkMobile(): Promise<boolean> {
   if (isMobile()) {
     if (container) {
       container.innerHTML = `
-     <div class="mx-[20px] bg-[#F95B37] text-center p-6 rounded-2xl shadow-lg">
+     <div class="mx-[20px] bg-[#A41034] text-center p-6 rounded-2xl shadow-lg">
     <img src="/assets/svg/note.svg" alt="note-icon" class="mx-auto my-10" />
     <h2 class="text-5xl dynapuff-regular text-white mb-5">Zagraj na większym ekranie!</h2>
     <p class="text-2xl abezee-regular text-white">Gra MaliMelomani jest niedostępna na <br>urządzeniach mobilnych.</p>
