@@ -23,7 +23,6 @@ class TimelineScene extends Phaser.Scene {
   }[] = [];
   private hitBoxContainer!: Phaser.GameObjects.Container;
   private songStartTimestamp: number | null = null;
-  private isSpaceHeld = false;
 
   isTutti = false;
   gameOver = false;
@@ -265,7 +264,6 @@ class TimelineScene extends Phaser.Scene {
 
     this.setupNoteFadeouts();
     this.spaceObject?.on("down", () => {
-      this.isSpaceHeld = true;
       this.handleHit();
     });
   }
