@@ -284,7 +284,7 @@ class TimelineScene extends Phaser.Scene {
             duration: this.isTutti ? 150 : 100,
             onComplete: () => note.note.destroy(),
           });
-          if (!this.isTutti)
+          if (!this.isTutti) {
             this.tweens.add({
               targets: hitBox,
               scaleX: 1.1,
@@ -292,6 +292,7 @@ class TimelineScene extends Phaser.Scene {
               duration: 100,
               yoyo: true,
             });
+          } else this.autoHit(note);
         });
       } else {
         this.time.delayedCall(time + 200, () =>
@@ -303,6 +304,42 @@ class TimelineScene extends Phaser.Scene {
           })
         );
       }
+    });
+  }
+
+  private autoHit(noteObj: { note: Phaser.GameObjects.Graphics }) {
+    const note = noteObj.note;
+
+    if (note.getData("isLong")) {
+      this.time.delayedCall(1350, () => {
+        this.tweens.add({
+          targets: note,
+          alpha: 0,
+          scale: 2,
+          duration: 100,
+          onComplete: () => note.destroy(),
+        });
+      });
+    } else {
+      this.tweens.add({
+        targets: note,
+        alpha: 0,
+        scale: 2,
+        duration: 100,
+        onComplete: () => note.destroy(),
+      });
+    }
+
+    const hb = this.hitBoxContainer.list.find(
+      (hb: any) => hb.name === note.getData("instrument")
+    );
+
+    this.tweens.add({
+      targets: hb,
+      scaleX: 1.1,
+      scaleY: 1.1,
+      duration: 50,
+      yoyo: true,
     });
   }
 
@@ -344,6 +381,17 @@ class TimelineScene extends Phaser.Scene {
         scale: 2,
         duration: 100,
         onComplete: () => hitNote.note.destroy(),
+      });
+
+      const hb = this.hitBoxContainer.list.find(
+        (hb: any) => hb.name === hitNote.note.getData("instrument")
+      );
+      this.tweens.add({
+        targets: hb,
+        scaleX: 1.1,
+        scaleY: 1.1,
+        duration: 50,
+        yoyo: true,
       });
     } else {
       const next = this.allNotes.find(
