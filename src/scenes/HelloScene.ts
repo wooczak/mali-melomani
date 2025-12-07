@@ -1,4 +1,5 @@
-import { COLORS } from "../constants";
+import { COLORS, GAME_SCENE_KEY } from "../constants";
+import { gameStore } from "../store";
 
 class HelloScene extends Phaser.Scene {
   constructor(config?: string | Phaser.Types.Scenes.SettingsConfig) {
@@ -8,6 +9,7 @@ class HelloScene extends Phaser.Scene {
   preload() {}
 
   create() {
+    gameStore.currentScene = GAME_SCENE_KEY.hello;
     const { width, height } = this.sys.game.canvas;
 
     const centerX = Math.round(width / 2);

@@ -6,8 +6,10 @@ import {
   PickSongScene,
   TimelineScene,
 } from "./scenes";
-import { COLORS } from "./constants";
+import { COLORS, GAME_SCENE_KEY } from "./constants";
+import { gameStore } from "./store";
 
+document.addEventListener("DOMContentLoaded", initializeHamburgerMenu);
 const gameBg = Phaser.Display.Color.IntegerToColor(COLORS.whiteBg).rgba;
 
 function initializeHamburgerMenu() {
@@ -20,29 +22,24 @@ function initializeHamburgerMenu() {
 
   let isMenuOpen = false;
 
-  // Toggle menu function with smooth animation
   const toggleMenu = () => {
     isMenuOpen = !isMenuOpen;
 
     if (isMenuOpen) {
-      // Open menu
       hamburgerButton.classList.add("hamburger-active");
       mobileMenu.classList.remove("mobile-menu-closed");
       mobileMenu.classList.add("mobile-menu-open");
 
-      // Add smooth push-down effect to main content
       if (mainContent) {
         mainContent.style.transition =
           "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
-        mainContent.style.transform = "translateY(0)"; // Content flows naturally
+        mainContent.style.transform = "translateY(0)";
       }
     } else {
-      // Close menu
       hamburgerButton.classList.remove("hamburger-active");
       mobileMenu.classList.remove("mobile-menu-open");
       mobileMenu.classList.add("mobile-menu-closed");
 
-      // Reset main content position
       if (mainContent) {
         mainContent.style.transform = "translateY(0)";
       }
@@ -98,9 +95,6 @@ function initializeHamburgerMenu() {
   });
 }
 
-// Call this function after DOM is loaded
-document.addEventListener("DOMContentLoaded", initializeHamburgerMenu);
-
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   width: 1000,
@@ -110,26 +104,26 @@ const config: Phaser.Types.Core.GameConfig = {
     disableWebAudio: false,
   },
   fps: {
-    forceSetTimeOut: false
+    forceSetTimeOut: false,
   },
   autoFocus: true,
   callbacks: {},
   banner: false,
   scene: [
     new HelloScene({
-      key: "HelloScene",
+      key: GAME_SCENE_KEY.hello,
       cameras: { backgroundColor: gameBg },
     }),
     new PickSongScene({
-      key: "PickSongScene",
+      key: GAME_SCENE_KEY.pickSong,
       cameras: { backgroundColor: gameBg },
     }),
     new PickInstrumentScene({
-      key: "PickInstrumentScene",
+      key: GAME_SCENE_KEY.pickInstrument,
       cameras: { backgroundColor: gameBg },
     }),
     new TimelineScene({
-      key: "TimelineScene",
+      key: GAME_SCENE_KEY.timeline,
       cameras: { backgroundColor: gameBg },
     }),
   ],
@@ -142,13 +136,25 @@ function loadFontsAndStartGame(): Promise<void> {
     const WebFont = (window as any).WebFont;
     WebFont.load({
       google: {
-        families: ["DynaPuff", "ABeeZee", "Bubblegum Sans", "Roboto"],
+        families: [
+          "DynaPuff",
+          "ABeeZee",
+          "Bubblegum Sans",
+          "Roboto",
+          "Poppins",
+        ],
       },
       active: async () => {
         await document.fonts.ready;
 
         const polishChars = "ąćęłńóśźżĄĆĘŁŃÓŚŹŻ";
-        const families = ["DynaPuff", "ABeeZee", "Bubblegum Sans", "Roboto"];
+        const families = [
+          "DynaPuff",
+          "ABeeZee",
+          "Bubblegum Sans",
+          "Roboto",
+          "Poppins",
+        ];
 
         await Promise.all(
           families.map((family) =>
@@ -189,7 +195,7 @@ async function checkMobile(): Promise<boolean> {
   if (isMobile()) {
     if (container) {
       container.innerHTML = `
-     <div class="mx-[20px] bg-[#A41034] text-center p-6 rounded-2xl shadow-lg">
+     <div class="mx-5 bg-[#A41034] text-center p-6 rounded-2xl shadow-lg">
     <img src="/assets/svg/note.svg" alt="note-icon" class="mx-auto my-10" />
     <h2 class="text-5xl dynapuff-regular text-white mb-5">Zagraj na większym ekranie!</h2>
     <p class="text-2xl abezee-regular text-white">Gra MaliMelomani jest niedostępna na <br>urządzeniach mobilnych.</p>
@@ -207,7 +213,8 @@ async function startGame() {
   if (isOnMobile) return;
 
   await loadFontsAndStartGame();
-  new Phaser.Game(config);
+  const game = new Phaser.Game(config);
+  gameStore.game = game;
 }
 
 startGame();

@@ -1,4 +1,5 @@
-import { COLORS } from "../constants";
+import { COLORS, GAME_SCENE_KEY } from "../constants";
+import { gameStore } from "../store";
 import type { Song } from "../types";
 
 class PickSongScene extends Phaser.Scene {
@@ -14,6 +15,8 @@ class PickSongScene extends Phaser.Scene {
   }
 
   create() {
+    gameStore.chosenSongName = "";
+    gameStore.currentScene = GAME_SCENE_KEY.pickSong;
     const { width, height } = this.sys.game.canvas;
 
     this.add
@@ -110,6 +113,10 @@ class PickSongScene extends Phaser.Scene {
         });
 
         button.on("pointerdown", () => {
+          gameStore.chosenSongName =
+            allSongs[button.getData("chosenSongIndex")].songName;
+          gameStore.chosenWorld =
+            allSongs[button.getData("chosenSongIndex")].world;
           this.scene.start("PickInstrumentScene", {
             chosenSongIndex: button.getData("chosenSongIndex"),
             world: allSongs[button.getData("chosenSongIndex")].world,

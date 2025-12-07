@@ -1,5 +1,7 @@
-import { COLORS, INSTRUMENTS } from "../constants";
+import { COLORS, GAME_SCENE_KEY, INSTRUMENTS } from "../constants";
+import { gameStore } from "../store";
 import { type Song, WORLD } from "../types";
+import { resetSceneState } from "../utils";
 import loaderNote1 from "/assets/svg/loader-note1.svg?raw";
 import loaderNote2 from "/assets/svg/loader-note2.svg?raw";
 import loaderNote3 from "/assets/svg/loader-note3.svg?raw";
@@ -100,11 +102,11 @@ class TimelineScene extends Phaser.Scene {
   }
 
   create() {
+    gameStore.currentScene = GAME_SCENE_KEY.timeline;
     this.song = this.cache.json.get(`song${this.chosenSongIndex + 1}`) as Song;
     const instruments = this.song.instruments;
     this.countdownMs = this.song.countdownMs;
 
-    // Camera setup
     const cam = this.cameras.add(
       0,
       0,
@@ -130,22 +132,6 @@ class TimelineScene extends Phaser.Scene {
         this.sound.resumeAll();
       }
     });
-
-    // Back arrow
-    const arrowBack = this.add
-      .image(50, 50, `arrow-back-${this.world}`)
-      .setOrigin(0.5)
-      .setScale(1)
-      .setInteractive();
-    arrowBack.on(
-      "pointerover",
-      () => (this.input.manager.canvas.style.cursor = "pointer")
-    );
-    arrowBack.on(
-      "pointerout",
-      () => (this.input.manager.canvas.style.cursor = "default")
-    );
-    arrowBack.on("pointerdown", () => this.resetScene("PickSongScene"));
 
     // Hit boxes
     const { width, height } = { width: 140, height: 78 };
@@ -424,16 +410,8 @@ class TimelineScene extends Phaser.Scene {
       this.showGameOver();
   }
 
-  private resetScene(sceneName: string) {
-    this.tweens.killAll();
-    this.time.removeAllEvents();
-    this.sound.stopAll();
-    this.sound.removeAll();
-    for (let i = 1; i <= 5; i++) this.textures.remove("world-animal" + i);
-    this.cache.audio.remove("audio");
-    this.cache.audio.remove("countdownStick");
-    this.scene.stop();
-    this.scene.start(sceneName);
+  private resetScene() {
+    resetSceneState("TimelineScene", this);
   }
 
   private showGameOver() {
@@ -479,7 +457,7 @@ class TimelineScene extends Phaser.Scene {
     };
 
     const [repickBtn, repickTxt] = makeBtn(10, "Wybierz inny utwór", () =>
-      this.resetScene("PickSongScene")
+      this.resetScene()
     );
     const [replayBtn, replayTxt] = makeBtn(90, "Zagraj ponownie", () =>
       this.scene.restart({

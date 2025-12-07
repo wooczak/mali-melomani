@@ -6,14 +6,21 @@ export const INSTRUMENTS = {
   drewienka: "drewienka",
   tarka: "tarka",
   janczary: "janczary",
-  talerze: "talerze"
+  talerze: "talerze",
+} as const;
+
+export const GAME_SCENE_KEY = {
+  hello: "HelloScene",
+  pickSong: "PickSongScene",
+  pickInstrument: "PickInstrumentScene",
+  timeline: "TimelineScene",
 } as const;
 
 export const COLORS = {
   whiteBg: 0xf9f5f2,
   bgBlue: 0x3650a5,
   textGreen: 0x018741,
-  textRed: 0xA41034,
+  textRed: 0xa41034,
   pickScene: [
     {
       fill: 0x1869ce,
@@ -35,29 +42,29 @@ export const COLORS = {
     fill: 0xfee8e3,
     stroke: 0xf95b37,
   },
-  playBtnCircleFill: 0xFFE5B3,
-  playBtnTriangleFill: 0x8C0129,
+  playBtnCircleFill: 0xffe5b3,
+  playBtnTriangleFill: 0x8c0129,
   timeline: {
     ocean: {
-      bg: 0xC4ECFE,
+      bg: 0xc4ecfe,
       blockStroke: {
-        active: 0x1052A3,
-        faded: 0x9BD9FE,
+        active: 0x1052a3,
+        faded: 0x9bd9fe,
       },
     },
     forest: {
-      bg: 0xE0F3DC,
+      bg: 0xe0f3dc,
       blockStroke: {
-        active: 0x1F713A,
-        faded: 0xA1D99B,
+        active: 0x1f713a,
+        faded: 0xa1d99b,
       },
     },
     savanna: {
-      bg: 0xF9F5F2,
+      bg: 0xf9f5f2,
       blockStroke: {
-        active: 0xF95B37,
-        faded: 0xFFE1DA,
+        active: 0xf95b37,
+        faded: 0xffe1da,
       },
-    }
+    },
   },
 } as const;

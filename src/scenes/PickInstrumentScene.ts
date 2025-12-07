@@ -1,4 +1,4 @@
-import { COLORS } from "../constants";
+import { COLORS, GAME_SCENE_KEY } from "../constants";
 import { WORLD, type Song } from "../types";
 import { bringBackPolishChars } from "../utils";
 
@@ -10,6 +10,7 @@ import triangle from "/assets/svg/triangle.svg";
 import woodBlocks from "/assets/svg/woodBlocks.svg";
 import sleighBells from "/assets/svg/sleighbells.svg";
 import cymbals from "/assets/svg/cymbals.svg";
+import { gameStore } from "../store";
 
 interface PickInstrumentSceneData {
   chosenSongIndex: number;
@@ -75,7 +76,9 @@ class PickInstrumentScene extends Phaser.Scene {
         .text(
           cardWidth / 2,
           220,
-          bringBackPolishChars(instrument.name.charAt(0).toUpperCase() + instrument.name.slice(1)),
+          bringBackPolishChars(
+            instrument.name.charAt(0).toUpperCase() + instrument.name.slice(1)
+          ),
           {
             fontFamily: "'ABeeZee', Arial",
             fontSize: "28px",
@@ -132,6 +135,7 @@ class PickInstrumentScene extends Phaser.Scene {
   }
 
   create() {
+    gameStore.currentScene = GAME_SCENE_KEY.pickInstrument;
     const { width, height } = this.sys.game.canvas;
 
     this.add
