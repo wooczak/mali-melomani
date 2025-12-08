@@ -35,7 +35,7 @@ body {
 
 /* Hamburger animation styles */
 .hamburger-active .hamburger-line:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
+  transform: rotate(45deg) translate(4px, 3px);
 }
 
 .hamburger-active .hamburger-line:nth-child(2) {
@@ -43,17 +43,16 @@ body {
 }
 
 .hamburger-active .hamburger-line:nth-child(3) {
-  transform: rotate(-45deg) translate(7px, -6px);
+  transform: rotate(-45deg) translate(6px, -5px);
 }
 
-/* Mobile menu roll-down animation styles */
 .mobile-menu-closed {
   max-height: 0;
   transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .mobile-menu-open {
-  max-height: 200px; /* Adjust based on your content */
+  max-height: 200px;
   transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -91,11 +90,23 @@ body {
   font-style: normal;
 }
 
+.poppins-regular {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.poppins-bold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
 h1 {
   font-family: "DynaPuff", system-ui;
   font-optical-sizing: auto;
   font-weight: 400;
-  color: #A41034;
+  color: #a41034;
 }
 
 @keyframes loader-note-bounce {
@@ -106,4 +117,58 @@ h1 {
   50% {
     transform: translate(-50%, -50%) translateY(-20px);
   }
+}
+
+.ocean-banner {
+  background-color: #1052a3;
+  color: #c4ecfe;
+}
+.forest-banner {
+  background-color: #1f713a;
+  color: #e0f3dc;
+}
+.savanna-banner {
+  background-color: #f54b24;
+  color: #f9f5f2;
+}
+
+.pick-instrument-banner {
+  background-color: #8c0129;
+  color: #f9f5f2;
+}
+
+.pick-instrument-arrow-back {
+  background-color: #f9f5f2 !important;
+  color: #8c0129 !important;
+  padding-inline: 12px;
+  padding-block: 4px;
+  border-radius: 28px;
+  cursor: pointer;
+}
+
+.ocean-arrow-back {
+  background-color: #c4ecfe !important;
+  color: #1052a3 !important;
+  padding-inline: 12px;
+  padding-block: 4px;
+  border-radius: 28px;
+  cursor: pointer;
+}
+
+.forest-arrow-back {
+  background-color: #e0f3dc !important;
+  color: #1f713a !important;
+  padding-inline: 12px;
+  padding-block: 4px;
+  border-radius: 28px;
+  cursor: pointer;
+}
+
+.savanna-arrow-back {
+  background-color: #f9f5f2 !important;
+  color: #f54b24 !important;
+  padding-inline: 12px;
+  padding-block: 4px;
+  border-radius: 28px;
+  cursor: pointer;
 }

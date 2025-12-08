@@ -1,5 +1,7 @@
-import { COLORS, INSTRUMENTS } from "../constants";
+import { COLORS, GAME_SCENE_KEY, INSTRUMENTS } from "../constants";
+import { gameStore } from "../store";
 import { type Song, WORLD } from "../types";
+import { resetSceneState } from "../utils";
 import loaderNote1 from "/assets/svg/loader-note1.svg?raw";
 import loaderNote2 from "/assets/svg/loader-note2.svg?raw";
 import loaderNote3 from "/assets/svg/loader-note3.svg?raw";
@@ -9,7 +11,6 @@ const loaderNotes = [loaderNote1, loaderNote2, loaderNote3];
 
 class TimelineScene extends Phaser.Scene {
   private loaders: HTMLElement[] = [];
-  private spaceKey!: Phaser.Input.Keyboard.Key;
   private song: Song = {
     songName: "",
     countdownMs: 0,
@@ -25,7 +26,6 @@ class TimelineScene extends Phaser.Scene {
   private hitBoxContainer!: Phaser.GameObjects.Container;
   private songStartTimestamp: number | null = null;
 
-  isSongStarted = false;
   isTutti = false;
   gameOver = false;
   countdownMs = 0;
@@ -102,15 +102,11 @@ class TimelineScene extends Phaser.Scene {
   }
 
   create() {
+    gameStore.currentScene = GAME_SCENE_KEY.timeline;
     this.song = this.cache.json.get(`song${this.chosenSongIndex + 1}`) as Song;
     const instruments = this.song.instruments;
     this.countdownMs = this.song.countdownMs;
 
-    this.spaceKey! = this.input.keyboard!.addKey(
-      Phaser.Input.Keyboard.KeyCodes.SPACE
-    );
-
-    // Camera setup
     const cam = this.cameras.add(
       0,
       0,
@@ -136,22 +132,6 @@ class TimelineScene extends Phaser.Scene {
         this.sound.resumeAll();
       }
     });
-
-    // Back arrow
-    const arrowBack = this.add
-      .image(50, 50, `arrow-back-${this.world}`)
-      .setOrigin(0.5)
-      .setScale(1)
-      .setInteractive();
-    arrowBack.on(
-      "pointerover",
-      () => (this.input.manager.canvas.style.cursor = "pointer")
-    );
-    arrowBack.on(
-      "pointerout",
-      () => (this.input.manager.canvas.style.cursor = "default")
-    );
-    arrowBack.on("pointerdown", () => this.resetScene("PickSongScene"));
 
     // Hit boxes
     const { width, height } = { width: 140, height: 78 };
@@ -213,7 +193,7 @@ class TimelineScene extends Phaser.Scene {
           .fillStyle(color, 1)
           .fillRoundedRect(-width / 2, -h / 2, width, h, 8)
           .setPosition(line.x, yStart)
-          .setData({ hitTime: hit.time, instrument: instrument.name })
+          .setData({ hitTime: hit.time, instrument: instrument.name, isLong })
           .setDepth(10);
 
         const tween = this.tweens.add({
@@ -261,7 +241,6 @@ class TimelineScene extends Phaser.Scene {
       .play();
 
     this.time.delayedCall(this.countdownMs, () => {
-      this.isSongStarted = true;
       this.allNotes.forEach((n) => n.tween.play());
     });
 
@@ -270,7 +249,9 @@ class TimelineScene extends Phaser.Scene {
     }
 
     this.setupNoteFadeouts();
-    this.spaceObject?.on("down", () => this.handleHit());
+    this.spaceObject?.on("down", () => {
+      this.handleHit();
+    });
   }
 
   private setupNoteFadeouts() {
@@ -289,7 +270,7 @@ class TimelineScene extends Phaser.Scene {
             duration: this.isTutti ? 150 : 100,
             onComplete: () => note.note.destroy(),
           });
-          if (!this.isTutti)
+          if (!this.isTutti) {
             this.tweens.add({
               targets: hitBox,
               scaleX: 1.1,
@@ -297,6 +278,7 @@ class TimelineScene extends Phaser.Scene {
               duration: 100,
               yoyo: true,
             });
+          } else this.autoHit(note);
         });
       } else {
         this.time.delayedCall(time + 200, () =>
@@ -308,6 +290,42 @@ class TimelineScene extends Phaser.Scene {
           })
         );
       }
+    });
+  }
+
+  private autoHit(noteObj: { note: Phaser.GameObjects.Graphics }) {
+    const note = noteObj.note;
+
+    if (note.getData("isLong")) {
+      this.time.delayedCall(1350, () => {
+        this.tweens.add({
+          targets: note,
+          alpha: 0,
+          scale: 2,
+          duration: 100,
+          onComplete: () => note.destroy(),
+        });
+      });
+    } else {
+      this.tweens.add({
+        targets: note,
+        alpha: 0,
+        scale: 2,
+        duration: 100,
+        onComplete: () => note.destroy(),
+      });
+    }
+
+    const hb = this.hitBoxContainer.list.find(
+      (hb: any) => hb.name === note.getData("instrument")
+    );
+
+    this.tweens.add({
+      targets: hb,
+      scaleX: 1.1,
+      scaleY: 1.1,
+      duration: 50,
+      yoyo: true,
     });
   }
 
@@ -328,6 +346,21 @@ class TimelineScene extends Phaser.Scene {
 
     if (hitNote) {
       hitNote.tween.stop();
+
+      if (hitNote.note.getData("isLong")) {
+        const holdDuration = 1350;
+        this.time.delayedCall(holdDuration, () => {
+          this.tweens.add({
+            targets: hitNote.note,
+            alpha: 0,
+            scale: 2,
+            duration: 100,
+            onComplete: () => hitNote.note.destroy(),
+          });
+        });
+        return;
+      }
+
       this.tweens.add({
         targets: hitNote.note,
         alpha: 0,
@@ -335,6 +368,7 @@ class TimelineScene extends Phaser.Scene {
         duration: 100,
         onComplete: () => hitNote.note.destroy(),
       });
+
       const hb = this.hitBoxContainer.list.find(
         (hb: any) => hb.name === hitNote.note.getData("instrument")
       );
@@ -369,20 +403,6 @@ class TimelineScene extends Phaser.Scene {
   update(time: number) {
     if (!this.songStartTimestamp) return;
 
-    /* TODO: Complete the updates */
-    /*     const elapsed = (time - this.songStartTimestamp) / 1000;
-
-    for (const { note } of this.allNotes) {
-      const hitTime = note.getData("hitTime");
-
-      if (
-        !note.getData("triggered") &&
-        Math.abs(hitTime - elapsed) < 0.05 // within 50 ms
-      ) {
-        note.setData("triggered", true);
-      }
-    } */
-
     if (
       Math.floor(time / 1000 - this.songStartTimestamp / 1000) >=
       this.song.duration
@@ -390,16 +410,8 @@ class TimelineScene extends Phaser.Scene {
       this.showGameOver();
   }
 
-  private resetScene(sceneName: string) {
-    this.tweens.killAll();
-    this.time.removeAllEvents();
-    this.sound.stopAll();
-    this.sound.removeAll();
-    for (let i = 1; i <= 5; i++) this.textures.remove("world-animal" + i);
-    this.cache.audio.remove("audio");
-    this.cache.audio.remove("countdownStick");
-    this.scene.stop();
-    this.scene.start(sceneName);
+  private resetScene() {
+    resetSceneState("TimelineScene", this);
   }
 
   private showGameOver() {
@@ -445,7 +457,7 @@ class TimelineScene extends Phaser.Scene {
     };
 
     const [repickBtn, repickTxt] = makeBtn(10, "Wybierz inny utwór", () =>
-      this.resetScene("PickSongScene")
+      this.resetScene()
     );
     const [replayBtn, replayTxt] = makeBtn(90, "Zagraj ponownie", () =>
       this.scene.restart({

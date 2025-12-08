@@ -29,5 +29,5 @@ export type InstrumentsSvgData = {
 export const WORLD = {
   ocean: "ocean",
   forest: "forest",
-  /* savanna: "savanna", */
+  savanna: "savanna",
 } as const;
