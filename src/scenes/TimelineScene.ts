@@ -200,7 +200,7 @@ class TimelineScene extends Phaser.Scene {
           targets: note,
           paused: true,
           y: finalY,
-          delay: hit.time * 1000 - 800,
+          delay: Math.max(0, hit.time * 1000 - 800),
           duration: tweenDur,
         });
 
