@@ -46,21 +46,21 @@ export const COLORS = {
   playBtnTriangleFill: 0x8c0129,
   timeline: {
     ocean: {
-      bg: 0xc4ecfe,
+      bg: 0xC4ECFE,
       blockStroke: {
         active: 0x1052a3,
         faded: 0x9bd9fe,
       },
     },
     forest: {
-      bg: 0xe0f3dc,
+      bg: 0xE0F3DC,
       blockStroke: {
         active: 0x1f713a,
         faded: 0xa1d99b,
       },
     },
     savanna: {
-      bg: 0xf9f5f2,
+      bg: 0xF9F5F2,
       blockStroke: {
         active: 0xf95b37,
         faded: 0xffe1da,

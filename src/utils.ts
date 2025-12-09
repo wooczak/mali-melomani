@@ -6,7 +6,8 @@ export function bringBackPolishChars(input: string): string {
 
 export function resetSceneState(
   currentScene: (typeof GAME_SCENE_KEY)[keyof typeof GAME_SCENE_KEY],
-  game: Phaser.Scene
+  game: Phaser.Scene,
+  goToScene?: (typeof GAME_SCENE_KEY)[keyof typeof GAME_SCENE_KEY]
 ) {
   switch (currentScene) {
     case GAME_SCENE_KEY.timeline:
@@ -18,11 +19,19 @@ export function resetSceneState(
       game.cache.audio.remove("audio");
       game.cache.audio.remove("countdownStick");
       game.scene.stop();
-      game.scene.start(GAME_SCENE_KEY.pickInstrument);
+      if (goToScene) {
+        game.scene.start(goToScene);
+      } else {
+        game.scene.start(GAME_SCENE_KEY.pickInstrument);
+      }
       break;
     case GAME_SCENE_KEY.pickInstrument:
       game.scene.stop();
-      game.scene.start(GAME_SCENE_KEY.pickSong);
+      if (goToScene) {
+        game.scene.start(goToScene);
+      } else {
+        game.scene.start(GAME_SCENE_KEY.pickSong);
+      }
       break;
     default:
       break;
