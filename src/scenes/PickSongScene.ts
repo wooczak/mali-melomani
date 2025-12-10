@@ -8,7 +8,7 @@ class PickSongScene extends Phaser.Scene {
   }
 
   preload() {
-    for (let i = 1; i <= 9; i++) {
+    for (let i = 1; i <= 10; i++) {
       this.load.json(`song${i}`, `assets/songs/song${i}.json`);
     }
     this.load.svg("start", "/assets/svg/pick-song-star.svg");
