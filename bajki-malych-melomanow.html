@@ -103,9 +103,75 @@
         </ul>
       </div>
     </nav>
-    <main class="flex-1">
-      <h1 class="text-center px-5 py-3 text-[24px]">Bajki Małych Melomanów</h1>
-      
+    <main class="flex-1 px-4 sm:px-8 md:px-16 lg:px-20 py-8">
+      <!-- Heading -->
+      <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-[48px] mb-5 text-center md:text-left">
+        Bajki małych melomanów
+      </h1>
+
+      <!-- Category tabs -->
+      <div class="flex flex-wrap gap-3 mb-12">
+        <button class="px-6 py-3 rounded-[12px] bg-[#A8D8EA] text-[#1052A3] font-medium hover:bg-[#1052A3] hover:text-white transition-colors">
+          Muzyczny ocean
+        </button>
+        <button class="px-6 py-3 rounded-[12px] bg-[#C8E6C9] text-[#1F713A] font-medium hover:bg-[#1F713A] hover:text-white transition-colors">
+          Muzyczny las
+        </button>
+        <button class="px-6 py-3 rounded-[12px] bg-[#F5ECE6]  text-[#F54B24] font-medium hover:bg-[#F54B24] hover:text-white transition-colors">
+          Muzyczna sawanna
+        </button>
+      </div>
+
+      <!-- Character cards grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+        <!-- Card 1: Rozgwiazda Różyczka -->
+        <div class="bg-[#1565C0] rounded-[12px] p-6 flex flex-col items-center text-center">
+          <div class="bg-white rounded-full w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center mb-4">
+            <img src="assets/svg/starfish.svg" alt="Rozgwiazda Różyczka" class="w-16 h-16 sm:w-20 sm:h-20" />
+          </div>
+          <p class="text-white font-medium text-sm sm:text-base">Rozgwiazda<br>Różyczka</p>
+        </div>
+
+        <!-- Card 2: Żółw Teodor -->
+        <div class="bg-[#1565C0] rounded-[12px] p-6 flex flex-col items-center text-center">
+          <div class="bg-white rounded-full w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center mb-4">
+            <img src="assets/svg/turtle.svg" alt="Żółw Teodor" class="w-16 h-16 sm:w-20 sm:h-20" />
+          </div>
+          <p class="text-white font-medium text-sm sm:text-base">Żółw<br>Teodor</p>
+        </div>
+
+        <!-- Card 3: Orka Iskierka -->
+        <div class="bg-[#1565C0] rounded-[12px] p-6 flex flex-col items-center text-center">
+          <div class="bg-white rounded-full w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center mb-4">
+            <img src="assets/svg/orca.svg" alt="Orka Iskierka" class="w-16 h-16 sm:w-20 sm:h-20" />
+          </div>
+          <p class="text-white font-medium text-sm sm:text-base">Orka<br>Iskierka</p>
+        </div>
+
+        <!-- Card 4: Meduza Meluzyna -->
+        <div class="bg-[#1565C0] rounded-[12px] p-6 flex flex-col items-center text-center">
+          <div class="bg-white rounded-full w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center mb-4">
+            <img src="assets/svg/jellyfish.svg" alt="Meduza Meluzyna" class="w-16 h-16 sm:w-20 sm:h-20" />
+          </div>
+          <p class="text-white font-medium text-sm sm:text-base">Meduza<br>Meluzyna</p>
+        </div>
+
+        <!-- Card 5: Wieloryb Baltazar -->
+        <div class="bg-[#1565C0] rounded-[12px] p-6 flex flex-col items-center text-center">
+          <div class="bg-white rounded-full w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center mb-4">
+            <img src="assets/svg/whale.svg" alt="Wieloryb Baltazar" class="w-16 h-16 sm:w-20 sm:h-20" />
+          </div>
+          <p class="text-white font-medium text-sm sm:text-base">Wieloryb<br>Baltazar</p>
+        </div>
+
+        <!-- Card 6: Krab Klemens -->
+        <div class="bg-[#1565C0] rounded-[12px] p-6 flex flex-col items-center text-center">
+          <div class="bg-white rounded-full w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center mb-4">
+            <img src="assets/svg/crab.svg" alt="Krab Klemens" class="w-16 h-16 sm:w-20 sm:h-20" />
+          </div>
+          <p class="text-white font-medium text-sm sm:text-base">Krab<br>Klemens</p>
+        </div>
+      </div>
     </main>
     <footer
       class="flex flex-col md:flex-row items-center justify-evenly mt-10 bg-white"
