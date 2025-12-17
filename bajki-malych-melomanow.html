@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./src/styles.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&family=DynaPuff:wght@400..700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Mali Melomani</title>
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <nav class="relative bg-[#f9f5f2] z-20">
+      <!-- Main navbar -->
+      <div
+        class="h-auto flex flex-row items-center justify-between px-4 sm:px-8 md:px-16 lg:px-[78px] py-4 sm:py-6 md:py-8 lg:py-[57px] gap-4 md:gap-0"
+      >
+        <a href="/" class="flex-shrink-0">
+          <h1
+            class="text-2xl sm:text-3xl md:text-4xl lg:text-[48px] text-center md:text-left"
+          >
+            Mali<b>Melomani</b>
+          </h1>
+        </a>
+
+        <!-- Hamburger button (visible on mobile) -->
+        <button
+          id="hamburger-menu"
+          class="md:hidden flex flex-col justify-center items-center w-10 h-10 space-y-1 focus:outline-none relative z-30"
+          aria-label="Toggle menu"
+        >
+          <span
+            class="hamburger-line w-6 h-0.5 bg-[#F95B37] transition-all duration-300 origin-center"
+          ></span>
+          <span
+            class="hamburger-line w-6 h-0.5 bg-[#F95B37] transition-all duration-300"
+          ></span>
+          <span
+            class="hamburger-line w-6 h-0.5 bg-[#F95B37] transition-all duration-300 origin-center"
+          ></span>
+        </button>
+
+        <!-- Desktop menu (hidden on mobile) -->
+        <ul
+          class="hidden md:flex gap-2 sm:gap-4 md:gapx-5 py-3 text-base sm:text-lg md:text-xl lg:text-[24px]"
+        >
+          <a href="/instrukcja-gry" class="hover:underline"
+            ><li>Instrukcja gry</li></a
+          >
+          <a href="/ciekawostki" class="hover:underline"
+            ><li>Ciekawostki</li></a
+          >
+          <a href="/o-projekcie" class="hover:underline"
+            ><li>O projekcie</li></a
+          >
+          <a href="/bajki-malych-melomanow" class="hover:underline"
+            ><li>Bajki Małych Melomanów</li></a
+          >
+        </ul>
+      </div>
+
+      <!-- Mobile menu dropdown -->
+      <div
+        id="mobile-menu"
+        class="md:hidden overflow-hidden bg-[#f9f5f2] border-t border-[#F95B37]/20 mobile-menu-closed"
+      >
+        <ul class="flex flex-col">
+          <a href="/instrukcja-gry" class="mobile-menu-item">
+            <li
+              class="px-4 sm:px-8 py-4 text-lg hover:bg-[#F95B37]/10 hover:text-[#F95B37] transition-all duration-200"
+            >
+              Instrukcja gry
+            </li>
+          </a>
+          <a href="/ciekawostki" class="mobile-menu-item">
+            <li
+              class="px-4 sm:px-8 py-4 text-lg hover:bg-[#F95B37]/10 hover:text-[#F95B37] transition-all duration-200 border-t border-[#F95B37]/10"
+            >
+              Ciekawostki
+            </li>
+          </a>
+          <a href="/o-projekcie" class="mobile-menu-item">
+            <li
+              class="px-4 sm:px-8 py-4 text-lg hover:bg-[#F95B37]/10 hover:text-[#F95B37] transition-all duration-200 border-t border-[#F95B37]/10"
+            >
+              O projekcie
+            </li>
+              <a href="/bajki-malych-melomanow.html" class="mobile-menu-item">
+            <li
+              class="px-4 sm:px-8 py-4 text-lg hover:bg-[#F95B37]/10 hover:text-[#F95B37] transition-all duration-200 border-t border-[#F95B37]/10"
+            >
+              Bajki Małych Melomanów
+            </li>
+          </a>
+        </ul>
+      </div>
+    </nav>
+    <main class="flex-1">
+      <h1 class="text-center px-5 py-3 text-[24px]">Bajki Małych Melomanów</h1>
+      <div
+        class="mx-auto w-[1000px] max-w-full box-border outline outline-[5px] outline-white shadow-xl"
+      >
+        <p class="p-5">
+          „Mali Melomani” - II edycja realizowany przez Fundację Klubu
+          Podróżników Śródziemie Aleja Podróżników to projekt
+          edukacyjno-artystyczny skierowany do dzieci w wieku przedszkolnym.
+          Jego celem rozbudzanie wrażliwości muzycznej najmłodszych,
+          popularyzacja muzyki klasycznej w przystępnej, atrakcyjnej formie oraz
+          tworzenie nowoczesnych, dostępnych narzędzi wspierających rozwój
+          muzyczny.
+        </p>
+        <p class="p-5">
+          W drugiej edycji projektu łączymy tradycyjne warsztaty muzyczne z
+          innowacyjną edukacją cyfrową, tworząc kompleksową, atrakcyjną i
+          dostępną dla wszystkich przestrzeń poznawania muzyki.
+        </p>
+
+        <p class="p-5">
+          W ramach projektu odbędzie się 150 warsztatów dla dzieci w wieku
+          przedszkolnym: cykl 10 warsztatów muzycznych w 12 grupach krakowskich
+          przedszkoli oraz w 3 grupach w małej miejscowości pozbawionej stałej
+          oferty kulturalnej. Każde spotkanie inspirowane jest twórczością
+          wybitnych kompozytorów różnych epok, wzbogacone instrumentarium Orffa
+          oraz opowieściami muzycznymi.
+        </p>
+
+        <h2 class="text-2xl font-semibold px-5">Lista utworów</h2>
+        <ol class="list-decimal list-inside space-y-1 px-5 py-3">
+          <li>F. Chopin – Walc e-moll op. posh.</li>
+          <li>G. F. Handel – Muzyka na wodzie, Suita nr 3 G-dur, Allegro</li>
+          <li>J. S. Bach – Badinerie, II Suita orkiestrowa h-moll BWV 1067</li>
+          <li>
+            A. Vivaldi - Koncert skrzypcowy E-dur op. 8 nr 1, Wiosna z cyklu
+            Cztery pory roku
+          </li>
+          <li>E. Grieg - Taniec Anitry z Suity Peer Gynt</li>
+          <li>
+            W. A. Mozart - Serenada na orkiestrę smyczkową G-dur nr 13 KV 525,
+            Eine kleine Nachtmusik
+          </li>
+          <li>P. Czajkowski - Marsz z baletu Dziadek do orzechów</li>
+          <li>G. Rossini - Uwertura do opery Wilhelm Tell</li>
+          <li>L. Delibes - Mazur z opery Coppélia</li>
+          <li>M. Musorgski - Chata Baby Jagi z Obrazków z wystawy</li>
+        </ol>
+
+        <h2 class="text-2xl font-semibold px-5">
+          Każde spotkanie zostanie wzbogacone
+        </h2>
+        <ul class="list-disc list-inside space-y-1 px-5 py-3">
+          <li>instrumentarium Orffa,</li>
+          <li>opowieściami muzycznymi,</li>
+          <li>ćwiczeniami rytmicznymi,</li>
+          <li>
+            aplikacją webową, która wspiera prowadzenie zajęć i pozwala na
+            wirtualną grę na instrumentach.
+          </li>
+        </ul>
+
+        <p class="px-5 py-3">
+          Na potrzeby warsztatów powstaną Bajki Małych Melomanów, nawiązujące do
+          charakteru poznawanych utworów i brzmień. Dzieci odwiedzą trzy
+          wyjątkowe, muzyczne krainy:
+        </p>
+
+        <ul class="list-disc list-inside space-y-2 px-5 py-3">
+          <li>
+            <strong>Kraina Oceanu</strong> – z Rozgwiazdą Różyczką, Orką
+            Iskierką, Meduzą Meluzyną, Żółwiem Teodorem, Wielorybem Baltazarem,
+            Krabem Klemensem
+          </li>
+          <li>
+            <strong>Kraina Lasu</strong> – z Sową Mądrosławą, Wiewiórką Rudą,
+            Jeżykiem Kolczatkiem, Liskiem Szelestkiem, Ślimakiem Wolniutkiem
+          </li>
+          <li>
+            <strong>Kraina Sawanny</strong> – z Lwem Leo, Słoniem Tambo, Żyrafą
+            Melanią, Zebrą Zulą, Flamingiem Fifi, Hipopotamem Hipo, Małpką Momo
+          </li>
+        </ul>
+
+        <p class="px-5 py-3">
+          Każda kraina będzie powiązana z konkretną muzyką, a bohater bajki z
+          instrumentami, co umożliwi dzieciom lepsze poznanie instrumentów i ich
+          brzmienia, zrozumienie emocji zawartych w utworach oraz doświadczenie
+          muzyki poprzez opowiadanie, przygodę, rytm i ruch. Bajka będzie
+          towarzyszyć całemu cyklowi warsztatów, tworząc spójną i angażującą
+          narrację.
+        </p>
+
+        <h2 class="text-2xl font-semibold px-5">
+          Interaktywna aplikacja webowa
+        </h2>
+
+        <p class="px-5 py-3">
+          Ten element projektu to trwałe, darmowe i ogólnodostępne narzędzie
+          edukacyjne, które umożliwi:
+        </p>
+
+        <ul class="list-disc list-inside space-y-1 px-5 py-3">
+          <li>wirtualną grę na instrumentach Orffa,</li>
+          <li>interaktywne ćwiczenia słuchowe i rytmiczne,</li>
+          <li>animacje wspierające rozwój muzyczny,</li>
+          <li>
+            dostęp z każdego miejsca na świecie – bez opłat i bez ograniczeń.
+          </li>
+        </ul>
+
+        <p class="px-5 py-3">
+          Aplikacja powstaje we współpracy sektora kultury i nowych technologii,
+          zwiększając kompetencje cyfrowe zespołu Fundacji i tworząc rozwiązanie
+          odporne na kryzysy, ograniczenia i zmieniające się realia.
+        </p>
+
+        <h2 class="text-2xl font-semibold px-5">
+          Dlaczego ten projekt jest ważny?
+        </h2>
+
+        <ul class="space-y-2 px-5 py-3">
+          <li>
+            ✔ <strong>Równość dostępu do kultury</strong><br />Dzieci z różnych
+            środowisk – w tym z terenów o ograniczonej ofercie kulturalnej –
+            biorą udział w tych samych wysokiej jakości zajęciach muzycznych.
+          </li>
+          <li>
+            ✔ <strong>Wzmacnianie odporności Fundacji</strong><br />Połączenie
+            warsztatów stacjonarnych z edukacją online pozwala prowadzić
+            działania również w sytuacjach kryzysowych, epidemiologicznych czy
+            logistycznych.
+          </li>
+          <li>
+            ✔ <strong>Nowoczesna, ekologiczna edukacja</strong><br />Aplikacja i
+            cyfrowa dystrybucja materiałów ograniczają zużycie papieru i
+            konieczność dojazdów, wspierając zrównoważony rozwój.
+          </li>
+          <li>
+            ✔ <strong>Długofalowe efekty</strong><br />Powstałe narzędzie
+            pozostanie dostępne także po zakończeniu projektu, dzięki czemu
+            Fundacja może systematycznie rozwijać i poszerzać swoją ofertę
+            edukacyjną.
+          </li>
+        </ul>
+
+        <h2 class="text-2xl font-semibold px-5">Nasza misja</h2>
+
+        <p class="px-5 py-3">
+          Chcemy, aby każde dziecko – niezależnie od miejsca zamieszkania,
+          możliwości czy sytuacji życiowej – miało szansę doświadczać piękna
+          muzyki, rozwijać swoje talenty i odkrywać świat dźwięków w bezpieczny,
+          radosny i twórczy sposób. Projekt „Mali Melomani – II edycja” to krok
+          w stronę nowoczesnej, włączającej i odpornej edukacji kulturalnej.
+          Łączymy tradycję z technologią, aby muzyka i sztuka były dostępne dla
+          wszystkich.
+        </p>
+
+        <h2 class="text-2xl font-semibold px-5">Dofinansowanie</h2>
+        <p class="px-5 py-3">
+          Przedsięwzięcie objęte wsparciem z Krajowego Planu Odbudowy i
+          Zwiększania Odporności Komponent: Odporność i konkurencyjność
+          gospodarki; Inwestycja A2.5.1: Program wspierania działalności
+          podmiotów sektora kultury i przemysłów kreatywnych na rzecz
+          stymulowania ich rozwoju. Całkowity koszt przedsięwzięcia: 218 600,00
+          zł Kwota dofinansowania z UE: 171 200,00 zł Nazwa przedsięwzięcia:
+          „Mali melomani” – II edycja
+        </p>
+
+        <p class="px-5 py-3">
+          Sfinansowane przez Unię Europejską NextGenerationEU #KPOdlakultury
+          #KPO #KorzyściDlaCiebie #NextGenerationEU #FunduszeUE
+        </p>
+      </div>
+      <button
+        id="accessibility-button"
+        class="accessibility-button"
+        aria-label="Accessibility options"
+      >
+        <img
+          src="/assets/svg/accessibility-icon.svg"
+          alt="accessibility-icon"
+        />
+      </button>
+    </main>
+    <footer
+      class="flex flex-col md:flex-row items-center justify-evenly mt-10 bg-white"
+    >
+      <!-- Desktop footer -->
+      <img
+        src="assets/images/footer.jpg"
+        alt="Stopka prezentująca logotypy Unii Europejskiej, Krajowego Planu Odbudowy i Funduszy Europejskich"
+        class="hidden md:block h-[100px]"
+      />
+      <!-- Mobile footer -->
+      <img
+        src="assets/images/footer_mobile.jpg"
+        alt="Stopka prezentująca logotypy Unii Europejskiej, Krajowego Planu Odbudowy i Funduszy Europejskich"
+        class="block md:hidden h-16 max-w-full object-contain"
+      />
+    </footer>
+  </body>
+</html>
