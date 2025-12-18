@@ -2,9 +2,7 @@ import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  plugins: [
-    tailwindcss(),
-  ],
+  plugins: [tailwindcss()],
   build: {
     rollupOptions: {
       input: {
@@ -12,6 +10,7 @@ export default defineConfig({
         instrukcja: "./instrukcja-gry.html",
         ciekawostki: "./ciekawostki.html",
         oprojekcie: "./o-projekcie.html",
+        bajki: "./bajki-malych-melomanow.html",
       },
     },
   },
