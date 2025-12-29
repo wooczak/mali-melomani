@@ -9,7 +9,10 @@ import {
 import { COLORS, GAME_SCENE_KEY } from "./constants";
 import { gameStore } from "./store";
 
-document.addEventListener("DOMContentLoaded", initializeHamburgerMenu);
+document.addEventListener("DOMContentLoaded", () => {
+  initializeHamburgerMenu();
+  changeFairyTaleButtons();
+});
 const gameBg = Phaser.Display.Color.IntegerToColor(COLORS.whiteBg).rgba;
 
 function initializeHamburgerMenu() {
@@ -92,6 +95,44 @@ function initializeHamburgerMenu() {
     if (window.innerWidth >= 768 && isMenuOpen) {
       closeMenu();
     }
+  });
+}
+
+function changeFairyTaleButtons() {
+  const oceanButton = document.querySelector(".fairy-tales-button-ocean");
+  const forestButton = document.querySelector(".fairy-tales-button-forest");
+  const savannaButton = document.querySelector(".fairy-tales-button-savanna");
+
+  const oceanContent = document.getElementById("ocean-content");
+  const forestContent = document.getElementById("forest-content");
+  const savannaContent = document.getElementById("savanna-content");
+
+  const buttons = [oceanButton, forestButton, savannaButton];
+  const contents = [oceanContent, forestContent, savannaContent];
+
+  // Set ocean as default active
+  oceanButton?.classList.add("active");
+  oceanContent?.classList.remove("hidden");
+  oceanContent?.classList.add("grid");
+
+  buttons.forEach((button, index) => {
+    button?.addEventListener("click", () => {
+      // Remove active class from all buttons
+      buttons.forEach((btn) => btn?.classList.remove("active"));
+      // Add active class to clicked button
+      button.classList.add("active");
+
+      // Hide all content sections
+      contents.forEach((content) => {
+        content?.classList.add("hidden");
+        content?.classList.remove("grid");
+      });
+
+      // Show the corresponding content
+      const activeContent = contents[index];
+      activeContent?.classList.remove("hidden");
+      activeContent?.classList.add("grid");
+    });
   });
 }
 

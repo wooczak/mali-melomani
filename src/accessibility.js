@@ -1,0 +1,1 @@
+// Accessibility functionality placeholder

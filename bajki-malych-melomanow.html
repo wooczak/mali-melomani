@@ -55,9 +55,7 @@
           <a href="/instrukcja-gry" class="hover:underline"
             ><li>Instrukcja gry</li></a
           >
-          <a href="/ciekawostki" class="hover:underline"
-            ><li>Ciekawostki</li></a
-          >
+   
           <a href="/o-projekcie" class="hover:underline"
             ><li>O projekcie</li></a
           >
@@ -80,13 +78,7 @@
               Instrukcja gry
             </li>
           </a>
-          <a href="/ciekawostki" class="mobile-menu-item">
-            <li
-              class="px-4 sm:px-8 py-4 text-lg hover:bg-[#F95B37]/10 hover:text-[#F95B37] transition-all duration-200 border-t border-[#F95B37]/10"
-            >
-              Ciekawostki
-            </li>
-          </a>
+
           <a href="/o-projekcie" class="mobile-menu-item">
             <li
               class="px-4 sm:px-8 py-4 text-lg hover:bg-[#F95B37]/10 hover:text-[#F95B37] transition-all duration-200 border-t border-[#F95B37]/10"
@@ -105,73 +97,183 @@
     </nav>
     <main class="flex-1 px-4 sm:px-8 md:px-16 lg:px-20 py-8">
       <!-- Heading -->
-      <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-[48px] mb-5 text-center md:text-left">
+      <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-[48px] lg:mx-[208px] md:mx-[104px] mb-5 text-center lg:text-left">
         Bajki małych melomanów
       </h1>
 
       <!-- Category tabs -->
-      <div class="flex flex-wrap gap-3 mb-12">
-        <button class="px-6 py-3 rounded-[12px] bg-[#A8D8EA] text-[#1052A3] font-medium hover:bg-[#1052A3] hover:text-white transition-colors">
+      <div class="flex flex-col sm:flex-row flex-wrap gap-3 mb-12 lg:mx-[208px] md:mx-[104px]">
+        <button class="px-6 py-3 rounded-[12px] bg-[#A8D8EA] text-[#1052A3] font-medium hover:bg-[#1052A3] hover:text-white transition-colors fairy-tales-button-ocean">
           Muzyczny ocean
         </button>
-        <button class="px-6 py-3 rounded-[12px] bg-[#C8E6C9] text-[#1F713A] font-medium hover:bg-[#1F713A] hover:text-white transition-colors">
+        <button class="px-6 py-3 rounded-[12px] bg-[#C8E6C9] text-[#1F713A] font-medium hover:bg-[#1F713A] hover:text-white transition-colors fairy-tales-button-forest">
           Muzyczny las
         </button>
-        <button class="px-6 py-3 rounded-[12px] bg-[#F5ECE6]  text-[#F54B24] font-medium hover:bg-[#F54B24] hover:text-white transition-colors">
+        <button class="px-6 py-3 rounded-[12px] bg-[#F5ECE6] text-[#F54B24] font-medium hover:bg-[#F54B24] hover:text-white transition-colors fairy-tales-button-savanna">
           Muzyczna sawanna
         </button>
       </div>
-
-      <!-- Character cards grid -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+       <!-- Character cards grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-[44px] lg:mx-[208px] mb-12 md:gap-6 mx-[104px]">
         <!-- Card 1: Rozgwiazda Różyczka -->
         <div class="bg-[#1565C0] rounded-[12px] p-6 flex flex-col items-center text-center">
-          <div class="bg-white rounded-full w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center mb-4">
-            <img src="assets/svg/starfish.svg" alt="Rozgwiazda Różyczka" class="w-16 h-16 sm:w-20 sm:h-20" />
+          <div class=" flex items-center justify-center mb-4">
+        <img src="assets/svg/starfish.svg" alt="Rozgwiazda Różyczka" class="w-16 h-16 sm:w-20 sm:h-20" />
           </div>
-          <p class="text-white font-medium text-sm sm:text-base">Rozgwiazda<br>Różyczka</p>
+          <p class="text-[#C4ECFE] font-medium text-sm sm:text-base">Rozgwiazda<br>Różyczka</p>
         </div>
 
         <!-- Card 2: Żółw Teodor -->
         <div class="bg-[#1565C0] rounded-[12px] p-6 flex flex-col items-center text-center">
-          <div class="bg-white rounded-full w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center mb-4">
-            <img src="assets/svg/turtle.svg" alt="Żółw Teodor" class="w-16 h-16 sm:w-20 sm:h-20" />
+          <div class=" flex items-center justify-center mb-4">
+        <img src="assets/svg/turtle.svg" alt="Żółw Teodor" class="w-16 h-16 sm:w-20 sm:h-20" />
           </div>
-          <p class="text-white font-medium text-sm sm:text-base">Żółw<br>Teodor</p>
+          <p class="text-[#C4ECFE] font-medium text-sm sm:text-base">Żółw<br>Teodor</p>
         </div>
 
         <!-- Card 3: Orka Iskierka -->
         <div class="bg-[#1565C0] rounded-[12px] p-6 flex flex-col items-center text-center">
-          <div class="bg-white rounded-full w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center mb-4">
-            <img src="assets/svg/orca.svg" alt="Orka Iskierka" class="w-16 h-16 sm:w-20 sm:h-20" />
+          <div class=" flex items-center justify-center mb-4">
+        <img src="assets/svg/orca.svg" alt="Orka Iskierka" class="w-16 h-16 sm:w-20 sm:h-20" />
           </div>
-          <p class="text-white font-medium text-sm sm:text-base">Orka<br>Iskierka</p>
+          <p class="text-[#C4ECFE] font-medium text-sm sm:text-base">Orka<br>Iskierka</p>
         </div>
 
         <!-- Card 4: Meduza Meluzyna -->
         <div class="bg-[#1565C0] rounded-[12px] p-6 flex flex-col items-center text-center">
-          <div class="bg-white rounded-full w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center mb-4">
-            <img src="assets/svg/jellyfish.svg" alt="Meduza Meluzyna" class="w-16 h-16 sm:w-20 sm:h-20" />
+          <div class=" flex items-center justify-center mb-4">
+        <img src="assets/svg/jellyfish.svg" alt="Meduza Meluzyna" class="w-16 h-16 sm:w-20 sm:h-20" />
           </div>
-          <p class="text-white font-medium text-sm sm:text-base">Meduza<br>Meluzyna</p>
+          <p class="text-[#C4ECFE] font-medium text-sm sm:text-base">Meduza<br>Meluzyna</p>
         </div>
 
         <!-- Card 5: Wieloryb Baltazar -->
         <div class="bg-[#1565C0] rounded-[12px] p-6 flex flex-col items-center text-center">
-          <div class="bg-white rounded-full w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center mb-4">
-            <img src="assets/svg/whale.svg" alt="Wieloryb Baltazar" class="w-16 h-16 sm:w-20 sm:h-20" />
+          <div class=" flex items-center justify-center mb-4">
+        <img src="assets/svg/whale.svg" alt="Wieloryb Baltazar" class="w-16 h-16 sm:w-20 sm:h-20" />
           </div>
-          <p class="text-white font-medium text-sm sm:text-base">Wieloryb<br>Baltazar</p>
+          <p class="text-[#C4ECFE] font-medium text-sm sm:text-base">Wieloryb<br>Baltazar</p>
         </div>
 
         <!-- Card 6: Krab Klemens -->
         <div class="bg-[#1565C0] rounded-[12px] p-6 flex flex-col items-center text-center">
-          <div class="bg-white rounded-full w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center mb-4">
-            <img src="assets/svg/crab.svg" alt="Krab Klemens" class="w-16 h-16 sm:w-20 sm:h-20" />
+          <div class=" flex items-center justify-center mb-4">
+        <img src="assets/svg/crab.svg" alt="Krab Klemens" class="w-16 h-16 sm:w-20 sm:h-20" />
           </div>
-          <p class="text-white font-medium text-sm sm:text-base">Krab<br>Klemens</p>
+          <p class="text-[#C4ECFE] font-medium text-sm sm:text-base">Krab<br>Klemens</p>
         </div>
       </div>
+
+      <!-- Rectangle content containers -->
+      <div id="ocean-content" class="fairy-tale-content lg:mx-[208px] md:mx-[104px] mb-8 grid grid-cols-1 gap-8">
+        <div class="bg-[#A8D8EA] rounded-[18px] p-6">
+          <p>Posłuchajcie historii o niezwykłym oceanie, w którym fale potrafią tańczyć, a muzyka żyje w każdej kropli wody. Dziś spotkamy Rozgwiazdę Różyczkę, Meduzę Meluzynę, Rybkę Iskierkę, Kraba Klemensa i Wieloryba Baltazara. Ich przygody opowiedzą nam trzej wielcy kompozytorzy: Fryderyk Chopin, Georg Friedrich Handel i Jan Sebastian Bach.</p>
+          <h3 class="text-[#1052A3] text-xl text-center my-5">CZĘŚĆ I - Pieśń Fal</h3>
+          <h4 class="text-xl">♫ Muzyka: F. Chopin – Walc e-moll op. posth.</h4>
+          <p>Na dnie błękitnego oceanu, wśród miękkich fal i świateł tańczących na piasku, mieszkała Rozgwiazda Różyczka. Była marzycielką. Codziennie mówiła, że każda fala ma w sobie muzykę – tylko trzeba umieć jej słuchać. Pewnego dnia morze zaczęło nucić delikatny walc. To był Walc e-moll Fryderyka Chopina – muzyka pełna wspomnień i tęsknoty.<br><br>
+
+Rozgwiazda Różyczka:
+– Słyszycie? Fale wirują jak tancerze!<br><br>
+
+Meduza Meluzyna:
+– To Chopin! Jego muzyka brzmi jak szept serca.<br><br>
+Żółw Teodor uniósł głowę znad piasku i westchnął powoli:
+– Chopin był kompozytorem z Polski. Pisał, gdy był daleko od domu… może dlatego jego walce są jak fale – tęskniące, a jednak piękne.<br><br>
+
+Rozgwiazda Różyczka:
+– Chciałabym, żeby nasz ocean też potrafił tańczyć w rytmie Chopina!<br><br>
+
+Narrator:
+Tak zaczęła się ich muzyczna podróż.</p>
+        </div>
+        <div class="bg-[#1052A3] rounded-[18px] p-6 text-white">
+          <h3 class="text-[#C4ECFE] text-xl text-center my-5">CZĘŚĆ II - Muzyka na wodzie</h3>
+          <h4 class="text-xl">♫ Muzyka: Georg Friedrich Handel – „Muzyka na wodzie", Suita nr 3 G-dur: Allegro</h4>
+          <br><br>
+          <p>Przyjaciele wypłynęli ku powierzchni. Woda mieniła się od słońca, a pośród fal płynął Wieloryb Baltazar, dostojny jak dyrygent orkiestry.<br><br>
+
+Baltazar:
+– O, znam tę melodię! To „Muzyka na wodzie” Georga Friedricha Handla.
+Dawno temu król Anglii kazał zagrać ten utwór na rzece Tamizie – orkiestra płynęła na łodziach!<br><br>
+
+Orka Iskierka (z entuzjazmem):
+– Na łodziach? To jak my – tylko my mamy płetwy zamiast wioseł!<br><br>
+
+Krab Klemens:
+– A ja mogę być perkusją! Stuk, stuk, stuk!<br><br>
+
+Meduza Meluzyna:
+– Ja zatańczę jak skrzypce, lekko i z wdziękiem!<br><br>
+
+Żółw Teodor (z uśmiechem):
+– A ja będę kontrabasem – powolnym, ale pewnym.<br><br>
+
+Muzyka Handla rozbrzmiała w całym oceanie – dostojna, wesoła i pełna blasku. Fale błyszczały jak dźwięki trąbek, a nawet Różyczka wirowała w rytmie suity.</p>
+        </div>
+        <div class="bg-[#A8D8EA] rounded-[18px] p-6"> <h3 class="text-[#1052A3] my-5 text-xl text-center">CZĘŚĆ III - Taniec Bąbelków</h3> <h4 class="text-xl">♫ Muzyka: Jan Sebastian Bach – „Badinerie” z Suity orkiestrowej nr 2 h-moll BWV 1067</h4><br><br><p>W głębinach coś zaczęło bulgotać, mienić się i śmiać.
+Z dna oceanu wypłynęły setki maleńkich bąbelków – tańczyły tak szybko, że wyglądały jak nutki na pięciolinii!<br><br>
+
+Wieloryb Baltazar:
+– To rytm Bacha!<br><br>
+
+Rozgwiazda Różyczka:
+– Bach?<br><br>
+
+Żółw Teodor:
+– Jan Sebastian Bach był niemieckim kompozytorem, który wierzył, że każda nuta ma swoje miejsce – jak każda kropla w oceanie.
+Jego muzyka jest uporządkowana, a jednocześnie pełna życia.<br><br>
+
+Orka Iskierka:
+– To idealne dla mnie! Zobaczcie, jak potrafię kręcić piruety w rytmie tej melodii!<br><br>
+
+I rzeczywiście Orka Iskierka kręciła się i wypuszczała bąbelki w powietrze, tworząc srebrzyste kręgi.
+Meluzyna wirowała wokół niej, jakby obie grały w duecie.<br><br>
+
+Żółw Teodor poruszał się powoli, ale rytmicznie, niczym kontrabas, który podtrzymuje cały taniec. Jego spokojne ruchy dodawały muzyce głębi. A Wieloryb Baltazar, największy i najstarszy z nich wszystkich, zaśpiewał niskim, potężnym tonem, który dopełnił całą melodię. W jego głosie brzmiała cała mądrość oceanu. Ocean rozbrzmiewał śmiechem i muzyką.</p></div>
+           <div class="bg-[#1052A3] rounded-[18px] p-6 text-white">
+          <h3 class="text-[#C4ECFE] text-xl text-center my-5">Zakończenie - Muzyka w Nas</h3>
+          <p class="text-white">Narrator:
+Gdy zapadła noc, przyjaciele zebrali się wokół świecącej meduzy. Woda była spokojna, a w oddali błyszczały gwiazdy.<br><br>
+
+Rozgwiazda Różyczka:
+– Dzisiaj nauczyliśmy się, że muzyka jest wszędzie – w falach, w bąbelkach, w każdym z nas.<br><br>
+
+Żółw Teodor:
+– Chopin grał z tęsknoty, Handel z radości, Bach z porządku. Każdy z nich słuchał świata… tak jak my słuchamy oceanu.<br><br>
+
+Orka Iskierka:
+– A może my też jesteśmy nutkami w wielkiej pieśni morza?<br><br>
+
+Narrator:
+Fale delikatnie kołysały ich do snu, niosąc echa muzyki w głąb oceanu. A gdzieś na powierzchni ktoś otworzył okno i usłyszał szept morza – który brzmiał jak muzyka.</p>
+        </div>
+      </div>
+
+      <div id="forest-content" class="fairy-tale-content lg:mx-[208px] md:mx-[104px] mb-8 grid grid-cols-1 gap-4">
+         <div class="bg-[#C8E6C9] rounded-[18px]"></div>
+        <div class="bg-[#1F713A] rounded-[18px]"></div>
+        <div class="bg-[#C8E6C9] rounded-[18px]"></div>
+        <div class="bg-[#1F713A] rounded-[18px]"></div>
+      </div>
+
+      <div id="savanna-content" class="fairy-tale-content lg:mx-[208px] md:mx-[104px] mb-8 grid grid-cols-1 gap-4">
+       <div class="bg-[#F5ECE6] rounded-[18px]"></div>
+        <div class="bg-[#F54B24] rounded-[18px]"></div>
+        <div class="bg-[#F5ECE6] rounded-[18px]"></div>
+        <div class="bg-[#F54B24] rounded-[18px]"></div>
+      </div>
+
+     
+      <button
+        id="accessibility-button"
+        class="accessibility-button"
+        aria-label="Accessibility options"
+      >
+        <img
+          src="/assets/svg/accessibility-icon.svg"
+          alt="accessibility-icon"
+        />
+      </button>
     </main>
     <footer
       class="flex flex-col md:flex-row items-center justify-evenly mt-10 bg-white"
@@ -189,5 +291,7 @@
         class="block md:hidden h-16 max-w-full object-contain"
       />
     </footer>
+    <script type="module" src="/src/main.ts"></script>
+        <script type="module" src="/src/accessibility.js"></script>
   </body>
 </html>

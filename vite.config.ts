@@ -8,7 +8,6 @@ export default defineConfig({
       input: {
         main: "./index.html",
         instrukcja: "./instrukcja-gry.html",
-        ciekawostki: "./ciekawostki.html",
         oprojekcie: "./o-projekcie.html",
         bajki: "./bajki-malych-melomanow.html",
       },

@@ -172,3 +172,21 @@ h1 {
   border-radius: 28px;
   cursor: pointer;
 }
+
+/* Fairy tale buttons active states */
+.fairy-tales-button-ocean.active {
+  background-color: #1052a3 !important;
+  color: white !important;
+}
+
+.fairy-tales-button-forest.active {
+  background-color: #1f713a !important;
+  color: white !important;
+}
+
+.fairy-tales-button-savanna.active {
+  background-color: #f54b24 !important;
+  color: white !important;
+}
+
+.
