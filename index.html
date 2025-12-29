@@ -2,8 +2,32 @@
 <html lang="pl">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- SEO Meta Tags -->
+    <title>Mali Melomani - Edukacyjna Gra Muzyczna dla Dzieci</title>
+    <meta name="description" content="Mali Melomani to interaktywna gra edukacyjna ucząca dzieci rytmu i muzyki. Poznaj klasycznych kompozytorów, graj w rytm i rozwijaj muzyczne umiejętności!" />
+    <meta name="keywords" content="gra muzyczna dla dzieci, edukacja muzyczna, rytm, Mali Melomani, nauka muzyki, gra edukacyjna, Chopin, klasyczna muzyka" />
+    <meta name="author" content="Mali Melomani" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://malmelomani.pl/" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://malmelomani.pl/" />
+    <meta property="og:title" content="Mali Melomani - Edukacyjna Gra Muzyczna dla Dzieci" />
+    <meta property="og:description" content="Interaktywna gra edukacyjna ucząca dzieci rytmu i muzyki. Poznaj klasycznych kompozytorów i rozwijaj muzyczne umiejętności!" />
+    <meta property="og:image" content="https://malmelomani.pl/assets/images/og-image.jpg" />
+    <meta property="og:locale" content="pl_PL" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://malmelomani.pl/" />
+    <meta name="twitter:title" content="Mali Melomani - Edukacyjna Gra Muzyczna dla Dzieci" />
+    <meta name="twitter:description" content="Interaktywna gra edukacyjna ucząca dzieci rytmu i muzyki." />
+    <meta name="twitter:image" content="https://malmelomani.pl/assets/images/og-image.jpg" />
+    
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <link href="./src/styles.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -115,7 +139,20 @@
           alt="accessibility-icon"
         />
       </button>
-      <div class="accessibility-menu"></div>
+      <div class="accessibility-menu hidden">
+        <div class="text-size-controls">
+          <p class="text-sm mb-2">Rozmiar tekstu:</p>
+          <div class="flex gap-2 mb-3">
+            <button id="decrease-text" class="text-size-btn" aria-label="Zmniejsz tekst">A-</button>
+            <button id="increase-text" class="text-size-btn" aria-label="Zwiększ tekst">A+</button>
+            <button id="reset-text" class="text-size-btn" aria-label="Resetuj rozmiar">Reset</button>
+          </div>
+          <div class="text-center">
+            <span class="text-sm">Aktualny rozmiar: </span>
+            <span id="current-size" class="font-bold">100%</span>
+          </div>
+        </div>
+      </div>
     </main>
     <footer
       class="flex flex-col md:flex-row items-center justify-evenly mt-10 bg-white h-[82px]"

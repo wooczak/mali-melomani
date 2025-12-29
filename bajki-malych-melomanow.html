@@ -1,9 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- SEO Meta Tags -->
+    <title>Bajki Małych Melomanów - Muzyczne Opowieści | Mali Melomani</title>
+    <meta name="description" content="Odkryj bajki Małych Melomanów! Poznaj muzykę Chopina, Handla i Bacha przez fascynujące opowieści o oceanicznych przyjaciołach i ich muzycznych przygodach." />
+    <meta name="keywords" content="bajki muzyczne, edukacja muzyczna dzieci, Chopin dla dzieci, Handel, Bach, opowieści muzyczne, Mali Melomani" />
+    <meta name="author" content="Mali Melomani" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://malmelomani.pl/bajki-malych-melomanow" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://malmelomani.pl/bajki-malych-melomanow" />
+    <meta property="og:title" content="Bajki Małych Melomanów - Muzyczne Opowieści" />
+    <meta property="og:description" content="Poznaj muzykę klasyczną przez fascynujące opowieści o oceanicznych przyjaciołach." />
+    <meta property="og:image" content="https://malmelomani.pl/assets/images/og-image.jpg" />
+    <meta property="og:locale" content="pl_PL" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://malmelomani.pl/bajki-malych-melomanow" />
+    <meta name="twitter:title" content="Bajki Małych Melomanów - Muzyczne Opowieści" />
+    <meta name="twitter:description" content="Poznaj muzykę klasyczną przez fascynujące opowieści." />
+    <meta name="twitter:image" content="https://malmelomani.pl/assets/images/og-image.jpg" />
+    
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <link href="./src/styles.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -274,6 +298,20 @@ Fale delikatnie kołysały ich do snu, niosąc echa muzyki w głąb oceanu. A gd
           alt="accessibility-icon"
         />
       </button>
+            <div class="accessibility-menu hidden">
+        <div class="text-size-controls">
+          <p class="text-sm mb-2">Rozmiar tekstu:</p>
+          <div class="flex gap-2 mb-3">
+            <button id="decrease-text" class="text-size-btn" aria-label="Zmniejsz tekst">A-</button>
+            <button id="increase-text" class="text-size-btn" aria-label="Zwiększ tekst">A+</button>
+            <button id="reset-text" class="text-size-btn" aria-label="Resetuj rozmiar">Reset</button>
+          </div>
+          <div class="text-center">
+            <span class="text-sm">Aktualny rozmiar: </span>
+            <span id="current-size" class="font-bold">100%</span>
+          </div>
+        </div>
+      </div>
     </main>
     <footer
       class="flex flex-col md:flex-row items-center justify-evenly mt-10 bg-white"

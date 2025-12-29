@@ -188,3 +188,41 @@ h1 {
   background-color: #f54b24 !important;
   color: white !important;
 }
+
+/* Accessibility Menu Styles */
+.accessibility-menu {
+  position: fixed;
+  bottom: 10rem;
+  right: 2.5rem;
+  background-color: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  width: 280px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  z-index: 9998;
+}
+
+.text-size-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 2px solid #A41034;
+  background-color: white;
+  color: #A41034;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.875rem;
+  flex: 1;
+}
+
+.text-size-btn:hover:not(:disabled) {
+  background-color: #A41034;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.text-size-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
