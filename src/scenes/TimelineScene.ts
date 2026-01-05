@@ -171,7 +171,11 @@ class TimelineScene extends Phaser.Scene {
       this.add
         .image(hitBox.x, hitBox.y + height / 2 + 20, instrument.name)
         .setScale(
-          ["janczary", "tamburyn"].includes(instrument.name) ? 0.6 : 0.8
+          instrument.name === "tamburyn"
+            ? 0.55
+            : instrument.name === "janczary"
+            ? 0.6
+            : 0.8
         );
 
       this.hitBoxContainer.add(hitBox);

@@ -70,7 +70,13 @@ class PickInstrumentScene extends Phaser.Scene {
 
       const instrumentImage = this.add
         .image(cardWidth / 2, 100, instrument.name)
-        .setScale(instrument.name === "janczary" ? 0.6 : 0.8);
+        .setScale(
+          instrument.name === "tamburyn"
+            ? 0.55
+            : instrument.name === "janczary"
+            ? 0.6
+            : 0.8
+        );
 
       const cardText = this.add
         .text(
