@@ -181,18 +181,20 @@ class TimelineScene extends Phaser.Scene {
       this.hitBoxContainer.add(hitBox);
     });
 
-    const finalY = this.sys.game.canvas.height + 300;
-
     instruments.forEach((instrument, i) => {
       const line = this.hitBoxContainer.list[i] as Phaser.GameObjects.Graphics;
-      const noteStartY = -100 + height / 2;
-      const tweenDur = (finalY / (line.y + 120)) * 1000;
-      const pxPerSec = (finalY - noteStartY) / (tweenDur / 1000);
 
-      this.pxPerSec = pxPerSec;
+      const noteStartY = -100 + height / 2;
 
       instrument.hits.forEach((hit) => {
         const isLong = hit.type === "long" && hit.length! > 0;
+        const finalY = this.sys.game.canvas.height + (!isLong ? 300 : 1000)
+
+        const tweenDur = (finalY / (line.y + 120)) * 1000;
+        const pxPerSec = (finalY - noteStartY) / (tweenDur / 1000);
+
+        this.pxPerSec = pxPerSec;
+
         const h = isLong ? hit.length! * pxPerSec : height;
         const color =
           this.isTutti || instrument.name === this.selectedInstrument
