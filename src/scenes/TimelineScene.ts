@@ -174,7 +174,7 @@ class TimelineScene extends Phaser.Scene {
           instrument.name === "tamburyn"
             ? 0.55
             : instrument.name === "janczary"
-            ? 0.6
+            ? 0.7
             : 0.8
         );
 
