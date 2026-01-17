@@ -254,10 +254,10 @@
     {
       "name": "tamburyn",
       "hits": [
-        { "time": 92.3 },
+        { "time": 92.3, "type": "long", "length": 1.35 },
         { "time": 94.3 },
         { "time": 95.4 },
-        { "time": 96.5 },
+        { "time": 96.5, "type": "long", "length": 1.35 },
         { "time": 98.5 },
         { "time": 100.4 },
         { "time": 101.3 },
