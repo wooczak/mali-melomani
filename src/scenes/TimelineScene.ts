@@ -188,7 +188,7 @@ class TimelineScene extends Phaser.Scene {
 
       instrument.hits.forEach((hit) => {
         const isLong = hit.type === "long" && hit.length! > 0;
-        const finalY = this.sys.game.canvas.height + (!isLong ? 300 : 1000)
+        const finalY = this.sys.game.canvas.height + (!isLong ? 300 : 1300)
 
         const tweenDur = (finalY / (line.y + 120)) * 1000;
         const pxPerSec = (finalY - noteStartY) / (tweenDur / 1000);
