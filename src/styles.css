@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+@theme {
+  --color-ocean-dark: #1052A3;
+  --color-ocean-light: #C4ECFE;
+  --color-forest-dark: #1F713A;
+  --color-forest-light: #E0F3DC;
+  --color-savanna-dark: #D23714;
+  --color-savanna-light: #F9F5F2;
+}
+
 body {
   background-color: #f9f5f2;
   overflow-x: hidden;
@@ -15,7 +24,8 @@ body {
   height: 4rem;
   color: white;
   border-radius: 9999px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
@@ -114,8 +124,12 @@ h2 {
   font-size: 40px;
 }
 
-h3 { font-size: 32px }
-h4 { font-size: 24px }
+h3 {
+  font-size: 32px;
+}
+h4 {
+  font-size: 24px;
+}
 
 @keyframes loader-note-bounce {
   0%,
@@ -206,7 +220,8 @@ h4 { font-size: 24px }
   border-radius: 1rem;
   padding: 1.5rem;
   width: 280px;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
+  box-shadow:
+    0 10px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
   z-index: 9998;
 }
@@ -214,9 +229,9 @@ h4 { font-size: 24px }
 .text-size-btn {
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
-  border: 2px solid #A41034;
+  border: 2px solid #a41034;
   background-color: white;
-  color: #A41034;
+  color: #a41034;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -225,7 +240,7 @@ h4 { font-size: 24px }
 }
 
 .text-size-btn:hover:not(:disabled) {
-  background-color: #A41034;
+  background-color: #a41034;
   color: white;
   transform: translateY(-2px);
 }
@@ -233,4 +248,29 @@ h4 { font-size: 24px }
 .text-size-btn:disabled {
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+.card-container {
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition-property: all;
+  transition-timing-function: var(
+    --tw-ease,
+    var(--default-transition-timing-function) /* cubic-bezier(0.4, 0, 0.2, 1) */
+  );
+  transition-duration: var(
+    --tw-duration,
+    var(--default-transition-duration) /* 150ms */
+  );
+}
+
+.tale-container {
+  border-radius: 18px;
+  padding-block: 58px;
+  padding-inline: 66px;
 }
