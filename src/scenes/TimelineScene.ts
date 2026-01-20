@@ -85,23 +85,23 @@ class TimelineScene extends Phaser.Scene {
 
     this.load.audio(
       "audio",
-      `assets/audio/song${this.chosenSongIndex + 1}.mp3`
+      `assets/audio/song${this.chosenSongIndex + 1}.mp3`,
     );
 
     this.load.audio("countdownStick", "assets/audio/countdown-stick.mp3");
 
     ["game-over-box", `arrow-back-${this.world}`].forEach((i) =>
-      this.load.svg(i, `assets/svg/${i}.svg`)
+      this.load.svg(i, `assets/svg/${i}.svg`),
     );
 
     const songData = this.cache.json.get(
-      `song${this.chosenSongIndex + 1}`
+      `song${this.chosenSongIndex + 1}`,
     ) as Song;
 
     songData.instruments.forEach((instrument) => {
       this.load.svg(
         `${this.world}-${instrument.name}`,
-        `assets/svg/${this.world}-${instrument.name}.svg`
+        `assets/svg/${this.world}-${instrument.name}.svg`,
       );
     });
 
@@ -117,7 +117,8 @@ class TimelineScene extends Phaser.Scene {
     this.cameras
       .add(0, 0, this.sys.game.canvas.width, this.sys.game.canvas.height)
       .setBackgroundColor(
-        Phaser.Display.Color.IntegerToColor(COLORS.timeline[this.world].bg).rgba
+        Phaser.Display.Color.IntegerToColor(COLORS.timeline[this.world].bg)
+          .rgba,
       );
 
     this.sound.unlock();
@@ -146,7 +147,7 @@ class TimelineScene extends Phaser.Scene {
     const total = instruments.length;
     const gap = Math.max(
       0,
-      (this.sys.game.canvas.width - width * total) / (total + 1)
+      (this.sys.game.canvas.width - width * total) / (total + 1),
     );
 
     instruments.forEach((instrument, i) => {
@@ -162,7 +163,7 @@ class TimelineScene extends Phaser.Scene {
 
       hitBox.setPosition(
         gap + i * (width + gap) + width / 2,
-        this.sys.game.canvas.height - 180 + height / 2
+        this.sys.game.canvas.height - 180 + height / 2,
       );
       hitBox.name = instrument.name;
       this.add
@@ -174,8 +175,8 @@ class TimelineScene extends Phaser.Scene {
           instrument.name === "tamburyn"
             ? 0.55
             : instrument.name === "janczary"
-            ? 0.7
-            : 0.8
+              ? 0.7
+              : 0.8,
         );
 
       this.hitBoxContainer.add(hitBox);
@@ -188,7 +189,7 @@ class TimelineScene extends Phaser.Scene {
 
       instrument.hits.forEach((hit) => {
         const isLong = hit.type === "long" && hit.length! > 0;
-        const finalY = this.sys.game.canvas.height + (!isLong ? 300 : 1300)
+        const finalY = this.sys.game.canvas.height + (!isLong ? 300 : 1300);
 
         const tweenDur = (finalY / (line.y + 120)) * 1000;
         const pxPerSec = (finalY - noteStartY) / (tweenDur / 1000);
@@ -241,7 +242,7 @@ class TimelineScene extends Phaser.Scene {
         this.sys.game.canvas.width / 2,
         this.sys.game.canvas.height / 2,
         "",
-        { fontSize: "350px", color: "#FFF", fontFamily: "ABeeZee, Arial" }
+        { fontSize: "350px", color: "#FFF", fontFamily: "ABeeZee, Arial" },
       )
       .setOrigin(0.5);
 
@@ -250,7 +251,8 @@ class TimelineScene extends Phaser.Scene {
     const events = Array.from({ length: steps }, (_, i) => ({
       at: i * dur,
       run: () => (
-        countdown.setText(String(steps - i)), this.sound.play("countdownStick")
+        countdown.setText(String(steps - i)),
+        this.sound.play("countdownStick")
       ),
     }));
 
@@ -268,7 +270,8 @@ class TimelineScene extends Phaser.Scene {
       .add({
         at: this.countdownMs,
         run: () => (
-          this.sound.play("audio"), (this.songStartTimestamp = this.time.now)
+          this.sound.play("audio"),
+          (this.songStartTimestamp = this.time.now)
         ),
       })
       .play();
@@ -290,7 +293,7 @@ class TimelineScene extends Phaser.Scene {
       const instrument = targetNote.getData("instrument");
       const time = targetNote.getData("hitTime") * 1000;
       const hitBox = this.hitBoxContainer.list.find(
-        (hb: any) => hb.name === instrument
+        (hb: any) => hb.name === instrument,
       );
       const isTuttiOrNotSelectedInstrument =
         this.isTutti || this.selectedInstrument !== instrument;
@@ -299,8 +302,8 @@ class TimelineScene extends Phaser.Scene {
       this.tweens.add({
         targets: targetNote,
         alpha: 0,
-        delay: time,
-        duration: 100 + longHitDuration * 1000,
+        delay: time + longHitDuration,
+        duration: 100,
         onComplete: () => targetNote.destroy(),
         scale: isTuttiOrNotSelectedInstrument ? 2 : 1,
       });
@@ -310,9 +313,9 @@ class TimelineScene extends Phaser.Scene {
       this.tweens.add({
         targets: hitBox,
         scaleX: 1.1,
-        delay: time,
+        delay: time + longHitDuration,
         scaleY: 1.1,
-        duration: 100 + longHitDuration * 1000,
+        duration: 100,
         yoyo: true,
       });
     });
@@ -329,8 +332,8 @@ class TimelineScene extends Phaser.Scene {
         between(
           current,
           n.note.getData("hitTime") - this.latency / 1000,
-          n.note.getData("hitTime") + this.latency / 1000
-        )
+          n.note.getData("hitTime") + this.latency / 1000,
+        ),
     );
 
     if (hit) {
@@ -349,7 +352,7 @@ class TimelineScene extends Phaser.Scene {
       });
 
       const hb = this.hitBoxContainer.list.find(
-        (hb: any) => hb.name === hit.note.getData("instrument")
+        (hb: any) => hb.name === hit.note.getData("instrument"),
       );
 
       this.tweens.add({
@@ -364,7 +367,7 @@ class TimelineScene extends Phaser.Scene {
         (n) =>
           n.note.getData("instrument") === this.selectedInstrument &&
           n.note.getData("hitTime") > current &&
-          !n.note.getData("jiggling")
+          !n.note.getData("jiggling"),
       );
       if (next) {
         next.note.setData("jiggling", true);
@@ -410,11 +413,11 @@ class TimelineScene extends Phaser.Scene {
 
       if (between(currentTime, hitTime - 0.2, hitTime + longDuration + 0.2)) {
         const relatedTween = this.allNotes.find(
-          (n) => n.note.getData("name") === longNote.getData("name")
+          (n) => n.note.getData("name") === longNote.getData("name"),
         )?.tween;
 
         const relatedHitBoxContainer = this.hitBoxContainer.list.find(
-          (hb: any) => hb.name === longNote.getData("instrument")
+          (hb: any) => hb.name === longNote.getData("instrument"),
         );
 
         if (this.isSpaceHeld) {
@@ -441,7 +444,7 @@ class TimelineScene extends Phaser.Scene {
             eatenPx / 2 - h / 2,
             width,
             h,
-            8
+            8,
           );
 
           this.tweens.add({
@@ -480,7 +483,7 @@ class TimelineScene extends Phaser.Scene {
   }
 
   private resetScene(
-    goToScene?: (typeof GAME_SCENE_KEY)[keyof typeof GAME_SCENE_KEY]
+    goToScene?: (typeof GAME_SCENE_KEY)[keyof typeof GAME_SCENE_KEY],
   ) {
     resetSceneState("TimelineScene", this, goToScene);
   }
@@ -515,7 +518,7 @@ class TimelineScene extends Phaser.Scene {
         .fillRoundedRect(0, 0, width, height, 8)
         .setInteractive(
           new Phaser.Geom.Rectangle(0, 0, width, height),
-          Phaser.Geom.Rectangle.Contains
+          Phaser.Geom.Rectangle.Contains,
         )
         .on("pointerdown", cb);
       const t = this.add
@@ -528,7 +531,7 @@ class TimelineScene extends Phaser.Scene {
     };
 
     const [repickBtn, repickTxt] = makeBtn(10, "Wybierz inny utwór", () =>
-      this.resetScene(GAME_SCENE_KEY.pickSong)
+      this.resetScene(GAME_SCENE_KEY.pickSong),
     );
     const [replayBtn, replayTxt] = makeBtn(90, "Zagraj ponownie", () =>
       this.scene.restart({
@@ -536,17 +539,17 @@ class TimelineScene extends Phaser.Scene {
         chosenInstrument: this.selectedInstrument,
         tutti: this.isTutti,
         world: this.world,
-      })
+      }),
     );
 
     [repickBtn, replayBtn].forEach((btn) => {
       btn.on(
         "pointerover",
-        () => (this.input.manager.canvas.style.cursor = "pointer")
+        () => (this.input.manager.canvas.style.cursor = "pointer"),
       );
       btn.on(
         "pointerout",
-        () => (this.input.manager.canvas.style.cursor = "default")
+        () => (this.input.manager.canvas.style.cursor = "default"),
       );
     });
 
