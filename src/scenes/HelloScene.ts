@@ -49,7 +49,7 @@ class HelloScene extends Phaser.Scene {
         48,
         64,
         0,
-        COLORS.playBtnTriangleFill
+        COLORS.playBtnTriangleFill,
       )
       .setOrigin(0.5)
       .setPosition(Math.round(centerX + 45), Math.round(centerY + 45))
