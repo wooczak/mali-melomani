@@ -1,18 +1,18 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
-  --color-ocean-dark: #1052A3;
-  --color-ocean-light: #C4ECFE;
-  --color-forest-dark: #1F713A;
-  --color-forest-light: #E0F3DC;
-  --color-savanna-dark: #D23714;
-  --color-savanna-light: #FFE1DA;
+  --color-ocean-dark: #1052a3;
+  --color-ocean-light: #c4ecfe;
+  --color-forest-dark: #1f713a;
+  --color-forest-light: #e0f3dc;
+  --color-savanna-dark: #d23714;
+  --color-savanna-light: #ffe1da;
 }
 
 body {
   background-color: #f9f5f2;
   overflow-x: hidden;
-  font-family: "ABeeZee", sans-serif;
+  font-family: 'ABeeZee', sans-serif;
   font-weight: 400;
   font-style: normal;
 }
@@ -75,45 +75,45 @@ body {
 }
 
 .bubblegum-sans-regular {
-  font-family: "Bubblegum Sans", sans-serif;
+  font-family: 'Bubblegum Sans', sans-serif;
   font-weight: 400;
   font-style: normal;
 }
 
 .dynapuff-regular {
-  font-family: "DynaPuff", system-ui;
+  font-family: 'DynaPuff', system-ui;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
 }
 
 .dynapuff-bold {
-  font-family: "DynaPuff", system-ui;
+  font-family: 'DynaPuff', system-ui;
   font-optical-sizing: auto;
   font-weight: 700;
   font-style: normal;
 }
 
 .abeezee-regular {
-  font-family: "ABeeZee", sans-serif;
+  font-family: 'ABeeZee', sans-serif;
   font-weight: 400;
   font-style: normal;
 }
 
 .poppins-regular {
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 400;
   font-style: normal;
 }
 
 .poppins-bold {
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 700;
   font-style: normal;
 }
 
 h1 {
-  font-family: "DynaPuff", system-ui;
+  font-family: 'DynaPuff', system-ui;
   font-optical-sizing: auto;
   font-weight: 400;
   color: #a41034;
@@ -263,14 +263,25 @@ h4 {
     --tw-ease,
     var(--default-transition-timing-function) /* cubic-bezier(0.4, 0, 0.2, 1) */
   );
-  transition-duration: var(
-    --tw-duration,
-    var(--default-transition-duration) /* 150ms */
-  );
+  transition-duration: var(--tw-duration, var(--default-transition-duration) /* 150ms */);
 }
 
 .tale-container {
   border-radius: 18px;
   padding-block: 58px;
   padding-inline: 66px;
+}
+
+@layer components {
+  .pick-song-btn {
+    @apply flex items-center justify-center h-16 rounded-[10px] cursor-pointer transition-transform duration-120 ease-out font-['ABeeZee'] text-lg text-white;
+  }
+
+  .pick-song-btn:hover {
+    @apply scale-[1.03];
+  }
+
+  .pick-song-btn:active {
+    @apply scale-100;
+  }
 }
